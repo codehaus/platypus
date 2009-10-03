@@ -10,12 +10,13 @@ package org.pz.platypus.plugin.pdf.commands;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.Token;
+import org.pz.platypus.TokenType;
 import org.pz.platypus.plugin.pdf.PdfData;
 
 /**
  * This is the command-equivalent that is called by PDF plugin to 'execute' a symbol.
  * It looks what the chars to ouput are to generate the symbol in PDF and it outputs
- * those as text.
+ * those as text. If Unicode conversion is necessary, that is performed as well.
  *
  * @author alb
  */
@@ -34,13 +35,15 @@ public class PdfSymbol implements OutputCommandable
 
     public void process( final OutputContextable context, final Token tok, final int tokNum )
     {
-        if( context == null || tok == null ) {
+        if( context == null ) {
             throw new IllegalArgumentException();
         }
 
-        // emits the string representing the symbol as text. It's generally the char or
-        // the Unicode encoding for the char in the form: \\u12CD
         PdfData pdf = (PdfData) context;
+
+        // emits the string representing the symbol as text. It's either the char or
+        // the Unicode encoding for the char in the form: \\u12CD
+
         if( passedValue.startsWith( "\\\\" )) {
             int k = getCharValueForUnicode( passedValue.substring( 3 ));
             String charAsString = new String( Character.toChars( k ));
