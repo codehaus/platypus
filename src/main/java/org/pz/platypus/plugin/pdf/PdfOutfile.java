@@ -518,7 +518,7 @@ public class PdfOutfile
     /**
      * Emit a single character in the current font, size, etc. This is used to output
      * a character by its Unicode value and is called by PdfSymbol, which handles the
-     * processing for symbols and special characters.
+     * processing of symbols and special characters.
      *
      * @param ch char to be emitted
      */
@@ -542,29 +542,6 @@ public class PdfOutfile
         Phrase phr = fs.process( ch );
         iTPara.add( phr );
     }
-
-//    public void emitChar( final int codepoint )
-//    {
-//        if( iTPara == null ) {
-//            startNewParagraph();
-//        }
-//
-////        String ch = chStr.substring( 1 );
-////        if( ch.equals( "u2013" )) {
-////            ch = "\u2013";
-////        }
-////        else if ( ch.equals( "u2018" )) {
-////            ch = "\u2018";
-////        }
-//
-//        FontSelector fs = new FontSelector();
-//        fs.addFont( pdfData.getFont().getItextFont() );
-//        char ch = (char) codepoint;
-//        String charStr = new String( Character.toString( ch ));
-//        Phrase phr = fs.process( charStr );
-//        iTPara.add( phr );
-//
-//    }
 
     // ===== endPage events =======
 
