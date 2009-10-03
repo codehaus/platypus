@@ -10,7 +10,6 @@ package org.pz.platypus.plugin.pdf.commands;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.Token;
-import org.pz.platypus.TokenType;
 import org.pz.platypus.plugin.pdf.PdfData;
 
 /**
