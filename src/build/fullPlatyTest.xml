@@ -13,23 +13,23 @@
 
 	2009-07-17  alb incomplete, but a start. 
 	2009-07-18  alb  unit tests, functional tests work and generate valid reports.
-
+	2009-10-01  alb added ..\ to all files to reflect new project organization
 -->
 
 <project name="platypus-build" default="all" basedir=".">
-	<property name="build.dir" 				location="target\" />
+	<property name="build.dir" 				location="..\target\" />
 	<property name="classes.dir" 			location="${build.dir}\classes\" />
-	<property name="config.dir"				location="config\" />
-    <property name="docs.dir"       		location="target\docs\" />
-    <property name="fonts.dir"      		location="fonts\" />
-	<property name="func.tests.src.dir"		location="src\functionalTests\" />
+	<property name="config.dir"				location="..\config\" />
+    <property name="docs.dir"       		location="..\target\docs\" />
+    <property name="fonts.dir"      		location="..\fonts\" />
+	<property name="func.tests.src.dir"		location="..\src\functionalTests\" />
 	<property name="jar.dir"				location="${build.dir}\jar"/>
-	<property name="src.dir" 				location="src\main\java"/>
+	<property name="src.dir" 				location="..\src\main\java"/>
     <property name="src.pdf.plugin.dir"     location="${src.dir}\org\pz\platypus\plugin\pdf"/>
     <property name="src.listing.plugin.dir" location="${src.dir}\org\pz\platypus\plugin\listing"/>
-	<property name="src.test.dir"   		location="src\test\java" />
-	<property name="test.report.dir" 		location="target\test-reports" />
-	<property name="vendor.libs"    		location="lib\" />
+	<property name="src.test.dir"   		location="..\src\test\java" />
+	<property name="test.report.dir" 		location="..\target\test-reports" />
+	<property name="vendor.libs"    		location="..\lib\" />
     <property name="vendor.lib.dir" 		location="${build.dir}\jar\lib" />
 	
 	<property name="version"				value="0.2.0 RC 0" />
