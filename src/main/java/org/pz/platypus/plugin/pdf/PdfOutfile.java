@@ -520,16 +520,51 @@ public class PdfOutfile
      * a character by its Unicode value and is called by PdfSymbol, which handles the
      * processing for symbols and special characters.
      *
-     * @param c char to be emitted
+     * @param ch char to be emitted
      */
-    public void emitChar( final char c )
+//    public void emitChar( final char c )
+//    {
+//        if( iTPara == null ) {
+//            startNewParagraph();
+//        }
+//
+//        iTPara.add( new Chunk( c ));
+//    }
+
+    public void emitChar( final String ch )
     {
         if( iTPara == null ) {
             startNewParagraph();
         }
 
-        iTPara.add( new Chunk( c ));
+        FontSelector fs = new FontSelector();
+        fs.addFont( pdfData.getFont().getItextFont() );
+        Phrase phr = fs.process( ch );
+        iTPara.add( phr );
     }
+
+//    public void emitChar( final int codepoint )
+//    {
+//        if( iTPara == null ) {
+//            startNewParagraph();
+//        }
+//
+////        String ch = chStr.substring( 1 );
+////        if( ch.equals( "u2013" )) {
+////            ch = "\u2013";
+////        }
+////        else if ( ch.equals( "u2018" )) {
+////            ch = "\u2018";
+////        }
+//
+//        FontSelector fs = new FontSelector();
+//        fs.addFont( pdfData.getFont().getItextFont() );
+//        char ch = (char) codepoint;
+//        String charStr = new String( Character.toString( ch ));
+//        Phrase phr = fs.process( charStr );
+//        iTPara.add( phr );
+//
+//    }
 
     // ===== endPage events =======
 

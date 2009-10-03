@@ -42,10 +42,12 @@ public class PdfSymbol implements OutputCommandable
         // the Unicode encoding for the char in the form: \\u12CD
         PdfData pdf = (PdfData) context;
         if( passedValue.startsWith( "\\\\" )) {
-            pdf.getOutfile().emitChar( getCharValueForUnicode( passedValue ));
+            int k = getCharValueForUnicode( passedValue.substring( 3 ));
+            String charAsString = new String( Character.toChars( k ));
+            pdf.getOutfile().emitChar( charAsString );
         }
         else {
-            pdf.getOutfile().emitText( passedValue );    
+            pdf.getOutfile().emitText( passedValue );
         }
     }
 
