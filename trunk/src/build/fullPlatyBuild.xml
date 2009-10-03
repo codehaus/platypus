@@ -11,23 +11,25 @@
      Note: this contains no tests or reports.
 
      2009-06-09  alb incomplete, but a start. 
-     2009-06-23  alb complete, works correctly. 
+     2009-06-23  alb complete, works correctly.
+     2009-10-01  alb added .. to all files to reflect new project organization; added licenses to jar
 
 -->
 
 <project name="platypus-build" default="all" basedir=".">
-	<property name="build.dir" 				location="target\" />
-	<property name="classes.dir" 			location="${build.dir}\classes\" />
-	<property name="config.dir"				location="config\" />
-    <property name="docs.dir"       		location="target\docs\" />
-    <property name="fonts.dir"      		location="fonts\" />
-	<property name="jar.dir"				location="${build.dir}\jar"/>
-	<property name="src.dir" 				location="src\main\java"/>
-    <property name="src.pdf.plugin.dir"     location="${src.dir}\org\pz\platypus\plugin\pdf"/>
-    <property name="src.listing.plugin.dir" location="${src.dir}\org\pz\platypus\plugin\listing"/>
-	<property name="src.test.dir"   		location="src\test\java" />
-	<property name="vendor.libs"    		location="lib\" />
-    <property name="vendor.lib.dir" 		location="${build.dir}\jar\lib" />
+	<property name="build.dir" 				location="..\target\" />
+	<property name="classes.dir" 			location="\${build.dir}\classes\" />
+	<property name="config.dir"				location="..\config\" />
+    <property name="docs.dir"       		location="..\target\docs\" />
+    <property name="fonts.dir"      		location="..\fonts\" />
+	<property name="licenses.dir"			location="..\licenses\" />
+	<property name="jar.dir"				location="\${build.dir}\jar"/>
+	<property name="src.dir" 				location="..\src\main\java"/>
+    <property name="src.pdf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\pdf"/>
+    <property name="src.listing.plugin.dir" location="\${src.dir}\org\pz\platypus\plugin\listing"/>
+	<property name="src.test.dir"   		location="..\src\test\java" />
+	<property name="vendor.libs"    		location="..\lib\" />
+    <property name="vendor.lib.dir" 		location="\${build.dir}\jar\lib" />
 	
 	<property name="version"				value="0.2.0 RC 0" />
 	<property name="message" 				value="Buid Platypus for Release" />
@@ -50,6 +52,7 @@
                  plugin-pdf-jar,
                  setup-config-files,
                  setup-docs,
+				 setup-licenses,
                  setup-vendor-libs,
                  setup-fonts,
                  zip-all"
@@ -162,7 +165,7 @@
         <fileset dir="${docs.dir}" />
     </copy>
     <copy  todir="${jar.dir}" >
-        <fileset dir="src\main" >
+        <fileset dir="..\src\main" >
             <include name="*.bat" />
         </fileset>
     </copy>
@@ -176,6 +179,13 @@
     </copy>
 </target>
 
+<target  name="setup-licenses" description="package licenses">
+    <delete dir="${jar.dir}\licenses\"/>
+	<mkdir  dir="${jar.dir}\licenses\" />
+    <copy todir="${jar.dir}\licenses\" >
+        <fileset dir="${licenses.dir}" />
+    </copy>
+</target>
 
 <target name="setup-vendor-libs" description="Set up 3rd party libs">
     <delete dir="${vendor.lib.dir}" />
