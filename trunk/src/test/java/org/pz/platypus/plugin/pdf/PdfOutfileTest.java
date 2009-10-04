@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 public class PdfOutfileTest
 {
     PdfOutfile pout;
-//    CommandParameter cp;
     GDD gdd;
     PdfData pdat;
 
@@ -247,22 +246,6 @@ public class PdfOutfileTest
                     pdat.getMarginBottom() != 2 * pdat.getPageHeight() );
 
     }
-//    @Test
-//    public void testSetColumnSize()
-//    {
-//        ColumnText iTColumn = new ColumnText( null );
-//        pout.setItColumn( iTColumn );
-//        pdat.setColumnCount( 1, new Source() );
-//        pdat.setCurrColumn( 0 );
-//        pdat.setColumns( new Columns( 1, 50f, pdat ));
-//        pout.setColumnSize();
-//        ColumnText ct = pout.getItColumn();
-//        System.out.println( "indent: " + ct.getIndent() );
-//        ct.addText( new Chunk("Four score and seven years ago our fathers gave birth to this great land via Caesearean section near present-day Plymouth Rock") );
-//        System.out.println( ct.maxY );
-//     //   System.out.println( "bottom edge" + pout.computeBottomColEdge( 590f ));
-//     //   System.out.println( iTColumn.getFilledWidth() );
-//    }
 
     @Test
     public void testStartNewParagraph()
@@ -273,24 +256,6 @@ public class PdfOutfileTest
         Paragraph newPar = pout.getItPara();
         assertEquals( 26f, newPar.getLeading(), 0.5f );
     }
-
-//    redo     
-//    @Test
-//    public void testEmitChar()
-//    {
-//        Character ch = '!';
-//
-//        pdat.setStrikethru( false, new Source() );
-//        pdat.getUnderline().setInEffect( false, new Source() );
-//        pdat.getFont().setToDefault();
-//        pout.setItPara( null );
-//        pout.emitChar( ch );
-//        Paragraph par = pout.getItPara();
-//        ArrayList chunks = par.getChunks();
-//        assertTrue( chunks.size() > 0 );
-//        Chunk chunk = (Chunk) chunks.get( 0 );
-//        assertEquals( ch.toString(), chunk.toString() );
-//    }
 
     @Test
     public void testEmitText1()

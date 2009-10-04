@@ -38,6 +38,9 @@ public class PdfOutfile
     /** the largest entity written to an iTDocument is a paragraph */
     Paragraph iTPara = null;
 
+    /** iText variable that ColumnText uses to see if there's more to write out */
+    int iTStatus;
+
     /** the name of the output file */
     String pdfFilename;
 
@@ -332,8 +335,7 @@ public class PdfOutfile
      */
     public void addColumnsContentToDocument()
     {
-        // iText variable that ColumnText uses to see if there's more to write out
-        int iTStatus = ColumnText.NO_MORE_COLUMN;
+        iTStatus = ColumnText.NO_MORE_COLUMN;
 
         try
         {
@@ -695,7 +697,10 @@ public class PdfOutfile
         return( iTColumn.getYLine() );
     }
 
-    //==== getters and setters in alpha order of field ===
+    public int getAddStatus()
+    {
+        return( iTStatus );
+    }
 
     public boolean isOpen()
     {

@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -14,7 +14,6 @@ import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
 import com.lowagie.text.Rectangle;
-import com.lowagie.text.DocumentException;
 
 import java.util.HashMap;
 
@@ -60,11 +59,16 @@ public class PdfPageSize implements OutputCommandable
             flushExistingText( pdf );
             pdf.setPageHeight( size.getHeight(), tok.getSource() );
             pdf.setPageWidth( size.getWidth(), tok.getSource() );
+
+            // now force a new page and a new computation of column size by setting current
+            // column number past the last column allowed on a page. These actions are
+            // actually performed in PdfOutfile.addColumnsContentToDocument()
+            pdf.setCurrColumn( 999999999 );
         }
     }
 
     /**
-     * Current text must be flushed to PDF file with current page size before
+     * Current text must be flushed to PDF file using the current page size before
      * the new page size takes effect.
      *
      * @param pdf
@@ -78,12 +82,6 @@ public class PdfPageSize implements OutputCommandable
 
         if( outfile.isOpen() ) {
             outfile.addColumnsContentToDocument();
-            try {
-                outfile.getItColumn().go();
-            }
-            catch ( DocumentException de ) {
-                System.out.println( "DocException in PdfPageSize()" );
-            }
         }
     }
 
