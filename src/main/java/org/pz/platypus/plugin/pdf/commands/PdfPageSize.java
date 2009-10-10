@@ -96,8 +96,8 @@ public class PdfPageSize implements OutputCommandable
     {
         HashMap<String, Rectangle> pageNames = new HashMap<String, Rectangle>( 50 );
 
-        pageNames.put( "4A0",           new Rectangle( 4768, 6741 ));           // 1682mm x 2378mm DIN476
-        pageNames.put( "2A0",           new Rectangle( 3370, 4768 ));           // 1189mm x 1682mm DIN476
+        pageNames.put( "4A0",           new Rectangle( 4768, 6741 ));      // 1682mm x 2378mm DIN476
+        pageNames.put( "2A0",           new Rectangle( 3370, 4768 ));      // 1189mm x 1682mm DIN476
         pageNames.put( "A0",            com.lowagie.text.PageSize.A0 );         //  841mm x 1189mm
         pageNames.put( "A1",            com.lowagie.text.PageSize.A1 );         //  594mm x  841mm
         pageNames.put( "A2",            com.lowagie.text.PageSize.A2 );         //  420mm x  594mm
