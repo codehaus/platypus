@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 package org.pz.platypus;
@@ -24,9 +24,6 @@ public class Infile
     /** file open status */
     private boolean isOpen = false;
 
-    /** are we at EOF? */
-    private boolean atEOF = false;
-
     /** input reader for file */
     private BufferedReader inReader;
 
@@ -34,9 +31,14 @@ public class Infile
     private int currFileNumber;
     private int currLineNumber;
 
-    public Infile( final String name, GDD gdd )
+    /** the GDD **/
+    private GDD gdd;
+
+    public Infile( final String name, GDD Gdd )
     {
         filename = name;
+        gdd = Gdd;
+
         try {
             currFileNumber = gdd.getInputFileList().getFileNumber( name );
         }
@@ -62,6 +64,7 @@ public class Infile
         }
 
         int retVal = 0;
+        boolean atEOF = false;
 
         if ( ! isOpen ) {
             if (( retVal = open()) != Status.OK ) {
@@ -72,24 +75,25 @@ public class Infile
         while( ! atEOF )
         {
             final InputLine inputLine = new InputLine();
-            
-            switch( readNext1LineIntoInputLine( inputLine )) {                    
+
+            switch( readNext1LineIntoInputLine( inputLine )) {
                 case Status.OK:
                     textLines.add( inputLine );
                     break;
 
                 case Status.AT_EOF:
-                    atEOF = true; 
+                    atEOF = true;
                     break;
-                    
-                case Status.IO_ERR:
-                default:   // anything other is also an error 
-                    break; //TODO Issue Error message
 
+                case Status.IO_ERR:
+                default:   // anything other is also an error
+                    gdd.logSevere( gdd.getLit( "ERROR.READING_PLATYPUS_FILE" ) + " " +
+                                    filename );
+                    break;
             }
         }
-        
-        // now close the input filestream
+
+        // close the input filestream
         try
         {
         	inReader.close();
@@ -99,17 +103,16 @@ public class Infile
         {
         	retVal = Status.IO_ERR;
         }
- 
+
         return(( retVal == Status.IO_ERR ) ? retVal : currLineNumber );
     }
-    
+
     /**
      * Reads a single line from the input file and converts into an InputLine
      * data structure, which contains, the file number of the input file,
      * the line number of the line, plus the content of the line
      * @param inputLine the InputLine into which the line of content is placed
      * @return Status.OK; Status.EOF at EOF; Status.IO_ERR if something goes wrong.
-     * //TODO: Should return TEXT, COMMENT, EOF, ERROR.
      */
     private int readNext1LineIntoInputLine( final InputLine inputLine )
     {
@@ -129,29 +132,27 @@ public class Infile
             return( Status.IO_ERR );
         }
         return( Status.OK );
-    } 
-    
+    }
+
     /**
      * open the file
      * @return Status.OK, if all went well; Status.FILE_NOT_FOUND_ERR, which should not occur.
      */
     public int open()
     {
-
         final File thisFile = new File( filename );
-        
+
         try {
             FileReader fr = new FileReader( thisFile );
             inReader = new BufferedReader( fr );
-        } 
+        }
         catch ( FileNotFoundException e ) {
             return( Status.FILE_NOT_FOUND_ERR ); // all files are known to exist by this point.
         }
 
         isOpen = true;
-        atEOF = false;
         return( Status.OK );
-    }   
+    }
 
     //=== getters and setters ===
 
@@ -159,7 +160,7 @@ public class Infile
     {
         return( filename );
     }
-    
+
     public int getLineNumber()
     {
         return( currLineNumber );
