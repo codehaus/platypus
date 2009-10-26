@@ -64,6 +64,7 @@ public class Column
      * @param colWidth new column width (in points)
      * @param colGutterWidth new gutter width (in points) for right gutter
      * @param colVertSkip new distance to skip before column (in points)
+     * @param pdf PDF file data
      */
     public Column( final float colWidth, final float colGutterWidth, final float colVertSkip,
                    final PdfData pdf )
