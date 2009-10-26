@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Keeps track of the number of columns, their size, and the gutter size. Does no implementation.
  * For implementation, see the appropriate Column class.
- * 
+ *
  * @author alb
  */
 public class Columns
@@ -48,7 +48,7 @@ public class Columns
     public int createColumns( final int newCount, final float verticalSkip, final PdfData pdf )
     {
         /** the number of columns to implement. Must be > 0 */
-        final int cols = ( newCount < 1 ? 1 : newCount ); 
+        final int cols = ( newCount < 1 ? 1 : newCount );
 
         /** the width of the space into which the columns + gutters must fit */
         float textWidth = pdf.getPageWidth() - pdf.getMarginLeft() - pdf.getMarginRight();
@@ -60,12 +60,12 @@ public class Columns
         float gutterSpace = numberOfGutters * getRecommendedGutterSize( cols );
 
         /** width of each column */
-        float colWidth = ( textWidth - gutterSpace ) / cols;
+        float colWidth = calculateColumnWidth( textWidth, gutterSpace, cols, pdf );
 
         // now add the columns
         this.columns = new ArrayList<Column>();
 
-        // issue warning if column count was < 0 
+        // issue warning if column count was < 0
         if( newCount < 1 ) {
             GDD gdd = pdf.getGdd();
             gdd.logWarning( gdd.getLit( "ERROR.COLUMN_COUNT_MUST_BE_GT_0" + " " +
@@ -81,13 +81,25 @@ public class Columns
                 c = new Column( colWidth, 0f, verticalSkip, pdf );
             }
             else {
-                c = new Column( colWidth, getRecommendedGutterSize( cols ), verticalSkip, pdf );
+                c = new Column( colWidth, getRecommendedGutterSize( cols, colWidth, textWidth, pdf ),
+                                verticalSkip, pdf );
             }
 
             columns.add( c );
         }
 
         return( getCount() );
+    }
+
+    float calculateColumnWidth( final float textWidth, final float gutterSpace, final int cols,
+                                final PdfData pdf )
+    {
+        float userSpecifiedWidth = pdf.getColumnWidth();
+        if( userSpecifiedWidth == 0f ) {    // 0 means use the default calculation
+            return (( textWidth - gutterSpace ) / cols );
+        }
+
+        return( userSpecifiedWidth );       // else use what the user specified
     }
 
     /**
@@ -141,21 +153,32 @@ public class Columns
     /**
      * Figure out the recommended gutter size for a given number of regular columns
      *
-     * @param numberOfColumns number of columns on the page
+     * @param numberOfCols number of columns on the page
      * @return recommended size of gutter in points.
      */
-    private float getRecommendedGutterSize( final int numberOfColumns )
+    private float getRecommendedGutterSize( final int numberOfCols, final float colWidth,
+                                            final float textWidth, final PdfData pdd )
     {
-        assert( numberOfColumns > 0 );
+        assert( numberOfCols > 0 );
+        assert( colWidth >= 0f );
+        assert( pdd != null );
 
-        switch ( numberOfColumns )
-        {
-            case 1: return(  0f );
-            case 2: return( 10f );
-            case 3: return(  8f );
-            case 4: return(  8f );
-            default: return( 6f );
+        if( pdd.getColumnWidth() == 0f ) {
+            switch ( numberOfCols )
+            {
+                case 1: return(  0f );
+                case 2: return( 10f );
+                case 3: return(  8f );
+                case 4: return(  8f );
+                default: return( 6f );
+            }
         }
+        else {
+            // it's the user specified column width * # of columns subtracted from total width.
+            // the remainder is divided by the number of gutters (that is, number of cols - 1 )
+            return(( textWidth - ( numberOfCols * colWidth )) / ( numberOfCols - 1 ));
+        }
+
     }
 
     public String dump( GDD gdd )

@@ -80,6 +80,7 @@ public class PdfData implements OutputContextable
 
     private Value alignment;
     private Value columnCount;
+    private Value columnWidth;
     private Columns columns;
     private int currColumn;
     private boolean eolPending;
@@ -119,6 +120,7 @@ public class PdfData implements OutputContextable
         alignment       = new Value( DefaultValues.ALIGNMENT );
 
         columnCount     = new Value( DefaultValues.COLUMN_COUNT );
+        columnWidth     = new Value( DefaultValues.COLUMN_WIDTH );
         currColumn      = 0;
 
         eolPending      = false;
@@ -169,7 +171,7 @@ public class PdfData implements OutputContextable
      * from the existing one. If they're not different, no update occurs, which means no
      * modification to the Source field in the Value object occurs either.
      */
-    
+
     /**
      * Sets the new float value, updates line number, and table in systemStrings
      * @param field the Value field to be updated
@@ -270,6 +272,21 @@ public class PdfData implements OutputContextable
     public void setColumnCount( final int newCount, final Source fileAndLine )
     {
         setValue( columnCount, newCount, fileAndLine, "_columnCount" );
+    }
+
+    public float getColumnWidth()
+    {
+        return( columnWidth.fval );
+    }
+
+    public Source getColumnWidthLine()
+    {
+        return( columnWidth.source );
+    }
+
+    public void setColumnWidth( final float newWidth, final Source fileAndLine )
+    {
+        setValue( columnWidth, newWidth, fileAndLine, "_columnWidth" );
     }
 
     public Columns getColumns()
