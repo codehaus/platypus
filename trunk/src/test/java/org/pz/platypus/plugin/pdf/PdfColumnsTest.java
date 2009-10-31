@@ -9,6 +9,7 @@ package org.pz.platypus.plugin.pdf;
 
 import static org.junit.Assert.*;
 import org.pz.platypus.GDD;
+import org.pz.platypus.Source;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.test.mocks.MockLiterals;
 import org.junit.Test;
@@ -31,6 +32,7 @@ public class PdfColumnsTest
         gdd.getLogger().setLevel( Level.OFF );
         pdd = new PdfData( gdd );
         pdd.setColumns( new Columns( pdd ));
+        pdd.setColumnWidth( 0f, new Source() );
     }
 
     // ==== actual tests start here ===== //
