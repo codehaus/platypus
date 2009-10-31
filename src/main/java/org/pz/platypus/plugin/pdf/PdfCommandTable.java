@@ -55,6 +55,7 @@ public class PdfCommandTable
         add( new PdfBoldOff() );
         add( new PdfBoldOn() );
         add( new PdfColumnCount() );
+        add( new PdfColumnWidth() );
         add( new PdfDump() );
         add( new PdfEol() );
         add( new PdfEolTreatment() );

@@ -137,7 +137,7 @@ public class PdfOutfileTest
 
         float leftColEdge = pout.computeLeftColEdge();
         float correctRightColEdge = DefaultValues.PAGE_WIDTH - DefaultValues.MARGIN;
-        assertEquals( correctRightColEdge, pout.computeRightColEdge( leftColEdge ), 0.05f );
+        assertEquals( correctRightColEdge, pout.computeRightColEdge( leftColEdge ), 1f );
     }
 
     @Test
