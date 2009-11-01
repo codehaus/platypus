@@ -83,7 +83,7 @@ public class PdfCommandTable
         add( new PdfParagraphIndentRight() );
         add( new PdfParagraphSkip() );
         add( new PdfPrintVariable() );
-        add( new PdfScript() );
+//        add( new PdfScript() );
         add( new PdfStrikethruOff() );
         add( new PdfStrikethruOn() );
         add( new PdfUnderlineOff() );
