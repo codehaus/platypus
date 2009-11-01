@@ -73,6 +73,7 @@ public class PdfCommandTable
         add( new PdfMarginLeft() );
         add( new PdfMarginRight() );
         add( new PdfMarginTop() );
+        add( new PdfMarginsMirrored() );
         add( new PdfNewPage() );
         add( new PdfNoIndent() );
         add( new PdfPageHeight() );
