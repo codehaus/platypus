@@ -31,7 +31,7 @@
 	<property name="vendor.libs"    		location="..\lib\" />
     <property name="vendor.lib.dir" 		location="\${build.dir}\jar\lib" />
 	
-	<property name="version"				value="0.2.0 RC 0" />
+	<property name="version"				value="0.2.0 RC 1" />
 	<property name="message" 				value="Buid Platypus for Release" />
 
     <path id="project.classpath">
