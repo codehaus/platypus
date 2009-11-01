@@ -28,7 +28,8 @@ public class PdfMarginsMirrored implements OutputCommandable
         }
 
         PdfData pdf = (PdfData) context;
-        pdf.getOutfile().setMarginsMirrored();               
+        pdf.setMarginsMirrored( true, tok.getSource() );
+        pdf.getOutfile().setMarginsMirrored();
     }
 
     public String getRoot()
