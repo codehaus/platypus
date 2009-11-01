@@ -524,15 +524,6 @@ public class PdfOutfile
      *
      * @param ch char to be emitted
      */
-//    public void emitChar( final char c )
-//    {
-//        if( iTPara == null ) {
-//            startNewParagraph();
-//        }
-//
-//        iTPara.add( new Chunk( c ));
-//    }
-
     public void emitChar( final String ch )
     {
         if( iTPara == null ) {
@@ -543,6 +534,14 @@ public class PdfOutfile
         fs.addFont( pdfData.getFont().getItextFont() );
         Phrase phr = fs.process( ch );
         iTPara.add( phr );
+    }
+
+    /**
+     * Turn on margin mirroring. 
+     */
+    public void setMarginsMirrored()
+    {
+        iTDocument.setMarginMirroring( true );
     }
 
     // ===== endPage events =======
