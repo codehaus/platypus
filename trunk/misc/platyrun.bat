@@ -5,4 +5,4 @@ rem Replace install_directory below with the complete name of the Platypus insta
 rem If the directory contains spaces, it should be enclosed in "quotes."
 
 set PLATYPUS_HOME=install_directory 
-java -Xmx256M -jar %PLATYPUS_HOME%\platypus.jar %1 %2 %3 %4 %5 %6 %7 %8
+java -Xmx256M -jar "%PLATYPUS_HOME%\platypus.jar" %1 %2 %3 %4 %5 %6 %7 %8
