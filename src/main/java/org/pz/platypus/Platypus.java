@@ -134,7 +134,7 @@ public class Platypus
         }
 
         String pluginJar =
-                PlatypusDir + "plugins" + gdd.getFileSeparator() + jarFilename + ".jar";
+                PlatypusDir + "plugins" + gdd.getFileSeparator() + jarFilename;
         pluginJar = findPluginJar( pluginJar, gdd );
 
 
