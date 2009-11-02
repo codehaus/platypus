@@ -150,7 +150,7 @@ public class PdfData implements OutputContextable
         paragraphSkip   = new Value( DefaultValues.PARA_SKIP_LINES );
         pixelsPerInch   = new Value( DefaultValues.PIXELS_PER_INCH );
 
-        scriptEngine    = createNewScriptEngine();
+//        scriptEngine    = createNewScriptEngine();
         strikethru      = new Value( false );
         typefaceMap     = new TypefaceMap( gdd );
         underline       = new Underline();
