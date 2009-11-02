@@ -165,7 +165,7 @@
         <fileset dir="${docs.dir}" />
     </copy>
     <copy  todir="${jar.dir}" >
-        <fileset dir="..\src\main" >
+        <fileset dir="..\misc" >
             <include name="*.bat" />
         </fileset>
     </copy>
