@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
+ 
+	Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+	Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
+	This is the full Platypus build file, that creates all the
+     the plugins and bundles them will all necessary files to run
+     in a previously constructed Platypus home directory.
+
+     Note: this contains no tests or reports.
+
+     2009-06-09  alb incomplete, but a start. 
+     2009-06-23  alb complete, works correctly.
+     2009-10-01  alb added ..\ to all files to reflect new project organization; added licenses to jar
+
+-->
+
+<project name="platypus-build" default="all" basedir=".">
+	<property name="build.dir" 				location="..\target\" />
+	<property name="classes.dir" 			location="\${build.dir}\classes\" />
+	<property name="config.dir"				location="..\config\" />
+    <property name="docs.dir"       		location="..\target\docs\" />
+    <property name="fonts.dir"      		location="..\fonts\" />
+	<property name="licenses.dir"			location="..\licenses\" />
+	<property name="jar.dir"				location="\${build.dir}\jar"/>
+	<property name="src.dir" 				location="..\src\main\java"/>
+    <property name="src.pdf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\pdf"/>
+    <property name="src.listing.plugin.dir" location="\${src.dir}\org\pz\platypus\plugin\listing"/>
+	<property name="src.test.dir"   		location="..\src\test\java" />
+	<property name="vendor.libs"    		location="..\lib\" />
+    <property name="vendor.lib.dir" 		location="\${build.dir}\jar\lib" />
+	
+	<property name="version"				value="0.2.0 RC 1" />
+	<property name="message" 				value="Buid Platypus for Release" />
+
+    <path id="project.classpath">
+        <pathelement location="${classes.dir}"/>
+        <fileset dir="${vendor.libs}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+<target name="all"
+        depends="compile-prep,
+                 compile,
+                 compile-listing-plugin,
+                 compile-pdf-plugin,
+                 jar-dir-prep,
+                 main-jar,
+                 plugin-listing-jar,
+                 plugin-pdf-jar,
+                 setup-config-files,
+                 setup-docs,
+				 setup-licenses,
+                 setup-vendor-libs,
+                 setup-fonts,
+                 zip-all"
+        description="Run all major targets">
+	<echo> ${message} </echo>
+</target>
+
+<target name="compile" description="Compile with Java 6">                         
+	<javac srcdir="${src.dir}"
+		   destdir="${classes.dir}">
+		   <classpath refid="project.classpath" />
+	</javac>
+</target>
+
+ <target name="compile-prep" description="Clean compilation output directory" >
+	<mkdir dir="${classes.dir}"/>
+    <delete dir="${classes.dir}\org" />
+</target>
+
+<target name="compile-listing-plugin" depends="compile" description="Compile listing plug-in with Java 6">
+	<javac srcdir="${src.listing.plugin.dir}"
+		   destdir="${classes.dir}">
+		   <classpath refid="project.classpath" />
+	</javac>
+</target>
+
+<target name="compile-pdf-plugin" depends="compile" description="Compile PDF plug-in with Java 6">
+	<javac srcdir="${src.pdf.plugin.dir}"
+		   destdir="${classes.dir}">
+		   <classpath refid="project.classpath" />
+	</javac>
+</target>
+
+<target name="jar-dir-prep" description="Prepare JAR directory">
+	<mkdir  dir="${jar.dir}"/>
+    <delete dir="${jar.dir}\plugins\" />
+	<mkdir  dir="${jar.dir}\plugins\" />
+</target>
+
+
+<target name="plugin-listing-jar" description="Create JAR for listing plugin">
+    <delete dir="${jar.dir}\plugins\listing\" />
+    <mkdir dir="${jar.dir}\plugins\listing\org\pz\platypus\plugin\listing" />
+	<copy todir="${jar.dir}\plugins\listing\org\pz\platypus\plugin\listing">
+		<fileset dir="${classes.dir}\org\pz\platypus\plugin\listing" />
+    </copy>
+
+	<jar destfile="${jar.dir}\plugins\listing.jar"
+		 basedir="${jar.dir}\plugins\listing" >
+		 <manifest>
+			<attribute name="Implementation-Title" value="Platypus listing output plugin" />
+			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
+			<attribute name="Implementation-Version" value="Platypus ${version}" />
+            <attribute name="Class-Path" value="..\lib\iText-2.1.3.jar" />
+		</manifest>
+    </jar>
+
+    <delete dir="${jar.dir}\plugins\listing\" />
+</target>
+
+<target name="main-jar" depends="compile" description="Build main JAR file">
+	<jar destfile="${jar.dir}\platypus.jar">
+		<fileset dir="${build.dir}\classes\">
+			<exclude name="**\plugin\**" />
+		</fileset>
+		<manifest>
+			<attribute name="Implementation-Title" value="Platypus Page Layout And Typesetting System" />
+			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
+			<attribute name="Implementation-Version" value="${version}" />
+			<attribute name="Main-Class" value="org.pz.platypus.Platypus" />
+            <attribute name="Class-Path" value="lib\iText-2.1.3.jar" />
+		</manifest>
+	</jar>
+</target>
+
+
+<target name="plugin-pdf-jar" description="Create JAR for pdf plugins">
+    <delete dir="${jar.dir}\plugins\pdf\" />
+    <mkdir dir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin\pdf" />
+	<copy todir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin\pdf">
+		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\pdf" />
+    </copy>
+
+	<jar destfile="${jar.dir}\plugins\pdf.jar"
+		 basedir="${jar.dir}\plugins\pdf\" >
+        <manifest>
+			<attribute name="Implementation-Title" value="Platypus PDF output plugin" />
+			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
+			<attribute name="Implementation-Version" value="Platypus ${version}" />
+            <attribute name="Class-Path" value="..\lib\iText-2.1.3.jar" />
+		</manifest>
+    </jar>
+
+    <delete dir="${jar.dir}\plugins\pdf\" />
+</target>
+
+<target  name="setup-config-files" description="Set up config files">
+    <delete dir="${jar.dir}\config\"/>
+	<mkdir  dir="${jar.dir}\config\" />
+
+    <copy todir="${jar.dir}\config\">
+		<fileset dir="${config.dir}" >
+            <exclude name="*.txt" />
+        </fileset>
+    </copy>
+</target>
+
+<target  name="setup-docs" description="set up misc docs in root of JAR">
+    <copy todir="${jar.dir}" >
+        <fileset dir="${docs.dir}" />
+    </copy>
+    <copy  todir="${jar.dir}" >
+        <fileset dir="..\misc" >
+            <include name="*.bat" />
+			<include name="*.pdf" />
+        </fileset>
+    </copy>
+</target>
+
+<target  name="setup-fonts" description="package free fonts">
+    <delete dir="${jar.dir}\fonts"/>
+	<mkdir  dir="${jar.dir}\fonts\" />
+    <copy todir="${jar.dir}\fonts\" >
+        <fileset dir="${fonts.dir}" />
+    </copy>
+</target>
+
+<target  name="setup-licenses" description="package licenses">
+    <delete dir="${jar.dir}\licenses\"/>
+	<mkdir  dir="${jar.dir}\licenses\" />
+    <copy todir="${jar.dir}\licenses\" >
+        <fileset dir="${licenses.dir}" />
+    </copy>
+</target>
+
+<target name="setup-vendor-libs" description="Set up 3rd party libs">
+    <delete dir="${vendor.lib.dir}" />
+	<mkdir  dir="${vendor.lib.dir}" />
+	<copy todir="${vendor.lib.dir}">
+		<fileset dir="${vendor.libs}">
+                <exclude name="junit*" />
+                <exclude name="hamcrest*" /> 
+        </fileset>
+    </copy>    
+</target>
+
+<target name="zip-all">
+    <zip destfile="${build.dir}\platypus-${version}.zip"
+         basedir="${jar.dir}" >
+    </zip>
+</target>
+
+</project>
+ 
