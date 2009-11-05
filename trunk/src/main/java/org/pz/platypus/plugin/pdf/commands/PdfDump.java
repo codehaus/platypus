@@ -192,7 +192,7 @@ public class PdfDump implements OutputCommandable
                             gdd.getLit( "POINTS") + " " +
                             gdd.getLit( "LAST_CHANGED_AT" ) + " " +
                             pdf.getParagraphIndentRightLine().getLineNumber() );
-        
+
         System.out.println( "\t" +
                             gdd.getLit( "FIRST_LINE" ) + " " + gdd.getLit( "INDENT" ) + ": " +
                             pdf.getFirstLineIndent() + " " +
@@ -212,7 +212,7 @@ public class PdfDump implements OutputCommandable
                             gdd.getLit( "POINTS") + " " +
                             gdd.getLit( "LAST_CHANGED_AT" ) + " " +
                             pdf.getLeadingLine().getLineNumber() );
-        
+
         System.out.println( "\t" +
                             gdd.getLit( "SPACE_TO_SKIP_AT_EO_PARAGRAPH" ) + ": " +
                             pdf.getParagraphSkip() + " " +
@@ -241,14 +241,15 @@ public class PdfDump implements OutputCommandable
         if( doHeading ) {
             doHeading( gdd, tok );
         }
-        
+
         UserStrings userStrings = gdd.getUserStrings();
         if( userStrings == null ) {
             gdd.logWarning( gdd.getLit( "USER_DEFINED_STRINGS" ) + ": " +
                             gdd.getLit( "NULL" ));
             return;
         }
-        
+
+        // this call does the print out of user strings, including "none" if none defined
         System.out.println( userStrings.dump( gdd.getLits() ));
     }
 
