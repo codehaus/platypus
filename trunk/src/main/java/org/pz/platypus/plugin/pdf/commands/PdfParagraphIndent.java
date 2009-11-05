@@ -31,21 +31,38 @@ public class PdfParagraphIndent implements OutputCommandable
 
         PdfData pdf = (PdfData) context;
 
-        float indent = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
-        if ( indent < 0 ) { //TODO: get column width and make it the maximum indent to test for
-            GDD gdd = pdf.getGdd();
-            gdd.logWarning( gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                            gdd.getLit( "ERROR.INVALID_PARAGRAPH_INDENT" ) + " " +
-                            gdd.getLit( "IGNORED" ));
+        float indent = obtainNewIndent( tok, pdf );
+        if( Float.isNaN( indent )) {
             return;
         }
 
         float currParaIndent = pdf.getParagraphIndent();
-
         if ( indent != currParaIndent ) {
             pdf.setParagraphIndent( indent, tok.getSource() );
             return;
         }
+    }
+
+    /**
+     * Extracts the new indent amount from the token and verifies its value.
+     * @param tok token containing the new indent specification
+     * @param pdf current PDF status info
+     * @return the indent if value is valid; otherwise Float.Nan (Nan = a value that's Not a Number)
+     */
+    float obtainNewIndent( final Token tok, final PdfData pdf )
+    {
+        float indent = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
+
+        if ( indent < 0 || indent >= pdf.getColumnWidth() ) {
+            GDD gdd = pdf.getGdd();
+            gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                            gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                            gdd.getLit( "ERROR.INVALID_PARAGRAPH_INDENT" ) + " " +
+                            gdd.getLit( "IGNORED" ));
+            return( Float.NaN );
+        }
+
+        return( indent );
     }
 
     public String getRoot()
