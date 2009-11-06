@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -9,7 +9,6 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.command.EolTreatment;
 import org.pz.platypus.command.Alignment;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
@@ -36,7 +35,8 @@ public class PdfAlignment implements OutputCommandable
             pdfData.setAlignment( Alignment.CENTER, tok.getSource() );
         }
         else
-        if( tok.getParameter().getString().equals( "just" )) {
+        if( tok.getParameter().getString().equals( "just" ) ||
+            tok.getParameter().getString().equals( "justified" )) {
             pdfData.setAlignment( Alignment.JUST, tok.getSource() );
         }
         else
@@ -50,7 +50,8 @@ public class PdfAlignment implements OutputCommandable
         else
         {
             GDD gdd = pdfData.getGdd();
-            gdd.logInfo( gdd.getLit( "LINE#" ) + tok.getSource().getLineNumber() + " " +
+            gdd.logInfo( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                         gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                          gdd.getLit( "ERROR.INVALID_ALIGNMENT" ) + " " +
                          tok.getParameter().getString() + " " +
                          gdd.getLit( "IGNORED" ));
