@@ -50,11 +50,11 @@ public class PdfAlignment implements OutputCommandable
         else
         {
             GDD gdd = pdfData.getGdd();
-            gdd.logInfo( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
-                         gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                         gdd.getLit( "ERROR.INVALID_ALIGNMENT" ) + " " +
-                         tok.getParameter().getString() + " " +
-                         gdd.getLit( "IGNORED" ));
+            gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                            gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                            gdd.getLit( "ERROR.INVALID_ALIGNMENT" ) + " " +
+                            tok.getParameter().getString() + " " +
+                            gdd.getLit( "IGNORED" ));
         }
     }
 
