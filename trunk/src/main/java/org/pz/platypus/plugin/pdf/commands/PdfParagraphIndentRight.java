@@ -9,6 +9,7 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
+import org.pz.platypus.exceptions.InvalidCommandParameterException;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.Conversions;
@@ -25,20 +26,24 @@ public class PdfParagraphIndentRight implements OutputCommandable
 
     public void process( final OutputContextable context, final Token tok, final int tokNum )
     {
+        float indent;
+
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
         }
 
         PdfData pdf = (PdfData) context;
-        float indent = obtainNewIndent( tok, pdf );
-        if( Float.isNaN( indent )) {
+
+        try {
+            indent = obtainNewIndent( tok, pdf );
+        }
+        catch( InvalidCommandParameterException icpe ) {
+            showErrorMsg( tok, pdf );
             return;
         }
 
-        float currParaIndentRight = pdf.getParagraphIndentRight();
-        if ( indent != currParaIndentRight ) {
+        if ( indent != pdf.getParagraphIndentRight() ) {
             pdf.setParagraphIndentRight( indent, tok.getSource() );
-            return;
         }
     }
 
@@ -50,18 +55,28 @@ public class PdfParagraphIndentRight implements OutputCommandable
      */
     float obtainNewIndent( final Token tok, final PdfData pdf )
     {
-        float indent = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
-        if ( indent < 0 || indent >= pdf.getColumnWidth() ) {
-            GDD gdd = pdf.getGdd();
-            gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
-                            gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                            gdd.getLit( "ERROR.INVALID_PARAGRAPH_INDENT" ) + " " +
-                            gdd.getLit( "IGNORED" ));
-            return( Float.NaN );
+        float newIndent = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
+        if ( newIndent < 0 || newIndent >= pdf.getColumnWidth() ) {
+            throw new InvalidCommandParameterException();
         }
 
-        return( indent );
+        return( newIndent );
     }
+
+    /**
+     * Show error message, giving location in Platypus input file
+     * @param tok contains the location data
+     * @param pdf contains the location of the logger and literals file
+     */
+    void showErrorMsg( final Token tok, final PdfData pdf )
+    {
+        GDD gdd = pdf.getGdd();
+        gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                        gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                        gdd.getLit( "ERROR.INVALID_PARAGRAPH_INDENT" ) + " " +
+                        gdd.getLit( "IGNORED" ));
+    }
+
 
     public String getRoot()
     {
