@@ -88,6 +88,7 @@ public class PdfCommandTable
         add( new PdfStrikethruOn() );
         add( new PdfUnderlineOff() );
         add( new PdfUnderlineOn() );
+        add( new PdfUrl() );
     }
 
     /**

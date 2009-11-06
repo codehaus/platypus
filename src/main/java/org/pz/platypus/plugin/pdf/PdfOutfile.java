@@ -536,8 +536,21 @@ public class PdfOutfile
         iTPara.add( phr );
     }
 
+    public void addUrl( final String url, final String coverText )
+    {
+        if( url == null ) {
+            return;
+        }
+
+        Anchor anchor = new Anchor( url );
+        if( coverText == null ) {
+            anchor.setReference( url );
+        }
+        iTPara.add( anchor );
+    }
+
     /**
-     * Turn on margin mirroring. 
+     * Turn on margin mirroring.
      */
     public void setMarginsMirrored()
     {
