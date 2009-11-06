@@ -50,7 +50,8 @@ public class PdfParagraphIndentTest
         parm = new CommandParameter();
         parm.setAmount( currColWidth / 4.0f );
         parm.setUnit( UnitType.POINT );
-        tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:", "[paraident:200]", parm );
+        tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:",
+                         "[paraindent:200]", parm );
 
         PdfParagraphIndent ppi = new PdfParagraphIndent();
         ppi.process( pdd, tok, 2 );
@@ -61,14 +62,10 @@ public class PdfParagraphIndentTest
     @Test
     public void testValidParagraphIndentOfZero()
     {
-        // get the starting page width and height
-        pdd.setColumnWidth( 288f, new Source() );
-        float currColWidth = pdd.getColumnWidth();
-
         parm = new CommandParameter();
         parm.setAmount( 0f );
         parm.setUnit( UnitType.POINT );
-        tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:", "[paraident:0]", parm );
+        tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:", "[paraindent:0]", parm );
 
         PdfParagraphIndent ppi = new PdfParagraphIndent();
         ppi.process( pdd, tok, 2 );
@@ -79,15 +76,13 @@ public class PdfParagraphIndentTest
     @Test
     public void testInvalidParagraphIndentThatsNegative()
     {
-        float startingIndent = pdd.getParagraphIndent();
         // get the starting page width and height
-        pdd.setColumnWidth( 288f, new Source() );
-        float currColWidth = pdd.getColumnWidth();
+        float startingIndent = pdd.getParagraphIndent();
 
         parm = new CommandParameter();
         parm.setAmount( -4.0f );
         parm.setUnit( UnitType.POINT );
-        tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:", "[paraident:-4]", parm );
+        tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:", "[paraindent:-4]", parm );
 
         PdfParagraphIndent ppi = new PdfParagraphIndent();
         ppi.process( pdd, tok, 2 );
@@ -102,8 +97,9 @@ public class PdfParagraphIndentTest
     @Test
     public void testInvalidParagraphIndentTooLarge()
     {
-        float startingIndent = pdd.getParagraphIndent();
         // get the starting page width and height
+        float startingIndent = pdd.getParagraphIndent();
+
         pdd.setColumnWidth( 288f, new Source() );
         float currColWidth = pdd.getColumnWidth();
 
@@ -111,7 +107,7 @@ public class PdfParagraphIndentTest
         parm.setAmount( 500 *  currColWidth );
         parm.setUnit( UnitType.POINT );
         tok = new Token( new Source(), TokenType.COMMAND, "[paraindent:",
-                         "[paraident:144000]", parm );
+                         "[paraindent:144000]", parm );
 
         PdfParagraphIndent ppi = new PdfParagraphIndent();
         ppi.process( pdd, tok, 2 );
