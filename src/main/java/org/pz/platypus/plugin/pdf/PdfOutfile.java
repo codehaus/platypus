@@ -536,13 +536,21 @@ public class PdfOutfile
         iTPara.add( phr );
     }
 
+    /**
+     * Emits a URL with the specified cover text. Creates a clickable link in the PDF doc.
+     * If no cover text is specified, then it defaults to the URL itself. (In other words,
+     * http://pz.org would print as is.)
+     *
+     * @param url the URL of the link
+     * @param coverText words to be printed and made linkable (in lieu of printing the URL)
+     */
     public void addUrl( final String url, final String coverText )
     {
         if( url == null ) {
             return;
         }
 
-        Anchor anchor = new Anchor( url );
+        Anchor anchor = new Anchor( url, pdfData.getFont().getItextFont() );
         if( coverText == null ) {
             anchor.setReference( url );
         }
