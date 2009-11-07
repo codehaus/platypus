@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.*;
 import org.pz.platypus.plugin.pdf.PdfData;
+import org.pz.platypus.plugin.pdf.Columns;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.test.mocks.MockLiterals;
 
@@ -38,14 +39,15 @@ public class PdfParagraphIndentRightTest
         gdd.setLits( new MockLiterals() );
         gdd.getLogger().setLevel( Level.OFF );
         pdd = new PdfData( gdd );
+        pdd.setColumns( new Columns( pdd ));
     }
 
     @Test
     public void testValidParagraphIndent()
     {
         // get the starting page width and height
-        pdd.setColumnWidth( 288f, new Source() );
-        float currColWidth = pdd.getColumnWidth();
+        pdd.setUserSpecifiedColumnWidth( 288f, new Source() );
+        float currColWidth = pdd.getUserSpecifiedColumnWidth();
 
         parm = new CommandParameter();
         parm.setAmount( currColWidth / 4.0f );
