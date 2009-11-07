@@ -30,20 +30,30 @@ public class PdfUrl implements OutputCommandable
         }
 
         PdfData pdf = (PdfData) context;
-        GDD gdd = pdf.getGdd();
 
         String url = tok.getParameter().getString();
         if( url == null ) {
-            gdd.logWarning(
-                    gdd.getLit( "FILE#" ) + " " + tok.getSource().getFileNumber() + " " +
-                    gdd.getLit( "LINE#" ) + " " + tok.getSource().getLineNumber() + " " +
-                    gdd.getLit( "ERROR.ITEM_TO_DUMP_IS_NULL" ) + " " +
-                    gdd.getLit( "IGNORED" ));
+            showErrorMsg( tok, pdf );
             return;
         }
 
         PdfOutfile outfile = pdf.getOutfile();
         outfile.addUrl( url, null );
+    }
+
+    /**
+     * Show error message, giving location in Platypus input file
+     * @param tok contains the location data
+     * @param pdf contains the location of the logger and literals file
+     */
+    void showErrorMsg( final Token tok, final PdfData pdf )
+    {
+        GDD gdd = pdf.getGdd();
+        gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                        gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                        gdd.getLit( "ERROR.URL_IS_NULL" ) + " " +
+                        gdd.getLit( "IGNORED" ));
+
     }
 
     public String getRoot()
