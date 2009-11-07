@@ -56,7 +56,13 @@ public class PdfParagraphIndentRight implements OutputCommandable
     float obtainNewIndent( final Token tok, final PdfData pdf )
     {
         float newIndent = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
-        if ( newIndent < 0 || newIndent >= pdf.getColumnWidth() ) {
+
+        float colWidth = pdf.getUserSpecifiedColumnWidth();
+        if( colWidth == 0f ) { // if = 0; get computed size
+            colWidth = pdf.getColumns().getColumn( pdf.getCurrColumn() ).getWidth();
+        }
+
+        if ( newIndent < 0 || newIndent >= colWidth ) {
             throw new InvalidCommandParameterException();
         }
 
