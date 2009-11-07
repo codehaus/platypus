@@ -80,7 +80,7 @@ public class PdfData implements OutputContextable
 
     private Value alignment;
     private Value columnCount;
-    private Value columnWidth;
+    private Value userSpecifiedColumnWidth;
     private Columns columns;
     private int currColumn;
     private boolean eolPending;
@@ -120,7 +120,6 @@ public class PdfData implements OutputContextable
         alignment       = new Value( DefaultValues.ALIGNMENT );
 
         columnCount     = new Value( DefaultValues.COLUMN_COUNT );
-        columnWidth     = new Value( DefaultValues.COLUMN_WIDTH );
         currColumn      = 0;
 
         eolPending      = false;
@@ -154,6 +153,7 @@ public class PdfData implements OutputContextable
         strikethru      = new Value( false );
         typefaceMap     = new TypefaceMap( gdd );
         underline       = new Underline();
+        userSpecifiedColumnWidth = new Value( DefaultValues.COLUMN_WIDTH );
     }
 
     /**
@@ -272,21 +272,6 @@ public class PdfData implements OutputContextable
     public void setColumnCount( final int newCount, final Source fileAndLine )
     {
         setValue( columnCount, newCount, fileAndLine, "_columnCount" );
-    }
-
-    public float getColumnWidth()
-    {
-        return( columnWidth.fval );
-    }
-
-    public Source getColumnWidthLine()
-    {
-        return( columnWidth.source );
-    }
-
-    public void setColumnWidth( final float newWidth, final Source fileAndLine )
-    {
-        setValue( columnWidth, newWidth, fileAndLine, "_columnWidth" );
     }
 
     public Columns getColumns()
@@ -678,5 +663,20 @@ public class PdfData implements OutputContextable
     public Underline getUnderline()
     {
         return( underline );
+    }
+
+    public float getUserSpecifiedColumnWidth()
+    {
+        return( userSpecifiedColumnWidth.fval );
+    }
+
+    public Source getUserSpecifiedColumnWidthLine()
+    {
+        return( userSpecifiedColumnWidth.source );
+    }
+
+    public void setUserSpecifiedColumnWidth( final float newWidth, final Source fileAndLine )
+    {
+        setValue( userSpecifiedColumnWidth, newWidth, fileAndLine, "_userSpecifiedColumnWidth" );
     }
 }

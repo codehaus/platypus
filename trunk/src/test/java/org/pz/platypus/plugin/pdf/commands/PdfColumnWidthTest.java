@@ -41,7 +41,7 @@ public class PdfColumnWidthTest
         gdd.getLogger().setLevel( Level.OFF );
         pdd = new PdfData( gdd );
         pdd.setColumns( new Columns( pdd ));
-        pdd.setColumnWidth( 0f, new Source() );
+        pdd.setUserSpecifiedColumnWidth( 0f, new Source() );
     }
 
     // ==== actual tests start here ===== //
@@ -124,6 +124,6 @@ public class PdfColumnWidthTest
                           new Token( new Source(), TokenType.COMMAND, colWidth.getRoot(), "", cp),
                           2 );
 
-        assertEquals( validWidth, pdd.getColumnWidth(), 0.1f );
+        assertEquals( validWidth, pdd.getUserSpecifiedColumnWidth(), 0.1f );
     }
 }
