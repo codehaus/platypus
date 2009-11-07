@@ -110,7 +110,7 @@ public class Columns
         GDD gdd = pdf.getGdd();
         float gutterWidth = 0f;
 
-        float userSpecifiedWidth = pdf.getColumnWidth();
+        float userSpecifiedWidth = pdf.getUserSpecifiedColumnWidth();
         if( userSpecifiedWidth == 0f ) {    // 0 means use the default calculation
             gutterWidth = getRecommendedGutterSize( cols );
             return (( textWidth - ( gutterWidth * ( cols - 1 ))) / cols );
@@ -189,7 +189,7 @@ public class Columns
 //        assert( colWidth >= 0f );
 //        assert( pdd != null );
 
-//        if( pdd.getColumnWidth() == 0f ) {
+//        if( pdd.getUserSpecifiedColumnWidth() == 0f ) {
             switch ( numberOfCols )
             {
                 case 1: return(  0f );

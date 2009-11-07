@@ -32,7 +32,7 @@ public class PdfColumnsTest
         gdd.getLogger().setLevel( Level.OFF );
         pdd = new PdfData( gdd );
         pdd.setColumns( new Columns( pdd ));
-        pdd.setColumnWidth( 0f, new Source() );
+        pdd.setUserSpecifiedColumnWidth( 0f, new Source() );
     }
 
     // ==== actual tests start here ===== //
