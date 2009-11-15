@@ -31,7 +31,9 @@ testPdfInputOutput( javaRun )
 testPdfInputFileOutputFileVerbose( javaRun )
 testPdfInputFileOutputFileVeryVerbose( javaRun )
 testListingSimpleInputOutput( javaRun )
-
+testListingInputOutputVeryVerbose( javaRun )
+testPdfInputOutputInvalidConfigFile( javaRun )
+testPdfInputOutputWithExtraUnsupportedOption( javaRun )
 
 return
 
@@ -48,7 +50,7 @@ def void testCopyrightString( String javaRun )
         output.contains( "Pacific Data Works LLC. All Rights Reserved." ))
         print( "Success in " )
     else
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     println( description );
 }
 
@@ -70,7 +72,7 @@ def void testHelpOutput( String javaRun )
         output.contains( "-vverbose" ))
         print( "Success in " )
     else
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     println( description );
 }
 
@@ -91,7 +93,7 @@ def void testHelpOutputEqualToNoCommandLineArgs( String javaRun )
     if( output == outputFromHelp ) // in Groovy, strings are compared with ==
         print( "Success in " )
     else
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     println( description );
 }
 
@@ -108,7 +110,7 @@ def void testValidCLButMissingInputFile( String javaRun )
     if( err.contains( "Error: Cannot find file: nonexistent.plat" ))
         print( "Success in " )
     else  {
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     }
     println( description );
 }
@@ -129,7 +131,7 @@ def void testEmptyInputFile( String javaRun )
     pw.write( "" )
     pw.close()
     if ( ! emptyFile.exists() ) {
-        println( "FAILURE in ${description}. Could not Create empty file" )
+        println( "***FAILURE in ${description}. Could not Create empty file" )
         return
     }
 
@@ -142,7 +144,7 @@ def void testEmptyInputFile( String javaRun )
         print( "Success in " )
     }
     else  {
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     }
     println( description );
 
@@ -166,7 +168,7 @@ def void testUnsupportedFormat( String javaRun )
     pw.write( "" )
     pw.close()
     if ( ! emptyFile.exists() ) {
-        println( "FAILURE in ${description}. Could not Create empty file" )
+        println( "***FAILURE in ${description}. Could not Create empty file" )
         return
     }
 
@@ -180,7 +182,7 @@ def void testUnsupportedFormat( String javaRun )
         print( "Success in " )
     }
     else  {
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     }
     println( description );
 
@@ -201,11 +203,14 @@ def void testFormatSpecifiedButNoFiles( String javaRun )
     if( err.contains( "Error: No file to process was specified. Exiting..." ))
         print( "Success in " )
     else  {
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     }
     println( description );
 }
 
+/**
+ * Test of simple PDF file generation.
+ */
 def void testPdfInputOutput( String javaRun )
 {
     def String description = "Test: input-file output-file.pdf"
@@ -217,7 +222,7 @@ def void testPdfInputOutput( String javaRun )
     pw.write( "hello, world" )
     pw.close()
     if ( ! helloFile.exists() ) {
-        println( "FAILURE in ${description}. Could not create text file" )
+        println( "***FAILURE in ${description}. Could not create text file" )
         return
     }
 
@@ -233,7 +238,7 @@ def void testPdfInputOutput( String javaRun )
         print( "Success in " )
     }
     else  {
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     }
     println( description );
 
@@ -241,6 +246,9 @@ def void testPdfInputOutput( String javaRun )
     pdfFile.delete()
 }
 
+/**
+ * Test for valid output from PDF generation with -verbose option
+ */
 def void testPdfInputFileOutputFileVerbose( String javaRun )
 {
     def String description = "Test: input-file output-file.pdf -verbose"
@@ -252,7 +260,7 @@ def void testPdfInputFileOutputFileVerbose( String javaRun )
     pw.write( "hello, world" )
     pw.close()
     if ( ! helloFile.exists() ) {
-        println( "FAILURE in ${description}. Could not create text file" )
+        println( "***FAILURE in ${description}. Could not create text file" )
         return
     }
 
@@ -273,7 +281,7 @@ def void testPdfInputFileOutputFileVerbose( String javaRun )
         print( "Success in " )
     }
     else  {
-        print( "FAILURE in " )
+        print( "***FAILURE in " )
     }
     println( description );
 
@@ -281,6 +289,9 @@ def void testPdfInputFileOutputFileVerbose( String javaRun )
     pdfFile.delete()
 }
 
+/**
+ * Test for valid output from PDF generation with -vverbose option
+ */
 def void testPdfInputFileOutputFileVeryVerbose( String javaRun )
 {
     def String description = "Test: input-file output-file.pdf -vverbose"
@@ -292,7 +303,7 @@ def void testPdfInputFileOutputFileVeryVerbose( String javaRun )
     pw.write( "hello, world" )
     pw.close()
     if ( ! helloFile.exists() ) {
-        println( "FAILURE in ${description}. Could not create text file" )
+        println( "***FAILURE in ${description}. Could not create text file" )
         return
     }
 
@@ -315,7 +326,7 @@ def void testPdfInputFileOutputFileVeryVerbose( String javaRun )
         print( "Success in " )
     }
     else  {
-        print( "FAILURE in " )
+        print( "***FAILURE in " )
     }
     println( description );
 
@@ -323,6 +334,9 @@ def void testPdfInputFileOutputFileVeryVerbose( String javaRun )
     pdfFile.delete()
 }
 
+/**
+ * Test of valid listing generation.
+ */
 def void testListingSimpleInputOutput( String javaRun )
 {
     def String description = "Test: input-file output-file.html -format listing"
@@ -334,7 +348,7 @@ def void testListingSimpleInputOutput( String javaRun )
     pw.write( "hello, world" )
     pw.close()
     if ( ! helloFile.exists() ) {
-        println( "FAILURE in ${description}. Could not create text file" )
+        println( "***FAILURE in ${description}. Could not create text file" )
         return
     }
 
@@ -350,10 +364,131 @@ def void testListingSimpleInputOutput( String javaRun )
         print( "Success in " )
     }
     else  {
-        print( "FAILURE in ")
+        print( "***FAILURE in " )
     }
     println( description );
 
     helloFile.delete()
     listingFile.delete()
+}
+
+/**
+ * Does the HTML listing work correctly with -vverbose? This validates both -verbose and -vverbose
+ * output data.
+ */
+def void testListingInputOutputVeryVerbose( String javaRun )
+{
+    def String description = "Test: input-file output-file.html -format listing -vverbose"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "***FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.html -format listing -vverbose"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File listingFile = new File( "${helloFileName}.html" )
+
+    if(( err == null || err.isEmpty() ) &&
+        listingFile.exists() &&
+        output.contains( "Property file loaded with" ) &&
+        output.contains( "Loading output plug-in" ) &&
+        output.contains( "Returned from output plug-in." ) &&
+        output.contains( "Line 0001: Text") &&
+        output.contains( "hello, world" )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "***FAILURE in " )
+    }
+    println( description );
+
+    helloFile.delete()
+    listingFile.delete()
+}
+
+/**
+ * Test valid input and output files but specification of a non-existent config file (via -config)
+ */
+def void testPdfInputOutputInvalidConfigFile( String javaRun )
+{
+    def String description = "Test: input-file output-file.pdf -config invalid-file"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "***FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -config fungus.properties"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    if(( err.contains( "Error: Configuration file could not be found:") )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "***FAILURE in " )
+    }
+    println( description );
+
+    helloFile.delete()
+    pdfFile.delete()
+}
+
+/**
+ * Test response if an unsupported option is specified on the command line
+ */
+def void testPdfInputOutputWithExtraUnsupportedOption( String javaRun )
+{
+    def String description = "Test: input-file output-file.pdf -unsupported-option"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "***FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -tomato"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    if(( err.contains( "Error: Invalid option specified:") )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "***FAILURE in " )
+    }
+    println( description );
+
+    helloFile.delete()
+    pdfFile.delete()
 }
