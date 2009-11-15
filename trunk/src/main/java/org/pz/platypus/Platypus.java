@@ -138,7 +138,7 @@ public class Platypus
         pluginJar = findPluginJar( pluginJar, gdd );
 
 
-        gdd.log( "Loading ouput plug-in: " + pluginJar );
+        gdd.log( "Loading output plug-in: " + pluginJar );
         return( pluginJar );
     }
 
@@ -153,7 +153,7 @@ public class Platypus
                                          final GDD gdd, final CommandLineArgs clArgs )
     {
         pluginLoader = new PluginLoader( pluginName, gdd );
-        gdd.log( "Transferring control to output plugin." );
+        gdd.log( "Transferring control to output plug-in." );
         pluginLoader.load( clArgs );
     }
 
@@ -424,7 +424,7 @@ public class Platypus
             final String plugin = loadOutputPlugin( gdd, clArgs );
             runOutputPlugin( plugin, gdd, clArgs );
 
-            gdd.log( "Returned from output plugin." );
+            gdd.log( "Returned from output plug-in." );
 
             if( gdd.isClVVerbose() ) {
                 gdd.getInputTokens().dump( gdd );
