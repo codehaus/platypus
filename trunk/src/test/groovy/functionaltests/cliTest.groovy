@@ -27,6 +27,11 @@ testValidCLButMissingInputFile( javaRun )
 testEmptyInputFile( javaRun )
 testUnsupportedFormat( javaRun )
 testFormatSpecifiedButNoFiles( javaRun )
+testPdfInputOutput( javaRun )
+testPdfInputFileOutputFileVerbose( javaRun )
+testPdfInputFileOutputFileVeryVerbose( javaRun )
+testListingSimpleInputOutput( javaRun )
+
 
 return
 
@@ -39,11 +44,11 @@ def void testCopyrightString( String javaRun )
     def proc = javaRun.execute()
     def output = proc.in.text
 
-    if( ! output.contains( "(c) Copyright 2006-0" ) ||
-        ! output.contains( "Pacific Data Works LLC. All Rights Reserved." ))
-        print( "FAILURE in " )
+    if( output.contains( "(c) Copyright 2006-0" ) &&
+        output.contains( "Pacific Data Works LLC. All Rights Reserved." ))
+        print( "Success in " )
     else
-        print( "Success in ")
+        print( "FAILURE in ")
     println( description );
 }
 
@@ -201,4 +206,154 @@ def void testFormatSpecifiedButNoFiles( String javaRun )
     println( description );
 }
 
+def void testPdfInputOutput( String javaRun )
+{
+    def String description = "Test: input-file output-file.pdf"
 
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.pdf"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    if(( err == null || err.isEmpty() ) && ( pdfFile.exists() )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "FAILURE in ")
+    }
+    println( description );
+
+    helloFile.delete()
+    pdfFile.delete()
+}
+
+def void testPdfInputFileOutputFileVerbose( String javaRun )
+{
+    def String description = "Test: input-file output-file.pdf -verbose"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -verbose"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    // make sure output contains some verbose logging
+    if(( err == null || err.isEmpty() ) &&
+        pdfFile.exists() &&
+        output.contains( "Property file loaded with") &&
+        output.contains( "Processing starting in PDF plug-in" ) &&
+        output.contains( "Closed output PDF file" )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "FAILURE in " )
+    }
+    println( description );
+
+    helloFile.delete()
+    pdfFile.delete()
+}
+
+def void testPdfInputFileOutputFileVeryVerbose( String javaRun )
+{
+    def String description = "Test: input-file output-file.pdf -vverbose"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -vverbose"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    // make sure the output has -verbose logging and -vverbose token list
+    if(( err == null || err.isEmpty() ) &&
+        pdfFile.exists() &&
+        output.contains( "Property file loaded with") &&
+        output.contains( "Processing starting in PDF plug-in" ) &&
+        output.contains( "Closed output PDF file" ) &&
+        output.contains( "Line 0001: Text") &&
+        output.contains( "hello, world" )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "FAILURE in " )
+    }
+    println( description );
+
+    helloFile.delete()
+    pdfFile.delete()
+}
+
+def void testListingSimpleInputOutput( String javaRun )
+{
+    def String description = "Test: input-file output-file.html -format listing"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName} ${helloFileName}.html -format listing"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File listingFile = new File( "${helloFileName}.html" )
+
+    if(( err == null || err.isEmpty() ) && ( listingFile.exists() )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "FAILURE in ")
+    }
+    println( description );
+
+    helloFile.delete()
+    listingFile.delete()
+}
