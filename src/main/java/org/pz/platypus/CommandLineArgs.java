@@ -124,7 +124,7 @@ public class CommandLineArgs
                 }
 
                 if ( ! areMoreArguments( args, currentArg )) {
-                    System.out.println( "Error! Missing argument for " + args[currentArg] +
+                    System.err.println( "Error! Missing argument for " + args[currentArg] +
                             ". Ignored." );
                     continue;
                 }
@@ -133,9 +133,9 @@ public class CommandLineArgs
                 currentArg++;
             }
             else {
-                System.out.println( "Error: Invalid option specified: " +
+                System.err.println( "Error: Invalid option specified: " +
                                     args[currentArg] +
-                                    "Ignored." );
+                                    " Ignored." );
             }
             //curr: else arg not recognized processing.
         }
