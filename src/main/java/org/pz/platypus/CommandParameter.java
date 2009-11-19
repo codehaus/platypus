@@ -30,7 +30,7 @@ public class CommandParameter
 
     /** used only if parameter is a string */
     private String string;
-    
+
     public CommandParameter()
     {
         this.unit = UnitType.ERROR;
@@ -66,7 +66,7 @@ public class CommandParameter
         }
 
         // so only differences in string (of which this.string is known not to be null apply
-        if( cp.getString() == null || string != cp.getString() ) {
+        if( cp.getString() == null || ! string.equals( cp.getString() )) {
             return( false );
         }
 

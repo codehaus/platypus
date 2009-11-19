@@ -30,26 +30,26 @@ public class PdfScript implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        PdfData pdfData = (PdfData) context;
+//        PdfData pdfData = (PdfData) context;
+//
+//        String script = tok.getParameter().getString();
+//        if( script.endsWith( "@" )) {
+//            script = script.substring( 0, script.length() - 1 );
+//        }
 
-        String script = tok.getParameter().getString();
-        if( script.endsWith( "@" )) {
-            script = script.substring( 0, script.length() - 1 );
-        }
+//        ScriptEngine engine = pdfData.getScriptEngine();
+//        if( engine == null ) {
+//            return;
+//        }
 
-        ScriptEngine engine = pdfData.getScriptEngine();
-        if( engine == null ) {
-            return;
-        }        
-
-        try {
-            engine.eval( script );
-        }
-        catch ( ScriptException sex ) {
-            pdfData.getGdd().logWarning(
-                    pdfData.getGdd().getLit( "LINE#" ) + tok.getSource().getLineNumber() + " " +
-                    pdfData.getGdd().getLit( "ERROR.MALFORMED_SCRIPT" ));
-        }
+//        try {
+//            engine.eval( script );
+//        }
+//        catch ( ScriptException sex ) {
+//            pdfData.getGdd().logWarning(
+//                    pdfData.getGdd().getLit( "LINE#" ) + tok.getSource().getLineNumber() + " " +
+//                    pdfData.getGdd().getLit( "ERROR.MALFORMED_SCRIPT" ));
+//        }
     }
 
 

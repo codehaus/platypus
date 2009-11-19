@@ -25,9 +25,10 @@ public class PdfData implements OutputContextable
 {
     /**
      * Inner class containing the value of the data item, plus
-     * the line at which it was las changed.
+     * the line at which it was las changed. Made static for
+     * performance reasons (per FindBugs).
      */
-    class Value
+    static class Value
     {
         boolean bval;
         float fval;
@@ -57,19 +58,34 @@ public class PdfData implements OutputContextable
         public Value( final float val, final Source fileAndLine )
         {
             fval = val;
-            source = fileAndLine.clone();
+            try {
+                source = fileAndLine.clone();
+            }
+            catch( CloneNotSupportedException clnse ){
+                source = new Source();
+            }
         }
 
         public Value( final String val, final Source fileAndLine )
         {
             sval = val;
-            source = fileAndLine.clone();
+            try {
+                source = fileAndLine.clone();
+            }
+            catch( CloneNotSupportedException clnse ){
+                source = new Source();
+            }
         }
 
         public Value( final boolean yn, final Source fileAndLine )
         {
             bval = yn;
-            source = fileAndLine.clone();
+            try {
+                source = fileAndLine.clone();
+            }
+            catch( CloneNotSupportedException clnse ){
+                source = new Source();
+            }
         }
     }
 
@@ -103,7 +119,7 @@ public class PdfData implements OutputContextable
     private Value paragraphIndentRight;
     private Value paragraphSkip;
     private Value pixelsPerInch;
-    private ScriptEngine scriptEngine;
+//    private ScriptEngine scriptEngine;
     private Value strikethru;
     private TypefaceMap typefaceMap;
     private Underline underline;
@@ -184,7 +200,12 @@ public class PdfData implements OutputContextable
     {
         if( val != field.fval ) {
             field.fval = val;
-            field.source = fileAndLine.clone();
+            try {
+                field.source = fileAndLine.clone();
+            }
+            catch( CloneNotSupportedException clnse ){
+                field.source = new Source();
+            }
             gdd.getSysStrings().add( name, Float.toString( val ));
         }
     }
@@ -201,7 +222,12 @@ public class PdfData implements OutputContextable
     {
         if( val != field.fval ) {
             field.ival = val;
-            field.source = fileAndLine.clone();
+            try {
+                field.source = fileAndLine.clone();
+            }
+            catch( CloneNotSupportedException clnse ){
+                field.source = new Source();
+            }
             gdd.getSysStrings().add( name, Integer.toString( val ));
         }
     }
@@ -218,7 +244,12 @@ public class PdfData implements OutputContextable
     {
         if( val != field.bval ) {
             field.bval = val;
-            field.source = fileAndLine.clone();
+            try {
+                field.source = fileAndLine.clone();
+            }
+            catch( CloneNotSupportedException clnse ){
+                field.source = new Source();
+            }
             gdd.getSysStrings().add( name, Boolean.toString( val ));
         }
     }
@@ -631,10 +662,10 @@ public class PdfData implements OutputContextable
         return( pixelsPerInch.source );
     }
 
-    public ScriptEngine getScriptEngine()
-    {
-        return( scriptEngine );
-    }
+//    public ScriptEngine getScriptEngine()
+//    {
+//        return( scriptEngine );
+//    }
 
     public boolean getStrikethru()
     {

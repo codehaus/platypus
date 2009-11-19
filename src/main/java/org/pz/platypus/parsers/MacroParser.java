@@ -20,7 +20,6 @@ public class MacroParser
 {
     /** following are for output of error messages */
     private GDD gdd;
-    private Literals lits;
 
     public MacroParser( final GDD gdd )
     {
@@ -65,7 +64,7 @@ public class MacroParser
             return( parsePoint - startParsePoint );
         }
 
-        
+
         if ( macro.startsWith( "_" )) {
             expandedMacro = lookupSystemMacro( macro );
             gdd.setExpandedMacro( expandedMacro );

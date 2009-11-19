@@ -35,7 +35,7 @@ public class SymbolsList
 
     public void load()
     {
-        BufferedReader inReader;
+        BufferedReader inReader = null;
         String filename = gdd.getHomeDirectory() + "config\\" + gdd.getSymbolsListFilename();
 
         File symbolFile = new File( filename );
@@ -53,15 +53,25 @@ public class SymbolsList
             }
         }
         catch ( FileNotFoundException e ) {
-             throw new InvalidConfigFileException(
+            throw new InvalidConfigFileException(
                     gdd.getLit( "ERROR.PROCESSING_FILE" ) + " ", filename );
         }
         catch( IOException ioe ) {
                throw new InvalidConfigFileException(
                     gdd.getLit( "ERROR.PROCESSING_FILE" ) + " ", filename );
         }
-
-        gdd.log( "Symbols file loaded with " + symbolsList.size() + " entries: " + filename );
+        finally {
+            if( inReader != null ) {
+                try {
+                    inReader.close();
+                }
+                catch( IOException ioe ) {
+                    // do nothing
+                }
+                gdd.log( "Symbols file loaded with " + symbolsList.size() +
+                         " entries: " + filename );
+            }
+        }
     }
 
     /**

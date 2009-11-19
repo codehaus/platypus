@@ -23,8 +23,8 @@ public class EolTreatment
     public static final int SOFT = 's';
     public static final int HARD = 'h';
 
-    private final String SOFT_STR = "soft";
-    private final String HARD_STR = "hard";
+    private static final String SOFT_STR = "soft";
+    private static final String HARD_STR = "hard";
 
     /**
      * Determines whether a treatment specifider is valid or not

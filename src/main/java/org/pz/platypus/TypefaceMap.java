@@ -8,6 +8,7 @@
 package org.pz.platypus;
 
 import org.pz.platypus.exceptions.InvalidConfigFileException;
+import org.pz.platypus.exceptions.FileCloseException;
 
 import java.util.*;
 import java.io.*;
@@ -334,6 +335,14 @@ public class TypefaceMap
         }
         catch( IOException ioe ) {
             throw new InvalidConfigFileException( "Error reading: " + filename, thisMethod );
+        }
+        finally {
+            try {
+                inReader.close();
+            }
+            catch( IOException ioe ) {
+                throw new FileCloseException( filename + " in " +thisMethod );
+            }
         }
     }
 
