@@ -40,7 +40,7 @@ public class ErrorMsgTest
     @Test
     public void testInvalidCall1()
     {
-        String s = ErrorMsg.NotAllowedInCode( null, null, new Source( 16 ));
+        String s = ErrorMsg.notAllowedInCode( null, null, new Source( 16 ));
         assertEquals( "", s );
     }
 
@@ -48,7 +48,7 @@ public class ErrorMsgTest
     public void testInvalidCall2()
     {
         // s/fail because Source is null
-        String s = ErrorMsg.NotAllowedInCode( gdd, "[]", null );
+        String s = ErrorMsg.notAllowedInCode( gdd, "[]", null );
         assertEquals( "", s );
     }
 
@@ -56,7 +56,7 @@ public class ErrorMsgTest
     public void testValidStringNotAllowedInCodeErr()
     {
         String commandStr = "[fsize:12pt]";
-        String msg = ErrorMsg.NotAllowedInCode( gdd, commandStr , new Source( 23 ));
+        String msg = ErrorMsg.notAllowedInCode( gdd, commandStr , new Source( 23 ));
         assertEquals( "line # 23: " + commandStr + " command not allowed in code listing." +  " " +
                       "Ignored.", msg );
     }

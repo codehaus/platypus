@@ -11,12 +11,15 @@ package org.pz.platypus.exceptions;
  *
  * @author alb
  */
-public class FileCloseException extends Exception
+public class FileCloseException extends PlatyException
 {
-    public FileCloseException() {};
-
     public FileCloseException( final String msg )
     {
-        super( msg );
+        super( "Error closing file: " + msg );
+    }
+
+    public FileCloseException( final String msg1, final String msg2 )
+    {
+        super( msg1, msg2 );
     }
 }

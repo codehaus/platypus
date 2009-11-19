@@ -26,7 +26,7 @@ public class ErrorMsg
      * @return the string that's written to the logger (used primarily for testing), or "" if
      *         an error occurred
      */
-    public static String NotAllowedInCode( final GDD gdd, final String command,final Source source )
+    public static String notAllowedInCode( final GDD gdd, final String command,final Source source )
     {
         if( gdd == null || command == null || source == null ) {
             return( "" );

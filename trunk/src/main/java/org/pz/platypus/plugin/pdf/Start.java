@@ -184,7 +184,6 @@ public class Start implements Pluggable
     boolean isNextTokenCr( int currTokNumber, TokenList tokList )
     {
         assert( currTokNumber >= 0 );
-        assert( tokList != null );
 
         if( tokList == null ) {
             return( false );

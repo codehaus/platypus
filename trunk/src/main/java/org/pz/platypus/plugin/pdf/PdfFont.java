@@ -33,7 +33,7 @@ public class PdfFont
     private float size = 0f;
 
     /** color of font */
-    private RgbColor color;
+//    private RgbColor color;
 
     /** is font bold? */
     private boolean bold;
@@ -43,9 +43,6 @@ public class PdfFont
 
     /** file and line number of last change */
     private Source source;
-
-    /** table of fonts as registered by iText */
-    private FontDirectoryList fontList;
 
     private GDD gdd;
     private PdfData pdfData;
@@ -63,7 +60,7 @@ public class PdfFont
     public void setToDefault()
     {
         typeface  = DefaultValues.FONT_TYPEFACE;
-        color     = new RgbColor();
+//        color     = new RgbColor();
         size      = DefaultValues.FONT_SIZE;
         bold      = DefaultValues.FONT_BOLD;
         italics   = DefaultValues.FONT_ITALIC;
@@ -80,9 +77,9 @@ public class PdfFont
     Font createFont( final PdfFont f )
     {
         int style = 0;
-        Color col  = new Color( color.getR(), color.getG(), color.getB() );
+ //       Color col  = new Color( color.getR(), color.getG(), color.getB() );
         Font font;
-        
+
         String iTextFontName = createItextFontName( f );
         if( ! isBase14Font( f.typeface )) {
             style = computeItextStyle();
@@ -97,7 +94,7 @@ public class PdfFont
             + iTextFontName );
             font = null;
         }
-        
+
         if( font == null || font.getBaseFont() == null ) {
             gdd.logWarning( "iText could not find font for: " + iTextFontName + ". Using Times-Roman" );
             font = FontFactory.getFont( BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.EMBEDDED,
@@ -287,7 +284,7 @@ public class PdfFont
     {
         return( source );
     }
-    
+
     /**
      * set bold on/off and re-create the iText font to record the change.
      *

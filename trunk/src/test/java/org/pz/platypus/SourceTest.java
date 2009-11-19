@@ -34,7 +34,14 @@ public class SourceTest
     public void testCloneEquals()
     {
         final Source s1 = new Source( 5, 6 );
-        final Source s2 = s1.clone();
+        Source s2;
+
+        try {
+            s2 = s1.clone();
+        }
+        catch( CloneNotSupportedException clnse ){
+            s2 = new Source();
+        }
         assertTrue( s2.equals( s1 ));
     }
 

@@ -56,7 +56,7 @@ public class PdfLeading implements OutputCommandable
         // to avoid changing the line size. This enables a user to say [leading:2li]
         // at one point and then later [leading:1li] to go back to the previous line
         // height.
-        if ( leading != currLeading ) {
+        if ( Math.abs( leading - currLeading ) > 0.01f ) {  // comparing FP's for inequality
             pdf.setLeading( leading, tok.getSource() );
             if( parameter.getUnit() != UnitType.LINE ) {
                 pdf.setLineHeight( leading, tok.getSource() );

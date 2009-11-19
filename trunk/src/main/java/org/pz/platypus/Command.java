@@ -106,7 +106,7 @@ public abstract class Command implements Commandable
     public int notExecutedInCodeSection( final String command,
                                          final TokenList tl, Source source, final GDD gdd )
     {
-        ErrorMsg.NotAllowedInCode( gdd, getRoot(), source );
+        ErrorMsg.notAllowedInCode( gdd, getRoot(), source );
         // skip the command.
         return( command.length() );
     }

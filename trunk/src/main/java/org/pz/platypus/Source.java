@@ -12,7 +12,7 @@ package org.pz.platypus;
  *
  * @author alb
  */
-public class Source
+public class Source implements Cloneable
 {
     /** the file number. FileList maps the number to a specific file name */
     private int fileNumber;
@@ -37,7 +37,7 @@ public class Source
         fileNumber = fileNum;
         lineNumber = lineNum;
     }
-    
+
     @Override
     public boolean equals( final Object o )
     {
@@ -59,9 +59,12 @@ public class Source
     }
 
     @Override
-    public Source clone()
+    public Source clone() throws CloneNotSupportedException
     {
-        return( new Source( fileNumber, lineNumber ));       
+        Source newSrc = (Source) super.clone();
+        newSrc.setFileNumber( fileNumber );
+        newSrc.setLineNumber( lineNumber );
+        return( newSrc );
     }
 
     @Override

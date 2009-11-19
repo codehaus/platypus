@@ -45,7 +45,7 @@ public class PlatypusParser
 
     /**
      * Converts input lines into an ArrayList of parsed tokens.
-     * 
+     *
      * @param lines  the input lines
      * @param tokens the resulting tokens
      * @param configFile the configuration file might have info on how to handle some features
@@ -118,7 +118,7 @@ public class PlatypusParser
                 emitEolToken( newTokens, context.source );
                 break;
             }
-            
+
             // are we in a block comment?
             if ( blockCommentClosingSymbol != null ) {
                 int closeCommentStart = content.indexOf( blockCommentClosingSymbol, segmentStartPoint );
@@ -157,7 +157,7 @@ public class PlatypusParser
 
     /**
      * Emits the so-called "soft" EOL command used when at end of line.
-     * 
+     *
      * @param newTokens token list to add the token to
      * @param source file# and line# of token
      */
@@ -224,7 +224,7 @@ public class PlatypusParser
                     // if the [ is not the beginning of the segment, then
                     // write out all that precedes it as text. Then loop.
                     // the new segment starting with [ will come back
-                    // here and proceed with processing the command 
+                    // here and proceed with processing the command
                     if ( context.startPoint != parsePoint ) {
                         writeOutText( context, parsePoint-1, tokens );
                         return( parsePoint );
@@ -317,6 +317,9 @@ public class PlatypusParser
      */
     public int processBlockComment( final ParseContext context, TokenList tokens )
     {
+        assert context != null;
+        assert tokens  != null;
+
         BlockCommentParser bcp = new BlockCommentParser();
 
         blockCommentClosingSymbol = bcp.computeClosingMarker( context.chars, context.startPoint );
@@ -328,11 +331,12 @@ public class PlatypusParser
         int endPoint = context.chars.length - 1;
 
         // but first check to see whether block closes on this same line.
-        if ( blockClosesOnSameLine(context, blockCommentClosingSymbol) ) {
-            endPoint = context.getLocation( blockCommentClosingSymbol ) + blockCommentClosingSymbol.length();
+        if ( blockClosesOnSameLine( context, blockCommentClosingSymbol )) {
+            endPoint = context.getLocation( blockCommentClosingSymbol ) +
+                       blockCommentClosingSymbol.length();
             blockCommentClosingSymbol = null;
         }
-        
+
         addToken( tokens, TokenType.BLOCK_COMMENT, context.segment( endPoint ), context.source );
         return( endPoint );
     }
@@ -387,7 +391,7 @@ public class PlatypusParser
      *
      * @param context the parser context
      * @param tokens list of tokens to which this token will be added
-     * @param commandRoot the root of the command, were it a real command. 
+     * @param commandRoot the root of the command, were it a real command.
      */
     void invalidCommandError( final ParseContext context,
                               final TokenList tokens, final String commandRoot )
@@ -522,7 +526,7 @@ public class PlatypusParser
 
         final Token tok = new Token( source, TokenType.TEXT, tokenText );
         tokensOut.add( tok );
-        
+
         return( Status.OK );
     }
 
