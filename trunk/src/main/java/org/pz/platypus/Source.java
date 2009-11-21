@@ -62,8 +62,6 @@ public class Source implements Cloneable
     public Source clone() throws CloneNotSupportedException
     {
         Source newSrc = (Source) super.clone();
-        newSrc.setFileNumber( fileNumber );
-        newSrc.setLineNumber( lineNumber );
         return( newSrc );
     }
 
