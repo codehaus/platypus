@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
 import org.pz.platypus.test.mocks.MockLiterals;
+import org.apache.commons.cli.ParseException;
 
 import java.util.logging.Level;
 
@@ -34,23 +35,14 @@ public class CommandLineArgsTest {
         gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
         gdd.getLogger().setLevel( Level.OFF );
     }
-
-    /**
-     * Test of getClArgs method, of class CommandLineArgs.
-     */
-    @Test
-    public void nullConstructor()
-    {
-        assertEquals( null, cl.getClArgs() );
-    }
-    
+  
     @Test
     public void testLoadFilenamesOnly()
     {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
-        String[] args = { infileName, outfilename };
+        String[] args = { "-inputFile", infileName, "-outputFile", outfilename };
         cl = new CommandLineArgs( args );
 
         assertEquals( infileName, cl.lookup( "inputFile" ));
@@ -63,7 +55,7 @@ public class CommandLineArgsTest {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
-        String[] args = { infileName, outfilename };
+        String[] args = { "-inputFile", infileName, "-outputFile", outfilename  };
         CommandLineArgs cl = new CommandLineArgs( args );
 
         assertNull( cl.lookup( null ));
@@ -75,9 +67,9 @@ public class CommandLineArgsTest {
     {
         final String infileName = "infile.txt";
 
-        String[] args = { infileName };
+        String[] args = { "-inputFile", infileName };
         CommandLineArgs cl = new CommandLineArgs( args );
-
+                
         assertEquals( infileName, cl.lookup( "inputFile" )  );
         assertEquals( null, cl.lookup( "outputFile" ) );
     }
@@ -90,8 +82,7 @@ public class CommandLineArgsTest {
         String[] args = { help };
         CommandLineArgs cl = new CommandLineArgs( args );
 
-
-        assertEquals( "true", cl.lookup( help ));
+        assertEquals( "true", cl.lookup( "help" ));
         assertEquals( null, cl.lookup( "inputFile") );
     }
 
@@ -107,7 +98,7 @@ public class CommandLineArgsTest {
         CommandLineArgs cl = new CommandLineArgs( args );
 
         assertEquals( "true", cl.lookup( verbose ));
-        assertEquals( fileName, cl.lookup( configFile ));
+        assertEquals( fileName, cl.lookup( "config" ));
     }
     
     @Test
@@ -150,8 +141,7 @@ public class CommandLineArgsTest {
     } 
     
     @Test
-    public void testCreateCommandLine()
-    {
+    public void testCreateCommandLine() throws ParseException {
         final String verbose = "-vverbose";
         final String configFile = "-config";
         final String fileName = "config.file";
@@ -162,11 +152,25 @@ public class CommandLineArgsTest {
     }
     
     @Test
-    public void testCreateCommandLineWithNoArgs()
-    {
+    public void testCreateCommandLineWithNoArgs() throws ParseException {
         String[] args = { };
         CommandLineArgs cl = new CommandLineArgs( args );
         System.out.println( cl.createCommandLine( args ));
         assertTrue( " ".equals( cl.createCommandLine( args )));
-    }        
+    }
+
+    @Test
+    public void testCreateCommandLine1() throws Exception {
+        CommandLineArgs clArgs = new CommandLineArgs(new String[] { "" });
+        String argStr = clArgs.createCommandLine(new String[] { "a", "b", "c" });
+        assertEquals("a b c", argStr);
+    }
+
+    @Test
+    public void testCreateCommandLine2() throws Exception {
+        CommandLineArgs clArgs = new CommandLineArgs(new String[] { "" });
+        String argStr = clArgs.createCommandLine(new String[0]);
+        assertEquals(" ", argStr);
+    }
+    
 }

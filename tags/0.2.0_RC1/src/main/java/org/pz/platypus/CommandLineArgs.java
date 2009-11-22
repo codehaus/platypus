@@ -6,9 +6,8 @@
  */
 package org.pz.platypus;
 
-import org.pz.platypus.commandline.SpecifiedOptions;
-import org.pz.platypus.commandline.SupportedOptions;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
+import org.apache.commons.cli.*;
 
 /**
  * Puts specified command-line options into a tree and processes those it can.
@@ -17,14 +16,12 @@ import org.pz.platypus.exceptions.HelpMessagePrinted;
  */
 public class CommandLineArgs
 {
+
     @SuppressWarnings("unchecked")
 
-    /** a tree containing all supported/allowed command-line options and their argument counts */
-    private final SupportedOptions validOptions;
-
-    /** a tree containing the command-line switches and their settings as specified by the user */
-    private final SpecifiedOptions clArgs;
-
+    private Options options = new Options();    
+    private CommandLineParser parser = new GnuParser();
+    private CommandLine line;
     /**
      * Creates a tree of SpecifiedOptions. The tree always contains input and output filenames.
      * If these were not specified, their corresponding argument is null.
@@ -35,20 +32,60 @@ public class CommandLineArgs
      * //curr: limit constructor to just setting up data structures
      *
      */
-    public CommandLineArgs( final String[] args )
-    {
-        validOptions = new SupportedOptions();
+    public CommandLineArgs( final String[] args ) {
 
         if ( args == null || args.length == 0 ) {
-            clArgs = null;
             return;
         }
 
-        clArgs = new SpecifiedOptions();
+        // Atul - moving to commons cli
+        initOptions();
 
-        int howManyFileArgs = loadFileNames( args, clArgs );
-        loadSpecifiedOptions( args, howManyFileArgs, clArgs );
+        parseArguments(args);
     }
+
+    private void parseArguments(String[] args) {
+        try {
+            line = parser.parse( options, args );
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    private void initOptions() {
+        Option[] optsArr = getSupportedOptions();
+
+        for (Option opt : optsArr) {
+            options.addOption(opt);
+        }
+    }
+
+    private Option[] getSupportedOptions() {
+        Option inputFile   = OptionBuilder.withArgName( "file" )
+                .hasArg()
+                .withDescription(  "input file" )
+                .create( "inputFile" );
+        Option outputFile   = OptionBuilder.withArgName( "file" )
+                .hasArg()
+                .withDescription(  "output file" )
+                .create( "outputFile" );
+        Option configFile   = OptionBuilder.withArgName( "configfile" )
+                .hasArg()
+                .withDescription(  "config file" )
+                .create( "config" );
+        Option format   = OptionBuilder.withArgName( "configfile" )
+                .hasArg()
+                .withDescription(  "config file" )
+                .create( "config" );
+
+        Option verbose = new Option( "verbose", "verbose help" );
+        Option vverbose = new Option( "vverbose", "very verbose help" );
+        Option fontlist = new Option( "fontlist", "list of fonts" );
+        Option help = new Option( "help", "print this message" );
+
+        return new Option[] { inputFile, outputFile, configFile, format, verbose, vverbose, fontlist, help };
+    }
+
 
     /**
      * Creates a single string from all the args specified by the user on the command line
@@ -56,11 +93,11 @@ public class CommandLineArgs
      * @param args the user-specified args
      * @return the command line as one string. If there were no args, a single space is returned.
      */
-    public String createCommandLine( final String[] args )
-    {
+    public String createCommandLine( final String[] args ) {
+        
         StringBuffer sb = new StringBuffer( args.length * 15 );
 
-        if ( args.length == 0 ) {
+        if ( args.length == 0 ) {                                               
             return( " " );
         }
 
@@ -73,86 +110,6 @@ public class CommandLineArgs
     }
 
     /**
-     * Load the input and output filenames, if any were specified
-     *
-     * @param args the command-line args
-     * @param options
-     * @return how many command-line args were processed. Can only be 0, 1, 2.
-     */
-    private int loadFileNames( final String[] args, SpecifiedOptions options )
-    {
-        int i = 0;
-
-        if ( ! args[0].startsWith( "-" ) ) {
-            options.add( "inputFile", args[0] );
-            i++;
-
-            if ( args.length == 1 ) {
-                return( i );
-            }
-
-            if ( args.length > 1 && ! args[1].startsWith( "-" )) {
-                options.add( "outputFile", args[1] );
-                i++;
-            }
-        }
-        return( i );
-    }
-
-    /**
-     * Load the options specified on the command line
-     * @param args array of individual args from the command-line
-     * @param startingArg which arg to start with (should be 0-2 depending on whether files were specified)
-     * @param options a list of the specified options and their arguments, if any.
-     */
-    private void loadSpecifiedOptions( final String[] args, int startingArg,
-                                       SpecifiedOptions options )
-    {
-//        System.out.println( "args count " + args.length + '\n' +
-//                "startingArg: " + startingArg );
-
-        for ( int currentArg = startingArg; currentArg < args.length; currentArg++ )
-        {
-//            System.out.println( "current Arg#: " + currentArg );
-
-            if ( validOptions.containsArg( args[currentArg] )) {
-                int argsForOption = validOptions.getArgCount( args[currentArg] );
-
-                if ( argsForOption == 0 ) {
-                    options.add( args[currentArg], "true" );
-                    continue;
-                }
-
-                if ( ! areMoreArguments( args, currentArg )) {
-                    System.out.println( "Error! Missing argument for " + args[currentArg] +
-                            ". Ignored." );
-                    continue;
-                }
-
-                options.add( args[currentArg], args[currentArg + 1] );
-                currentArg++;
-            }
-            else {
-                System.out.println( "Error: Invalid option specified: " +
-                                    args[currentArg] +
-                                    "Ignored." );
-            }
-            //curr: else arg not recognized processing.
-        }
-    }
-
-    /**
-     * Tests to see whether there are more options to process
-     *
-     * @param args
-     * @param currentArg
-     * @return yea/nay
-     */
-    private boolean areMoreArguments( final String[] args, final int currentArg ) {
-        return( args.length > currentArg );
-    }
-
-    /**
      * Determines whether an item was specified on the command-line. And if so,
      * what any argument for it is.
      *
@@ -162,21 +119,15 @@ public class CommandLineArgs
      */
     public String lookup( final String argToFind )
     {
-        String argValue = null;
-
         if ( argToFind == null ) {
-            return( null );
+            return( null );    
         }
-
-        if ( clArgs.containsArg( argToFind )) {
-            argValue = "";
-
-            final String value = clArgs.getArg( argToFind );
-            if ( value != null ) {
-                argValue = value;
-            }
-        }
-        return( argValue );
+        if (!line.hasOption(argToFind))
+            return null;
+        String opt = line.getOptionValue(argToFind);
+        if (opt == null)
+            return "true";
+        return opt;
     }
 
     /**
@@ -187,32 +138,21 @@ public class CommandLineArgs
      */   //curr: improve method name
     public void process( GDD gdd ) throws HelpMessagePrinted
     {
-        if( clArgs == null ) {
-            Platypus.showUsage( gdd );
-            System.err.println( gdd.getLit( "PLEASE_RERUN_WITH_FILENAMES" ));
-            throw new UnsupportedOperationException( "ERR" ); //curr: delete ERR
-        }  //curr: combine with graf below, using same exit exception.
+        showUsageIfZeroArgs(gdd);
 
         // Note: the -config option is entirely handled in Platypus.processConfigFile(), not here.
 
-        if ( clArgs.containsArg( "-help" )) {
-            Platypus.showUsage( gdd );
-            // this exception exits Platypus without further processing and w/out
-            // an error message. Technically, this is not an exception, but it's
-            // the cleanest way of closing down from here.
-            throw new HelpMessagePrinted( "OK" );
-        }
+        processHelpOption(gdd);
 
-        if ( clArgs.containsArg( "-verbose" )) {
-            gdd.setClVerbose( true );
-        }
+        processVerboseOption(gdd);
 
-        if ( clArgs.containsArg( "-vverbose" )) {
-            gdd.setClVVerbose( true );
-        }
-            //FIXTHIS: Cannot be calling the PDF plugin from here. Move this to non PDF function
-            //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        if ( clArgs.containsArg( "-fontlist" )) {
+        processVeryVerboseOption(gdd);
+
+        processFontListOption(gdd);
+    }
+
+    private void processFontListOption(GDD gdd) throws HelpMessagePrinted {
+        if ( line.hasOption( "fontlist" )) {
             TypefaceMap tfm = new TypefaceMap( gdd );
             tfm.loadFamilies();
             tfm.writeMapToFile( gdd.getHomeDirectory() + "config/fontlist.txt" );
@@ -220,10 +160,34 @@ public class CommandLineArgs
         }
     }
 
-    // === getters and setters ===//
-
-    public SpecifiedOptions getClArgs()
-    {
-        return( clArgs );
+    private void processVeryVerboseOption(GDD gdd) {
+        if ( line.hasOption( "vverbose" )) {
+            gdd.setClVVerbose( true );
+        }
     }
+
+    private void processVerboseOption(GDD gdd) {
+        if ( line.hasOption( "verbose" )) {
+            gdd.setClVerbose( true );
+        }
+    }
+
+    private void processHelpOption(GDD gdd) throws HelpMessagePrinted {
+        if ( line.hasOption( "help" )) {
+            Platypus.showUsage( gdd );
+            // this exception exits Platypus without further processing and w/out
+            // an error message. Technically, this is not an exception, but it's
+            // the cleanest way of closing down from here.
+            throw new HelpMessagePrinted( "OK" );
+        }
+    }
+
+    private void showUsageIfZeroArgs(GDD gdd) {
+        if( line.getOptions().length == 0) {
+            Platypus.showUsage( gdd );
+            System.err.println( gdd.getLit( "PLEASE_RERUN_WITH_FILENAMES" ));
+            throw new UnsupportedOperationException( "ERR" ); //curr: delete ERR
+        }  //curr: combine with graf below, using same exit exception.
+    }
+
 }
