@@ -9,6 +9,7 @@ package org.pz.platypus;
 
 import org.pz.platypus.exceptions.FilenameLookupException;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
+import org.apache.commons.cli.ParseException;
 
 import java.io.File;
 import java.util.MissingResourceException;
@@ -180,8 +181,7 @@ public class Platypus
      * @return the CommandLineArgs structure that is filled in by this method
      */
     static public CommandLineArgs processCommandLine( final String[] args, GDD gdd ) throws
-            HelpMessagePrinted
-    {
+            HelpMessagePrinted, ParseException {
         CommandLineArgs clArgs = new CommandLineArgs( args );
 
         final String commandLine = clArgs.createCommandLine( args );
@@ -387,8 +387,7 @@ public class Platypus
      *
      * @param args command-line args
      */
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws ParseException {
         GDD gdd = null;
         CommandLineArgs clArgs = null;
 
