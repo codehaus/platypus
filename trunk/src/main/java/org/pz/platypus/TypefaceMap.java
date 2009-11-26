@@ -172,9 +172,7 @@ public class TypefaceMap
         if( f.exists() || ! f.isDirectory() ) {
             try {
                 if( fontFilename.toLowerCase().endsWith( ".ttc")) {
-                    System.out.println( fontFilename );
-                    String[] fontNames = BaseFont.enumerateTTCNames( fontFilename );
-                    return fontNames;
+                    return( BaseFont.enumerateTTCNames( fontFilename ));
                 }
 
 	            bf = BaseFont.createFont( fontFilename, "winansi", BaseFont.NOT_EMBEDDED );
