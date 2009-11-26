@@ -9,6 +9,7 @@ package org.pz.platypus;
 
 import org.pz.platypus.exceptions.FilenameLookupException;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
+import org.pz.platypus.exceptions.StopExecutionExecption;
 import org.apache.commons.cli.ParseException;
 
 import java.io.File;
@@ -416,6 +417,8 @@ public class Platypus
         }
         catch( HelpMessagePrinted hmp ) {
             System.exit( Status.OK );
+        } catch (StopExecutionExecption see) {
+            System.exit( Status.OK );                        
         }
 
         try {

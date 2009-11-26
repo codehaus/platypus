@@ -7,6 +7,7 @@
 package org.pz.platypus;
 
 import org.pz.platypus.exceptions.HelpMessagePrinted;
+import org.pz.platypus.exceptions.StopExecutionExecption;
 import org.apache.commons.cli.*;
 
 /**
@@ -32,23 +33,22 @@ public class CommandLineArgs
      * //curr: limit constructor to just setting up data structures
      *
      */
-    public CommandLineArgs( final String[] args ) {
-
-        if ( args == null || args.length == 0 ) {
-            return;
-        }
-
-        // Atul - moving to commons cli
+    public CommandLineArgs( final String[] args )  {
         initOptions();
 
-        parseArguments(args);
+        if (args == null || args.length == 0) {
+            parseArguments( new String[] { "-help" } );            
+        } else {
+            parseArguments(args);            
+        }
     }
 
     private void parseArguments(String[] args) {
         try {
             line = parser.parse( options, args );
         } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            System.err.println(e.getLocalizedMessage());
+            throw new StopExecutionExecption(e.getLocalizedMessage());
         }
     }
 

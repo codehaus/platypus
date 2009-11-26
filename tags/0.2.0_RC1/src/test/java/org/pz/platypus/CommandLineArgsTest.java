@@ -26,8 +26,7 @@ public class CommandLineArgsTest {
     private GDD gdd;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         cl = new CommandLineArgs( null );
 
         gdd = new GDD();
@@ -37,8 +36,7 @@ public class CommandLineArgsTest {
     }
   
     @Test
-    public void testLoadFilenamesOnly()
-    {
+    public void testLoadFilenamesOnly() {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
@@ -50,7 +48,7 @@ public class CommandLineArgsTest {
      }
 
     @Test
-    public void testInvalidLookups()
+    public void testInvalidLookups() 
     {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
@@ -141,7 +139,7 @@ public class CommandLineArgsTest {
     } 
     
     @Test
-    public void testCreateCommandLine() throws ParseException {
+    public void testCreateCommandLine() {
         final String verbose = "-vverbose";
         final String configFile = "-config";
         final String fileName = "config.file";
@@ -152,7 +150,7 @@ public class CommandLineArgsTest {
     }
     
     @Test
-    public void testCreateCommandLineWithNoArgs() throws ParseException {
+    public void testCreateCommandLineWithNoArgs() {
         String[] args = { };
         CommandLineArgs cl = new CommandLineArgs( args );
         System.out.println( cl.createCommandLine( args ));
@@ -160,17 +158,28 @@ public class CommandLineArgsTest {
     }
 
     @Test
-    public void testCreateCommandLine1() throws Exception {
+    public void testCreateCommandLine1() {
         CommandLineArgs clArgs = new CommandLineArgs(new String[] { "" });
         String argStr = clArgs.createCommandLine(new String[] { "a", "b", "c" });
         assertEquals("a b c", argStr);
     }
 
     @Test
-    public void testCreateCommandLine2() throws Exception {
+    public void testCreateCommandLine2() {
         CommandLineArgs clArgs = new CommandLineArgs(new String[] { "" });
         String argStr = clArgs.createCommandLine(new String[0]);
         assertEquals(" ", argStr);
     }
-    
+
+    @Test(expected = HelpMessagePrinted.class)
+    public void testZeroArgsGivingNPE() throws Exception {
+        Platypus.processCommandLine( new String[0], gdd );
+    }
+
+
+    @Test
+    public void testUnsupportedOption() throws Exception {
+        Platypus.processCommandLine( new String[] { "NotSupported"}, gdd );
+    }
+
 }
