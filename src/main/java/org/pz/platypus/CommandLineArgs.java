@@ -73,10 +73,10 @@ public class CommandLineArgs
                 .hasArg()
                 .withDescription(  "config file" )
                 .create( "config" );
-        Option format   = OptionBuilder.withArgName( "configfile" )
+        Option format   = OptionBuilder.withArgName( "formatname" )
                 .hasArg()
-                .withDescription(  "config file" )
-                .create( "config" );
+                .withDescription(  "output format" )
+                .create( "format" );
 
         Option verbose = new Option( "verbose", "verbose help" );
         Option vverbose = new Option( "vverbose", "very verbose help" );
