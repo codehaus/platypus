@@ -64,7 +64,7 @@ public class Platypus
      */
     static public void findOutputFilePluginType( CommandLineArgs ClArgs, GDD Gdd )
     {
-        String pluginType = ClArgs.lookup( "-format" );
+        String pluginType = ClArgs.lookup( "format" );
         if ( pluginType == null || pluginType.isEmpty() ) {
 
             final String outputFilename = ClArgs.lookup( "outputFile" );
@@ -203,7 +203,7 @@ public class Platypus
     {
         String outputFormat;
 
-        outputFormat =  clArgs.lookup( "-format" );
+        outputFormat =  clArgs.lookup( "format" );
         if( outputFormat == null ) {
             final String outputFilename = clArgs.lookup( "outputFile" );
             outputFormat = outputFilename.substring( outputFilename.lastIndexOf( '.' ) + 1 );
@@ -253,7 +253,7 @@ public class Platypus
         String filename = null;
 
         if( ClArgs != null ) {
-            filename = ClArgs.lookup( "-config" );
+            filename = ClArgs.lookup( "config" );
         }
 
         // if the config file is not specified on the command line,
