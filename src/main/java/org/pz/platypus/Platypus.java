@@ -401,6 +401,7 @@ public class Platypus
         }
 
         try {
+            args = CommandLineArgs.preProcessCommandLine(args);
             gdd = setupGdd( lits );
             storeVersionNumber( gdd );
             clArgs = processCommandLine( args, gdd );
@@ -442,4 +443,5 @@ public class Platypus
             }
         }
     }
+
 }

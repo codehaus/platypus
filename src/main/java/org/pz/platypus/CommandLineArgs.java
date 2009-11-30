@@ -10,6 +10,9 @@ import org.pz.platypus.exceptions.HelpMessagePrinted;
 import org.pz.platypus.exceptions.StopExecutionExecption;
 import org.apache.commons.cli.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Puts specified command-line options into a tree and processes those it can.
  *
@@ -190,4 +193,56 @@ public class CommandLineArgs
         }  //curr: combine with graf below, using same exit exception.
     }
 
+    /** Injects the -inputFile and -outputFile options before correct barewords
+     * The algorithm first checks if we have encountered an option with zero or one argument.
+     * If so, it copies the elements to the result array.
+     * Else, it injects -inputFile before the first bareword
+     * and-outputFile after the next bareword.
+     *
+     * @param args
+     * @return correctly injects -inputFile and -outputFile before the barewords...
+     */
+
+    public static String[] preProcessCommandLine(final String[] args) {
+        final List<String> newArgs = new ArrayList<String>();
+        boolean inOption = false;
+        boolean inputSeen = false;
+
+        for (String arg: args) {
+            if (inOption == false) {
+                if (isArgAnOption(arg)) {
+                    if (doesOptionHaveArg(arg)) {
+                        inOption = true;
+                    }
+                }
+                else if (inputSeen == false) { // we have encountered a bareword
+                    newArgs.add("-inputFile"); // first bareword is taken as input file
+                    inputSeen = true;
+                }
+                else if (inputSeen == true) {
+                    newArgs.add("-outputFile"); // next bareword is output file
+                    inputSeen = false;
+                }
+            }
+            else if (inOption == true){
+                inOption = false; // this bareword is an option argument
+            }
+            newArgs.add(arg);
+        }
+        return newArgs.toArray(new String[0]); // java collections idiom for converting to an array :-)
+    }
+
+    private static boolean doesOptionHaveArg(String arg) {
+        return arg.equals("-config") || arg.equals("-format");
+
+    }
+
+    private static boolean isArgAnOption(String arg) {
+        if (!arg.isEmpty()) {
+            if (arg.charAt(0) == '-') {
+                return true;
+            }
+        }
+        return false;
+    }
 }
