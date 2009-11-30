@@ -103,7 +103,7 @@ def void testHelpOutputEqualToNoCommandLineArgs( String javaRun )
 def void testValidCLButMissingInputFile( String javaRun )
 {
     def String description = "Test: non-existent input file"
-    javaRun += " -inputFile nonexistent.plat -outputFile nonexistent.pdf"
+    javaRun += " nonexistent.plat nonexistent.pdf"
     def proc = javaRun.execute()
     def err = proc.err.text
 
@@ -136,7 +136,7 @@ def void testEmptyInputFile( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${emptyFileName} -outputFile ${emptyFileName}.pdf"
+    javaRun += " ${emptyFileName} ${emptyFileName}.pdf"
     def proc = javaRun.execute()
     def err = proc.err.text
 
@@ -173,7 +173,7 @@ def void testUnsupportedFormat( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${emptyFileName} -outputFile ${emptyFileName}.out -format fungus"
+    javaRun += " ${emptyFileName} ${emptyFileName}.out -format fungus"
     def proc = javaRun.execute()
     def err = proc.err.text
 
@@ -227,7 +227,7 @@ def void testPdfInputOutput( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.pdf"
+    javaRun += " ${helloFileName} ${helloFileName}.pdf"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
@@ -265,7 +265,7 @@ def void testPdfInputFileOutputFileVerbose( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.pdf -verbose"
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -verbose"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
@@ -308,7 +308,7 @@ def void testPdfInputFileOutputFileVeryVerbose( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.pdf -vverbose"
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -vverbose"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
@@ -353,7 +353,7 @@ def void testListingSimpleInputOutput( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.html -format listing"
+    javaRun += " ${helloFileName} ${helloFileName}.html -format listing"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
@@ -392,7 +392,7 @@ def void testListingInputOutputVeryVerbose( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.html -format listing -vverbose"
+    javaRun += " ${helloFileName} ${helloFileName}.html -format listing -vverbose"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
@@ -402,8 +402,8 @@ def void testListingInputOutputVeryVerbose( String javaRun )
     if(( err == null || err.isEmpty() ) &&
         listingFile.exists() &&
         output.contains( "Property file loaded with" ) &&
-        output.contains( "Loading output plug-in" ) &&
-        output.contains( "Returned from output plug-in." ) &&
+        output.contains( "Loading ouput plug-in" ) &&
+        output.contains( "Returned from output plugin." ) &&
         output.contains( "Line 0001: Text") &&
         output.contains( "hello, world" )) {
         print( "Success in " )
@@ -436,7 +436,7 @@ def void testPdfInputOutputInvalidConfigFile( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.pdf -config fungus.properties"
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -config fungus.properties"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
@@ -474,14 +474,15 @@ def void testPdfInputOutputWithExtraUnsupportedOption( String javaRun )
     }
 
     // run it and test for error message
-    javaRun += " -inputFile ${helloFileName} -outputFile ${helloFileName}.pdf -tomato"
+    javaRun += " ${helloFileName} ${helloFileName}.pdf -tomato"
     def proc = javaRun.execute()
     def output = proc.in.text
     def err = proc.err.text
 
     def File pdfFile = new File( "${helloFileName}.pdf" )
 
-    if(( err.contains( "Error: Invalid option specified:") )) {
+   // if(( err.contains( "Error: Invalid option specified:") )) {
+   if(( err.contains( "Unrecognized option:") )) {
         print( "Success in " )
     }
     else  {
