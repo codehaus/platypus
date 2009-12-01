@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 	Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- 
+
 	Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
 	Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
 	This is the full Platypus build file, that creates all the
@@ -10,7 +10,7 @@
 
      Note: this contains no tests or reports.
 
-     2009-06-09  alb incomplete, but a start. 
+     2009-06-09  alb incomplete, but a start.
      2009-06-23  alb complete, works correctly.
      2009-10-01  alb added ..\ to all files to reflect new project organization; added licenses to jar
 
@@ -30,8 +30,8 @@
 	<property name="src.test.dir"   		location="..\src\test\java" />
 	<property name="vendor.libs"    		location="..\lib\" />
     <property name="vendor.lib.dir" 		location="\${build.dir}\jar\lib" />
-	
-	<property name="version"				value="0.2.0 RC 1" />
+
+	<property name="version"				value="0.2.0 RC 2" />
 	<property name="message" 				value="Buid Platypus for Release" />
 
     <path id="project.classpath">
@@ -60,7 +60,7 @@
 	<echo> ${message} </echo>
 </target>
 
-<target name="compile" description="Compile with Java 6">                         
+<target name="compile" description="Compile with Java 6">
 	<javac srcdir="${src.dir}"
 		   destdir="${classes.dir}">
 		   <classpath refid="project.classpath" />
@@ -194,9 +194,9 @@
 	<copy todir="${vendor.lib.dir}">
 		<fileset dir="${vendor.libs}">
                 <exclude name="junit*" />
-                <exclude name="hamcrest*" /> 
+                <exclude name="hamcrest*" />
         </fileset>
-    </copy>    
+    </copy>
 </target>
 
 <target name="zip-all">
@@ -206,4 +206,3 @@
 </target>
 
 </project>
- 
