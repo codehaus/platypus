@@ -48,6 +48,7 @@ public class CommandLineArgs
 
     private void parseArguments(String[] args) {
         try {
+            args = CommandLineArgs.preProcessCommandLine(args);
             line = parser.parse( options, args );
         } catch (ParseException e) {
             System.err.println(e.getLocalizedMessage());
