@@ -1,6 +1,6 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- * 
+ *
  *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
@@ -93,7 +93,7 @@ public class LeadingTest
     }
 
 
-@Test
+    @Test
     public void testInvalidLeadingGreaterThanMax()
     {
         assertEquals( DefaultValues.LEADING, pdd.getLeading(), 0.5f );
