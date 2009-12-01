@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
 import org.pz.platypus.test.mocks.MockLiterals;
+import org.apache.commons.cli.ParseException;
 
 import java.util.logging.Level;
 
@@ -25,8 +26,7 @@ public class CommandLineArgsTest {
     private GDD gdd;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         cl = new CommandLineArgs( null );
 
         gdd = new GDD();
@@ -34,23 +34,13 @@ public class CommandLineArgsTest {
         gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
         gdd.getLogger().setLevel( Level.OFF );
     }
-
-    /**
-     * Test of getClArgs method, of class CommandLineArgs.
-     */
-    @Test
-    public void nullConstructor()
-    {
-        assertEquals( null, cl.getClArgs() );
-    }
     
     @Test
-    public void testLoadFilenamesOnly()
-    {
+    public void testLoadFilenamesOnly() {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
-        String[] args = { infileName, outfilename };
+        String[] args = { "-inputFile", infileName, "-outputFile", outfilename };
         cl = new CommandLineArgs( args );
 
         assertEquals( infileName, cl.lookup( "inputFile" ));
@@ -58,12 +48,12 @@ public class CommandLineArgsTest {
      }
 
     @Test
-    public void testInvalidLookups()
+    public void testInvalidLookups() 
     {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
-        String[] args = { infileName, outfilename };
+        String[] args = { "-inputFile", infileName, "-outputFile", outfilename  };
         CommandLineArgs cl = new CommandLineArgs( args );
 
         assertNull( cl.lookup( null ));
@@ -75,9 +65,9 @@ public class CommandLineArgsTest {
     {
         final String infileName = "infile.txt";
 
-        String[] args = { infileName };
+        String[] args = { "-inputFile", infileName };
         CommandLineArgs cl = new CommandLineArgs( args );
-
+                
         assertEquals( infileName, cl.lookup( "inputFile" )  );
         assertEquals( null, cl.lookup( "outputFile" ) );
     }
@@ -90,8 +80,7 @@ public class CommandLineArgsTest {
         String[] args = { help };
         CommandLineArgs cl = new CommandLineArgs( args );
 
-
-        assertEquals( "true", cl.lookup( help ));
+        assertEquals( "true", cl.lookup( "help" ));
         assertEquals( null, cl.lookup( "inputFile") );
     }
 
@@ -107,7 +96,7 @@ public class CommandLineArgsTest {
         CommandLineArgs cl = new CommandLineArgs( args );
 
         assertEquals( "true", cl.lookup( verbose ));
-        assertEquals( fileName, cl.lookup( configFile ));
+        assertEquals( fileName, cl.lookup( "config" ));
     }
     
     @Test
@@ -150,8 +139,7 @@ public class CommandLineArgsTest {
     } 
     
     @Test
-    public void testCreateCommandLine()
-    {
+    public void testCreateCommandLine() {
         final String verbose = "-vverbose";
         final String configFile = "-config";
         final String fileName = "config.file";
@@ -162,11 +150,107 @@ public class CommandLineArgsTest {
     }
     
     @Test
-    public void testCreateCommandLineWithNoArgs()
-    {
+    public void testCreateCommandLineWithNoArgs() {
         String[] args = { };
         CommandLineArgs cl = new CommandLineArgs( args );
         System.out.println( cl.createCommandLine( args ));
         assertTrue( " ".equals( cl.createCommandLine( args )));
-    }        
+    }
+
+    @Test
+    public void testCreateCommandLine1() {
+        CommandLineArgs clArgs = new CommandLineArgs(new String[] { "" });
+        String argStr = clArgs.createCommandLine(new String[] { "a", "b", "c" });
+        assertEquals("a b c", argStr);
+    }
+
+    @Test
+    public void testCreateCommandLine2() {
+        CommandLineArgs clArgs = new CommandLineArgs(new String[] { "" });
+        String argStr = clArgs.createCommandLine(new String[0]);
+        assertEquals(" ", argStr);
+    }
+
+    @Test(expected = HelpMessagePrinted.class)
+    public void testZeroArgsGivingNPE() throws Exception {
+        Platypus.processCommandLine( new String[0], gdd );
+    }
+
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testUnsupportedOption() throws Exception {
+        Platypus.processCommandLine( new String[] { "NotSupported"}, gdd );
+    }
+
+    @Test
+    public void testPreProcessingJustInputAndOutput() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { infileName, outfileName } );
+        assertArrayEquals(new String[] {"-inputFile", infileName, "-outputFile", outfileName}, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingConfigComesBefore() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-config", "config.txt", infileName, outfileName } );
+        assertArrayEquals(new String[] { "-config", "config.txt", "-inputFile", infileName, "-outputFile", outfileName}, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingConfigComesAfter() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { infileName, outfileName, "-config", "config.txt" } );
+        assertArrayEquals(new String[] { "-inputFile", infileName, "-outputFile", outfileName, "-config", "config.txt" }, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingConfigBeforeFormatAfter() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-config", "config.txt", infileName, outfileName, "-format", "pdf" } );
+        assertArrayEquals(new String[] { "-config", "config.txt", "-inputFile", infileName, "-outputFile", outfileName, "-format", "pdf" }, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingConfigInputFileFormatOutputFile() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-config", "config.txt", infileName, "-format", "pdf", outfileName,  } );
+        assertArrayEquals(new String[] { "-config", "config.txt", "-inputFile", infileName, "-format", "pdf", "-outputFile", outfileName, }, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingVerboseInputFileOutputFile() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-verbose", infileName, outfileName,  } );
+        assertArrayEquals(new String[] { "-verbose", "-inputFile", infileName, "-outputFile", outfileName, }, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingHelpVVerboseInputFileOutputFile() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-help", "-vverbose", infileName, outfileName,  } );
+        assertArrayEquals(new String[] { "-help", "-vverbose", "-inputFile", infileName, "-outputFile", outfileName, }, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingHelpInputFileVVerboseOutputFile() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-help", infileName, "-vverbose", outfileName,  } );
+        assertArrayEquals(new String[] { "-help", "-inputFile", infileName, "-vverbose", "-outputFile", outfileName, }, cmdLine );
+    }
+
+    @Test
+    public void testPreProcessingConfigVerboseInputFileHelpFormatOutputFile() throws Exception {
+        final String infileName = "infile.txt";
+        final String outfileName = "outfile.txt";
+        String[] cmdLine = CommandLineArgs.preProcessCommandLine( new String[] { "-config", "config.txt", "-verbose", infileName, "-help", "-format", "pdf", outfileName,  } );
+        assertArrayEquals(new String[] { "-config", "config.txt", "-verbose", "-inputFile", infileName, "-help", "-format", "pdf", "-outputFile", outfileName, }, cmdLine );
+    }
 }

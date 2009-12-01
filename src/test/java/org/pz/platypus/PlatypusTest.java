@@ -7,6 +7,7 @@
 
 package org.pz.platypus;
 
+import org.apache.commons.cli.ParseException;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import org.pz.platypus.test.mocks.MockLiterals;
 import org.pz.platypus.test.mocks.MockLogger;
 
 import java.util.MissingResourceException;
-import java.util.logging.Level;
 
 /**
  * Tests for Platypus.java
@@ -38,8 +38,7 @@ public class PlatypusTest
     //=== tests of findOutputFilePluginType()
 
     @Test (expected=MissingResourceException.class)
-    public void testFindOutputPluginTypeInvalidOutputType1()
-    {
+    public void testFindOutputPluginTypeInvalidOutputType1() throws ParseException {
         final String[] comLine = { "in.txt" };
         CommandLineArgs clArgs = null;
 
@@ -54,8 +53,7 @@ public class PlatypusTest
     }
 
     @Test (expected=MissingResourceException.class)
-    public void testFindOutputPluginTypeInvalidOutputType2()
-    {
+    public void testFindOutputPluginTypeInvalidOutputType2() throws ParseException {
         final String[] comLine = { "in.txt", "outputfilenamewithnodotinit" };
         CommandLineArgs clArgs = null;
 
@@ -70,8 +68,7 @@ public class PlatypusTest
     }
 
     @Test
-    public void testFindOutputPluginTypeValidOutputType1()
-    {
+    public void testFindOutputPluginTypeValidOutputType1() throws ParseException {
         final String[] comLine = { "in.txt", "out.pdf" };
         CommandLineArgs clArgs = null;
 
@@ -89,8 +86,7 @@ public class PlatypusTest
     //=== tests of processCommandLine()
 
     @Test
-    public void testProcessCommandLineValid()
-    {
+    public void testProcessCommandLineValid() throws ParseException {
         final String[] comLine = { "in.txt", "out.pdf", "-verbose" };
 
         CommandLineArgs clArgs = null;
@@ -109,8 +105,7 @@ public class PlatypusTest
     //=== tests of processConfigFile()
 
     @Test
-    public void testProcessConfigFileValid()
-    {
+    public void testProcessConfigFileValid() throws ParseException {
         final String[] comLine = { "in.txt", "out.pdf", "-verbose" };
         CommandLineArgs clArgs = null;
 

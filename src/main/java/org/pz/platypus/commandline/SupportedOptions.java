@@ -8,7 +8,8 @@
 package org.pz.platypus.commandline;
 
 
-import org.pz.platypus.*;
+import org.pz.platypus.Status;
+
 import java.util.TreeMap;
 
 /**
@@ -19,6 +20,7 @@ import java.util.TreeMap;
  */
 public class SupportedOptions
 {
+    
     /** a tree containing the options and the count of args */
     private final TreeMap<String, Integer> supportedOptions;
 
@@ -38,6 +40,7 @@ public class SupportedOptions
      // add( "-pagesize", 1 );
         add( "-verbose", 0 );
         add( "-vverbose", 0 );
+
 
     }    
 
