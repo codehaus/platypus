@@ -126,12 +126,55 @@ public class CommandLineArgs
         if ( argToFind == null ) {
             return( null );    
         }
+        if (shouldGenerateOutputOption(argToFind)) {
+            return generateOutputFile();
+        }
         if (!line.hasOption(argToFind))
             return null;
         String opt = line.getOptionValue(argToFind);
         if (opt == null)
             return "true";
         return opt;
+    }
+
+    private String generateOutputFile() {
+        String inputFile = line.getOptionValue("inputFile");
+        String ret = getNameMinusExtension(inputFile);
+        return appendFormatExtension(ret);
+    }
+
+    private String appendFormatExtension(String ret) {
+        final String formatExt = getFormatExtension();
+        return ret + "." + formatExt;
+    }
+
+    private String getFormatExtension() {
+        String formatExtension = "pdf";
+        if (line.hasOption("format")) {
+            formatExtension = line.getOptionValue("format");                        
+        }
+        return formatExtension;
+    }
+
+    private String getNameMinusExtension(String str) {
+        String ret = str;
+        StringBuilder fileBuilder = new StringBuilder(str);
+        int lastDotAt = fileBuilder.lastIndexOf(".");
+        if (lastDotAt != -1) {
+            ret = ret.substring(0, lastDotAt);
+        }
+        return ret;
+    }
+
+    private boolean shouldGenerateOutputOption(final String argStr) {
+        if (argStr.equals("outputFile")) {
+            if(!line.hasOption("outputFile")) {
+                if (line.hasOption("inputFile")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
