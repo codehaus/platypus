@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 	Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- 
+
 	Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
 	Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
 
@@ -11,7 +11,7 @@
      Note: this is only for testing. To build the productized
 	version, use the Ant file, fullplatybuild.xml
 
-	2009-07-17  alb incomplete, but a start. 
+	2009-07-17  alb incomplete, but a start.
 	2009-07-18  alb  unit tests, functional tests work and generate valid reports.
 	2009-10-01  alb added ..\ to all files to reflect new project organization
 -->
@@ -22,7 +22,7 @@
 	<property name="config.dir"				location="..\config\" />
     <property name="docs.dir"       		location="..\target\docs\" />
     <property name="fonts.dir"      		location="..\fonts\" />
-	<property name="func.tests.src.dir"		location="..\src\functionalTests\" />
+	<property name="groovy.func.tests.dir"	location="..\src\test\groovy\functionalTests\" />
 	<property name="jar.dir"				location="${build.dir}\jar"/>
 	<property name="src.dir" 				location="..\src\main\java"/>
     <property name="src.pdf.plugin.dir"     location="${src.dir}\org\pz\platypus\plugin\pdf"/>
@@ -31,8 +31,8 @@
 	<property name="test.report.dir" 		location="..\target\test-reports" />
 	<property name="vendor.libs"    		location="..\lib\" />
     <property name="vendor.lib.dir" 		location="${build.dir}\jar\lib" />
-	
-	<property name="version"				value="0.2.0 RC 0" />
+
+	<property name="version"				value="0.2.0" />
 	<property name="message" 				value="Buid Platypus for Release" />
 
     <path id="project.classpath">
@@ -41,11 +41,11 @@
             <include name="*.jar"/>
         </fileset>
     </path>
-	
+
 	<path id="groovy.classpath">
 		<pathelement location="C:\Tools\Groovy\Groovy-1.6.3\lib\groovy-1.6.3.jar" />
 	</path>
-	
+
 	<taskdef name="groovy"
 			 classname = "org.codehaus.groovy.ant.Groovy"
 		     classpathref = "groovy.classpath" />
@@ -68,7 +68,7 @@
     <delete dir="${classes.dir}\org" />
 </target>
 
-<target name="compile" description="Compile with Java 6">                         
+<target name="compile" description="Compile with Java 6">
 	<javac srcdir="${src.dir}"
 		   destdir="${classes.dir}"
 		   debug="on">
@@ -103,43 +103,36 @@
 <target name="unit-test" depends="compile-unit-tests, compile-prep, compile, compile-listing-plugin, compile-pdf-plugin" description="Run unit tests, create report">
 	<delete dir="${test.report.dir}"/>
 	<mkdir  dir="${test.report.dir}" />
-	
+
 	<junit fork="yes" printsummary="no" haltonfailure="no" showoutput="yes" >
 		<formatter type="xml"/>
 		<classpath refid="project.classpath" />
 		<batchtest fork="yes" todir="${test.report.dir}">
 			<fileset dir="${classes.dir}">
-				<include name="**/*Test.class"/>				
+				<include name="**/*Test.class"/>
 			</fileset>
 		</batchtest>
 	</junit>
-	
+
 	<junitreport todir="${test.report.dir}">
 		<fileset dir="${test.report.dir}">
 			<include name="TEST-*.xml" />
 		</fileset>
 		<report todir="${test.report.dir}\html" />
-	</junitreport>	
+	</junitreport>
 </target>
-	
+
 	<!--
-	Runs the functional tests, generated a Platypus file containing the results, 
-	then generates a PDF by running Platypus on the results file.
+	Runs the groovy functional tests. To pass, all tests must show "SUCCESS".
 	-->
 <target name="functional-tests" description="Run functional tests (in Groovy)" >
 	<delete>
 		<fileset dir="${jar.dir}" includes="*.platy" />
 	</delete>
-	
-	<exec dir="${func.tests.src.dir}" executable="groovy" os="Windows XP" >
-		<arg line="${func.tests.src.dir}\framework.groovy ${func.tests.src.dir}\scripts.txt ${jar.dir} AntFunctionalTests.platy" />
+
+	<exec dir="${groovy.func.tests.dir}" executable="groovy" os="Windows XP" >
+		<arg line="${groovy.func.tests.dir}\cliTest.groovy ${jar.dir}\platypus.jar" />
 	</exec>
-	
-	<exec dir="${jar.dir}" executable ="java" os="Windows XP" >
-		<arg line="-cp . -jar Platypus.jar ${jar.dir}\AntFunctionalTests.platy ${test.report.dir}\AntFunctionalTests.pdf" />
-	</exec>
-	
-</target>	
+</target>
 
 </project>
- 
