@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
+import org.pz.platypus.exceptions.StopExecutionException;
 import org.pz.platypus.test.mocks.MockLiterals;
 import org.apache.commons.cli.ParseException;
 
@@ -40,7 +41,7 @@ public class CommandLineArgsTest {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
-        String[] args = { "-inputFile", infileName, "-outputFile", outfilename };
+        String[] args = { infileName, outfilename };
         cl = new CommandLineArgs( args );
 
         assertEquals( infileName, cl.lookup( "inputFile" ));
@@ -53,7 +54,7 @@ public class CommandLineArgsTest {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
 
-        String[] args = { "-inputFile", infileName, "-outputFile", outfilename  };
+        String[] args = { infileName, outfilename  };
         CommandLineArgs cl = new CommandLineArgs( args );
 
         assertNull( cl.lookup( null ));
@@ -64,12 +65,13 @@ public class CommandLineArgsTest {
     public void testSpecifyingInfileOnly()
     {
         final String infileName = "infile.txt";
+        final String outfileName = "infile.pdf";
 
-        String[] args = { "-inputFile", infileName };
+        String[] args = { infileName };
         CommandLineArgs cl = new CommandLineArgs( args );
                 
         assertEquals( infileName, cl.lookup( "inputFile" )  );
-        assertEquals( null, cl.lookup( "outputFile" ) );
+        assertEquals( outfileName, cl.lookup( "outputFile" ) );
     }
 
     @Test
@@ -177,9 +179,9 @@ public class CommandLineArgsTest {
     }
 
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = StopExecutionException.class)
     public void testUnsupportedOption() throws Exception {
-        Platypus.processCommandLine( new String[] { "NotSupported"}, gdd );
+        Platypus.processCommandLine( new String[] { "-NotSupported"}, gdd );
     }
 
     @Test

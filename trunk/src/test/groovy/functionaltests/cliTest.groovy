@@ -481,7 +481,7 @@ def void testPdfInputOutputWithExtraUnsupportedOption( String javaRun )
 
     def File pdfFile = new File( "${helloFileName}.pdf" )
 
-    if(( err.contains( "Error: Invalid option specified:") )) {
+   if(( err.contains( "Unrecognized option:") )) {
         print( "Success in " )
     }
     else  {

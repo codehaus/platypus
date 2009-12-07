@@ -37,7 +37,7 @@ public class PlatypusTest
 
     //=== tests of findOutputFilePluginType()
 
-    @Test (expected=MissingResourceException.class)
+    @Test
     public void testFindOutputPluginTypeInvalidOutputType1() throws ParseException {
         final String[] comLine = { "in.txt" };
         CommandLineArgs clArgs = null;
