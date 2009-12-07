@@ -1,0 +1,72 @@
+# Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
+#
+# Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+# Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
+#
+# This file contains all the symbols that Platypus handles. Specifically, it
+# contains all the symbols in their command syntax.
+#
+# Any character other than [ in the first column, turns that line
+# into a comment.
+#
+# Do not alter without first checking the documentation. Also note 
+# that any changes made here by you will result in a non-standard Platypus 
+# distribution, which will affect the portability of documents generated 
+# by this version of Platypus.
+#
+[a']
+[a^]
+[a`]
+[a"]
+[A']
+[A^]
+[A`]
+[A"]
+[copyright]
+[c_]
+[C_]
+[dlq]
+[drq]
+[e']
+[e^]
+[e`]
+[e"]
+[E']
+[E^]
+[E`]
+[E"]
+[i']
+[i^]
+[i`]
+[i"]
+[I']
+[I^]
+[I`]
+[I"]
+[n~]
+[N~]
+[registered]
+[ssharp]
+[o']
+[o^]
+[o`]
+[o"]
+[O']
+[O^]
+[O`]
+[O"]
+[slq]
+[srq]
+[u']
+[u^]
+[u`]
+[u"]
+[U']
+[U^]
+[U`]
+[U"]
+[/]
+[!^]
+[?^]
+[--]
+[---]
