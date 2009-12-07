@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Platypus Page Layout and Typesetting Software</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="description" content="Typesetting software">
+<meta name="keywords" content="typesetting, typesetting software, alternative to TeX, easier to use than Tex, alternative to lout, open source, alternative to LaTeX">
+<link rel="stylesheet" href="mm_engineering.css" type="text/css">
+	<style type="text/css">
+		@import url("mm_engineering.css");
+	</style>
+<script language="javascript">
+//--------------- LOCALIZEABLE GLOBALS ---------------
+var d=new Date();
+var monthname=new Array("January","February","March","April","May","June","July","August","September","October","November","December");
+//Ensure correct for language. English is "January 1, 2004"
+var TODAY = monthname[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+//---------------   END LOCALIZEABLE   ---------------
+</script>
+</head>
+<body bgcolor="#DEDDD9">
+<table width="101%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#30414F">
+    <td colspan="3" rowspan="2"><img src="images/header-movable-type.jpg" alt="" width="300" height="149" border="0"></td>
+    <td height="59" colspan="3" id="logo" valign="bottom" align="center" nowrap>Platypus Zone</td>
+    <td width="168">&nbsp;</td>
+  </tr>
+
+  <tr bgcolor="#30414F">
+    <td height="58" colspan="3" id="tagline" valign="top" align="center" nowrap>PZ.ORG</td>
+	<td width="168">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td colspan="7" bgcolor="#4A5464"><img src="images/mm_spacer.gif" alt="" width="1" height="1" border="0"></td>
+  </tr>
+
+    <tr bgcolor="#9A988D">
+  	<td colspan="7" id="dateformat" height="25">[ <a href="http://www.pz.org/index.html">HOME</a> ]&nbsp;&nbsp;
+        <script language="javascript">
+            document.write(TODAY);
+        </script>
+	</td>
+  </tr>
+  <!--
+  <tr bgcolor="#9A988D">
+  	<td colspan="7" id="dateformat" height="25">&nbsp;&nbsp;
+        <script language="javascript">
+            document.write(TODAY);
+        </script>
+	</td>
+  </tr>
+--->
+    <tr>
+    <td colspan="7" bgcolor="#66CCFF"><img src="images/mm_spacer.gif" alt="" width="1" height="1" border="0"></td>
+  </tr>
+
+ <tr>
+    <td colspan="7" bgcolor="#30414F"><img src="images/mm_spacer.gif" alt="" width="1" height="2" border="0"></td>
+  </tr>
+
+ <tr>
+    <td width="165" valign="top" bgcolor="#9A988D">
+	<table border="0" cellspacing="0" cellpadding="0" width="165" id="navigation">
+
+		<!--
+        <tr>
+            <td width="165">
+                <a href="http://platypus.pz.org/UserGuide.pdf" class="navText">documentation</a>
+            </td>
+        </tr>
+		-->
+        <tr>
+            <td width="165">
+                <a href="http://platypus.pz.org/examples.html" class="navText">examples</a>
+            </td>
+        </tr> 
+        <tr>
+            <td width="165">
+                <a href="http://platypus.pz.org/downloads.html" class="navText">downloads</a>
+            </td>
+        </tr>
+        <!--		
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/source.html" class="navText">source code</a></td>
+        </tr>
+
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/index.html" class="navText">version history</a></td>
+        </tr>        
+
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/javadoc/index.html" class="navText">javadoc</a></td>
+        </tr> 
+			-->
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/mailinglists.html" class="navText">mailing lists</a></td>
+        </tr>
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/designdocs.html" class="navText">design docs</a></td>
+        </tr>  
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/current/index.html" class="navText">latest build</a></td>
+        </tr>		
+        <tr>
+          <td width="165"><a href="http://platypus.pz.org/platypuscontact.html" class="navText">contact</a></td>
+        </tr>
+      </table>
+  	&nbsp;<br>
+  	&nbsp;<br>
+  	&nbsp;<br>
+ 	</td>
+    <td width="50"><img src="images/mm_spacer.gif" alt="" width="50" height="1" border="0"></td>
+    <td colspan="2" valign="top"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0"><br>
+	&nbsp;<br>
+	&nbsp;<br>
+	<table width="314" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="41" class="pageName" width="310">PLATYPUS</td>
+        </tr>
+        <tr>
+          <td width="310" valign="top" class="bodyText">
+            <p>Platypus is a full-featured and easy-to-use page layout and typesetting system.
+            </p>
+            
+            <p style="margin-bottom: 0;">Inspired by technologies such as TeX, Platypus 
+                adds new features and, especially, ease of use to the generation of documents of all kinds. Input consists of text files with embedded formatting commands. These files are converted by Platypus to PDF or HTML. (Microsoft
+                Word and e-Book formats to be added).
+            </p>
+            
+            <p>Platypus is available at no charge under the Apache 
+               open-source license. See downloadthe links to the left.  
+			   It requires only Java 6 to run.
+            </p>
+
+            <p>Features in the current release include:<ul>
+				<li>support for all TrueType and OpenType fonts
+				<li>bold, italics, underline, strikethrough
+				<li>foreign characters (enough for French, German, Spanish)
+				<li>left, center, right alignment and justified text
+				<li>customizable page size
+				<li>customizable margins
+				<li>multiple customizable columns
+				<li>indented/unindented paragraphs
+				<li>page-number footer
+				<li>debugging features
+				</ul>
+The most recent release, v. 0.2.0 RC1 is currently in field test. It implements additional features and a new plug-in architecture. Making it even simpler to generate typeset quality documents with ease!
+            </p>
+            
+            <p>If you would like to know about upcoming milestone releases, place yourself on the
+               (low-volume) announcement mailing list by sending an e-mail to: platypus.announce @ pz.org.
+            </p>
+          </td>
+        </tr>
+      </table></td>
+    <td width="50">
+        <img src="images/mm_spacer.gif" alt="" width="50" height="1" border="0">
+    </td>
+    <td width="190" valign="top">
+        <br>
+        <table border="0" cellspacing="0" cellpadding="0" width="190" bgcolor="#C2BFB4">
+            <tr>
+                <td colspan="3" id="colheader" class="subHeader" align="center">
+                    quick documents
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" id="colheader" class="subHeader2" align="center">
+                    &nbsp;&nbsp;<a href="http://platypus.pz.org/UserGuide.pdf" class="subHeader2">user guide</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" id="colheader" class="subHeader2" align="center">
+                    &nbsp;&nbsp;<a href="http://platypus.pz.org/examples/milestones.pdf" class="subHeader2">schedule</a>
+                </td>
+            </tr> 
+            <tr>
+                <td colspan="3" id="colheader" class="subHeader2" align="center">
+                    &nbsp;&nbsp;<a href="http://platypus.pz.org/RationaleForPlatypus.pdf" class="subHeader2">rationale</a>
+                </td>
+            </tr>            
+          
+        </table>
+	</td>
+	<td width="168">
+        &nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td width="165" bgcolor="#9A988D">&nbsp;</td>
+    <td width="50">&nbsp;</td>
+    <td width="132">&nbsp;</td>
+    <td width="180">&nbsp;</td>
+    <td width="50">&nbsp;</td>
+    <td width="190">&nbsp;</td>
+	<td width="168">&nbsp;</td>
+  </tr>
+</table>
+
+<!-- following snippet added for tracking in Google analytics ALB-2007-08-18 -->
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2443356-1";
+urchinTracker();
+</script>
+
+</body>
+</html>
