@@ -24,7 +24,8 @@ public class PdfSymbol implements OutputCommandable
     private String root;
     private String passedValue;
 
-    public PdfSymbol( final String symbolRoot, final String stringToEmit ) {
+    public PdfSymbol( final String symbolRoot, final String stringToEmit )
+    {
         assert( root != null );
         assert( stringToEmit != null );
 
