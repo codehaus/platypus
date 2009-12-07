@@ -17,6 +17,7 @@ import java.util.List;
  * Puts specified command-line options into a tree and processes those it can.
  *
  * @author alb
+ * @author atul - moved the command line parsing to apache commons CLI 
  */
 public class CommandLineArgs
 {
@@ -50,7 +51,8 @@ public class CommandLineArgs
     private void parseArguments(String[] args)
     {
         try {
-            line = parser.parse( options, args );
+            String[] preprocessedArgs = CommandLineArgs.preProcessCommandLine(args);
+            line = parser.parse( options, preprocessedArgs );
         } catch (ParseException e) {
             System.err.println(e.getLocalizedMessage());
             throw new StopExecutionException(e.getLocalizedMessage());
@@ -116,17 +118,6 @@ public class CommandLineArgs
     }
 
     /**
-     * Tests to see whether there are more options to process
-     *
-     * @param args
-     * @param currentArg
-     * @return yea/nay
-     */
-    private boolean areMoreArguments( final String[] args, final int currentArg ) {
-        return( args.length > currentArg );
-    }
-
-    /**
      * Determines whether an item was specified on the command-line. And if so,
      * what any argument for it is.
      *
@@ -139,6 +130,9 @@ public class CommandLineArgs
         if ( argToFind == null ) {
             return( null );
         }
+        if (shouldGenerateOutputOption(argToFind)) {
+            return generateOutputFile();
+        }
         if (!line.hasOption(argToFind))
             return null;
         String opt = line.getOptionValue(argToFind);
@@ -146,6 +140,46 @@ public class CommandLineArgs
             return "true";
         return opt;
             }
+
+    private String generateOutputFile() {
+        String inputFile = line.getOptionValue("inputFile");
+        String ret = getNameMinusExtension(inputFile);
+        return appendFormatExtension(ret);
+    }
+
+    private String appendFormatExtension(String ret) {
+        final String formatExt = getFormatExtension();
+        return ret + "." + formatExt;
+    }
+
+    private String getFormatExtension() {
+        String formatExtension = "pdf";
+        if (line.hasOption("format")) {
+            formatExtension = line.getOptionValue("format");
+        }
+        return formatExtension;
+    }
+
+    private String getNameMinusExtension(String str) {
+        String ret = str;
+        StringBuilder fileBuilder = new StringBuilder(str);
+        int lastDotAt = fileBuilder.lastIndexOf(".");
+        if (lastDotAt != -1) {
+            ret = ret.substring(0, lastDotAt);
+        }
+        return ret;
+    }
+
+    private boolean shouldGenerateOutputOption(final String argStr) {
+        if (argStr.equals("outputFile")) {
+            if(!line.hasOption("outputFile")) {
+                if (line.hasOption("inputFile")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Processes some command-line options

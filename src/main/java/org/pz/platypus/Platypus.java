@@ -10,6 +10,7 @@ package org.pz.platypus;
 import org.pz.platypus.exceptions.FilenameLookupException;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
 import org.pz.platypus.exceptions.StopExecutionException;
+import org.pz.platypus.exceptions.InvalidInputException;
 import org.apache.commons.cli.ParseException;
 
 import java.io.File;
@@ -130,9 +131,10 @@ public class Platypus
                 gdd.getConfigFile().lookup( "pi.out." + gdd.getOutputPluginPrefix());
 
         if ( jarFilename == null ) {
-            gdd.logSevere( gdd.getLit( "ERROR.OUTPUT_TYPE_NOT_IN_CONFIGFILE" ) +
-                                    " " + gdd.getOutputPluginPrefix() );
-            throw new MissingResourceException( null, null, null );
+            final String errMsg = gdd.getLit( "ERROR.OUTPUT_TYPE_NOT_IN_CONFIGFILE" ) +
+                                    " " + gdd.getOutputPluginPrefix();
+            gdd.logSevere( errMsg );
+            throw new InvalidInputException( errMsg, Status.ERR_UNSUPPORTED_FORMAT );
         }
 
         String pluginJar =
@@ -401,7 +403,6 @@ public class Platypus
         }
 
         try {
-            args = CommandLineArgs.preProcessCommandLine(args);
             gdd = setupGdd( lits );
             storeVersionNumber( gdd );
             clArgs = processCommandLine( args, gdd );
@@ -435,6 +436,9 @@ public class Platypus
         }
         catch ( NoSuchFieldException nsfe ) {
             System.exit( Status.INVALID_INPUT_FILE );
+        }
+        catch (InvalidInputException iie) {
+            System.exit( iie.getStatus() );
         }
         catch ( Exception ex ) {
             logUnexpectedError( ex, gdd );
