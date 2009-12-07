@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.pz.platypus.exceptions.HelpMessagePrinted;
 import org.pz.platypus.exceptions.StopExecutionException;
 import org.pz.platypus.test.mocks.MockLiterals;
-import org.apache.commons.cli.ParseException;
 
 import java.util.logging.Level;
 
@@ -35,7 +34,7 @@ public class CommandLineArgsTest {
         gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
         gdd.getLogger().setLevel( Level.OFF );
     }
-    
+
     @Test
     public void testLoadFilenamesOnly() {
         final String infileName = "infile.txt";
@@ -45,11 +44,11 @@ public class CommandLineArgsTest {
         cl = new CommandLineArgs( args );
 
         assertEquals( infileName, cl.lookup( "inputFile" ));
-        assertEquals( outfilename, cl.lookup( "outputFile" ));    
+        assertEquals( outfilename, cl.lookup( "outputFile" ));
      }
 
     @Test
-    public void testInvalidLookups() 
+    public void testInvalidLookups()
     {
         final String infileName = "infile.txt";
         final String outfilename = "outfile.pdf";
@@ -69,7 +68,7 @@ public class CommandLineArgsTest {
 
         String[] args = { infileName };
         CommandLineArgs cl = new CommandLineArgs( args );
-                
+
         assertEquals( infileName, cl.lookup( "inputFile" )  );
         assertEquals( outfileName, cl.lookup( "outputFile" ) );
     }
@@ -100,14 +99,14 @@ public class CommandLineArgsTest {
         assertEquals( "true", cl.lookup( verbose ));
         assertEquals( fileName, cl.lookup( "config" ));
     }
-    
+
     @Test
     public void testVerbose()
     {
         final String verbose = "-verbose";
         final String configFile = "-config";
         final String fileName = "config.file";
-        
+
         String[] args = { verbose, configFile, fileName };
         CommandLineArgs cl = new CommandLineArgs( args );
 
@@ -119,17 +118,17 @@ public class CommandLineArgsTest {
         }
         assertTrue( gdd.isClVerbose() );
     }
-    
+
     @Test
     public void testVverbose()
     {
         final String verbose = "-vverbose";
         final String configFile = "-config";
         final String fileName = "config.file";
-        
+
         String[] args = { verbose, configFile, fileName };
         CommandLineArgs cl = new CommandLineArgs( args );
-        
+
         try {
             cl.process( gdd );
         }
@@ -138,19 +137,19 @@ public class CommandLineArgsTest {
         }
         assertTrue( gdd.isClVerbose() );
         assertTrue( gdd.isClVVerbose() );
-    } 
-    
+    }
+
     @Test
     public void testCreateCommandLine() {
         final String verbose = "-vverbose";
         final String configFile = "-config";
         final String fileName = "config.file";
-        
+
         String[] args = { verbose, configFile, fileName };
         CommandLineArgs cl = new CommandLineArgs( args );
         assertTrue( "-vverbose -config config.file".equals( cl.createCommandLine( args )));
     }
-    
+
     @Test
     public void testCreateCommandLineWithNoArgs() {
         String[] args = { };
