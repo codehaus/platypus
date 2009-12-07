@@ -1,3 +1,5 @@
+Platypus Page Layout and Typesetting System, v. 0.2.0
+
 Platypus is released under the Apache 2.0 license. (first license below). 
 All code and binaries can be downloaded from http://platypus.pz.org
 
@@ -5,7 +7,10 @@ Platypus uses the following free and/or open-source resources. In all
 cases, the text of the applicable licenses appear below in this file.
 
 For PDF generation: iText PDF Library (www.itextsoftware.com), which uses
-the Mozilla Public License 1.1
+the Mozilla Public License 1.1 in the version included in this release.
+
+For command-line parsing: The Apache Commons CLI library, which is released
+under the Apache 2.0 license. (first license below)
 
 The Bitstream Vera Sans Mono fonts are generously made available by 
 Bitstream and available here (http://www.gnome.org/fonts/). The text of 
