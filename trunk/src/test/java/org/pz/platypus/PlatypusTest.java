@@ -121,22 +121,6 @@ public class PlatypusTest
         assertNotNull( gdd.getConfigFile().lookup( "pi.out.pdf" ));
     }
 
-//    @Test (expected=MissingResourceException.class)
-//    public void testProcessConfigFileInvalid()
-//    {
-//        gdd.setLogger( new MockLogger() );
-//        final String[] comLine = { "in.txt", "out.pdf", "-verbose" };
-//        CommandLineArgs clArgs = null;
-//
-//        try {
-//            clArgs = Platypus.processCommandLine( comLine, gdd );
-//        }
-//        catch ( HelpMessagePrinted hmp ) {
-//            fail( "Unexpected HelpMessagePrinted exception in PlatypusTest" );
-//        }
-//
-//        Platypus.processConfigFile( "non-existendConfigFile", clArgs, gdd );
-//    }
 
     //=== tests of setupLiterals()
 
@@ -154,7 +138,7 @@ public class PlatypusTest
         MockLiterals lits = new MockLiterals( );
         lits.setVersionNumberToReturn( version );
         gdd.setLits( lits );
-        
+
         Platypus.storeVersionNumber( gdd );
         assertEquals( version, gdd.getSysStrings().getString( "_version" ));
     }

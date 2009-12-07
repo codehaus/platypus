@@ -419,7 +419,8 @@ public class Platypus
         }
         catch( HelpMessagePrinted hmp ) {
             System.exit( Status.OK );
-        } catch ( StopExecutionException see) {
+        }
+        catch ( StopExecutionException see ) {
             System.exit( Status.OK );
         }
 
