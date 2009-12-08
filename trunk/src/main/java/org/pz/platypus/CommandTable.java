@@ -129,10 +129,10 @@ public class CommandTable
 
         int i = 0;
 
-        Set commands =  pf.getContents().keySet();
-        for( Object root : commands )
+        Set<String> commands =  pf.getContents().keySet();
+        for( String root : commands )
         {
-            loadCommand( (String) root, (String) pf.getContents().get( root ));
+            loadCommand( root, pf.getContents().get( root ));
             i++;
         }
         return( i );
