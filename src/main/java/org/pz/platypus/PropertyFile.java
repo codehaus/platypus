@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.MissingResourceException;
 import java.util.Set;
+import java.util.Map;
 
 /**
  * Reads a properties file and parses it into a Map<String, String>. The Java library
@@ -157,7 +158,7 @@ public class PropertyFile
     //=== getters and setters ===
 
 
-    public HashMap getContents()
+    public Map<String,String> getContents()
     {
         return( contents );
     }
