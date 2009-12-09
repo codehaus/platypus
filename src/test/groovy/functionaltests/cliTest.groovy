@@ -10,6 +10,7 @@
  */
 
 import org.apache.commons.cli.ParseException
+import java.util.zip.*
 
 // the JAR to test should be passed to this script as args[0]
 if( ! args ) {
@@ -38,6 +39,7 @@ testListingSimpleInputOutput( javaRun )
 testListingInputOutputVeryVerbose( javaRun )
 testPdfInputOutputInvalidConfigFile( javaRun )
 testPdfInputOutputWithExtraUnsupportedOption( javaRun )
+testPdfValidConfigThenInputAndOutputFiles( javaRun )
 
 return
 
@@ -533,7 +535,6 @@ def void testPdfInputOutputWithExtraUnsupportedOption( String javaRun )
 
     def File pdfFile = new File( "${helloFileName}.pdf" )
 
-   // if(( err.contains( "Error: Invalid option specified:") )) {
    if(( err.contains( "Unrecognized option:") )) {
         print( "Success in " )
     }
@@ -544,4 +545,108 @@ def void testPdfInputOutputWithExtraUnsupportedOption( String javaRun )
 
     helloFile.delete()
     pdfFile.delete()
+}
+
+/**
+ * See PLATYPUS-7 at Codehaus. This code tests for the -config option being specified
+ * before the input and output files. Previously, it generated an NPE. Now it works
+ * correctly. That is, it generates the expected output file without complaint.
+ */
+def void testPdfValidConfigThenInputAndOutputFiles( String javaRun )
+{
+    def String description =
+    "Test: -config valid-file input-file output-file.pdf [PLATYPUS-7]"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "***FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // point to the config file in PLATYPUS_HOME
+    def envVars = System.getenv()
+    def platypusHome = envVars['PLATYPUS_HOME']
+    def String configFileName = platypusHome + "/config/Config.properties"
+
+    // run it and test for error message as well as a generated PDF file
+    String commandLine =  javaRun +
+                            " -config ${configFileName}  ${helloFileName} ${helloFileName}.pdf "
+    def proc = commandLine.execute()
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    if(
+        ( err.equals( null ) || err.isEmpty() )
+        &&  pdfFile.exists()
+                            ) {
+        println( "Success in " + description )
+    }
+    else  {
+        println( "***FAILURE in " + description )
+        println( err )
+    }
+
+    helloFile.delete()
+    pdfFile.delete()
+
+}
+    //========= support functions ==============/
+
+/**
+ * Extracts a namedfile from a jar file. Was used briefly. Could be deleted if not used soon.
+ * But hard code to find/write and get right.
+ */
+def String unzipPDFplugin()
+{
+    try {
+        ZipFile jar = new ZipFile( args[0] )
+        Enumeration contents = jar.entries();
+        while( contents.hasMoreElements() ) {
+            ZipEntry jarredFile = (ZipEntry) contents.nextElement()
+            println( "file in Platypus.jar: " + jarredFile.getName() )
+            if( ! jarredFile.getName().endsWith( "pdf.jar" )) {
+                continue;
+            }
+            else {
+                // we have the right entry for pdf.jar, so read it and write it out
+                BufferedInputStream bis =
+                new BufferedInputStream(zipFile.getInputStream( jarredFile ));
+
+                int size;
+                byte[] buffer = new byte[2048];
+
+                FileOutputStream fos = new FileOutputStream( jarredFile.getName() );
+                BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
+
+                while ((size = bis.read(buffer, 0, buffer.length)) != -1) {
+                    bos.write(buffer, 0, size);
+                }
+
+                bos.flush();
+                bos.close();
+                fos.close();
+
+                bis.close();
+
+                def File pdfPluginFile = new File( jarredFile.getName() )
+
+                if ( ! pdfPluginFile.exists() ) {
+                    println( "***FAILURE in to unzip PDF plug-in jar file" )
+                    return null
+                }
+                else {
+                    println( "pdf.jar = " + jarredFile.getName() )
+                    return jarredFile.getName()
+                }
+            }
+        }
+        println( "***FAILURE pdf.jar not found")
+        return null
+    } catch (IOException e) { return null   }
 }
