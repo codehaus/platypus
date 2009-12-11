@@ -44,8 +44,10 @@ public class PdfColumnCount implements OutputCommandable
         int pddColumnCount = pdd.getColumnCount();
 
         if ( newColumnCount != pddColumnCount ) {
-            flushExistingText( pdd.getOutfile() );
-            setupNewColumns( newColumnCount, pdd );
+            if( pdd.getOutfile().isOpen() ) {
+                flushExistingText( pdd.getOutfile() );
+                setupNewColumns( newColumnCount, pdd );
+            }
             pdd.setColumnCount( newColumnCount, tok.getSource() );
             return;
         }
@@ -119,7 +121,7 @@ public class PdfColumnCount implements OutputCommandable
     {
         return( pdd.getPageHeight() - pdd.getMarginTop() - yPosition );
     }
-    
+
     /**
      * Before changing columns, we need to flush any existing text to the PDF file.
      * That action is performed here.
