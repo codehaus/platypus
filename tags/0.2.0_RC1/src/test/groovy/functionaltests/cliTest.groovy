@@ -10,7 +10,6 @@
  */
 
 import org.apache.commons.cli.ParseException
-import java.util.zip.*
 
 // the JAR to test should be passed to this script as args[0]
 if( ! args ) {
@@ -595,58 +594,4 @@ def void testPdfValidConfigThenInputAndOutputFiles( String javaRun )
     helloFile.delete()
     pdfFile.delete()
 
-}
-    //========= support functions ==============/
-
-/**
- * Extracts a namedfile from a jar file. Was used briefly. Could be deleted if not used soon.
- * But hard code to find/write and get right.
- */
-def String unzipPDFplugin()
-{
-    try {
-        ZipFile jar = new ZipFile( args[0] )
-        Enumeration contents = jar.entries();
-        while( contents.hasMoreElements() ) {
-            ZipEntry jarredFile = (ZipEntry) contents.nextElement()
-            println( "file in Platypus.jar: " + jarredFile.getName() )
-            if( ! jarredFile.getName().endsWith( "pdf.jar" )) {
-                continue;
-            }
-            else {
-                // we have the right entry for pdf.jar, so read it and write it out
-                BufferedInputStream bis =
-                new BufferedInputStream(zipFile.getInputStream( jarredFile ));
-
-                int size;
-                byte[] buffer = new byte[2048];
-
-                FileOutputStream fos = new FileOutputStream( jarredFile.getName() );
-                BufferedOutputStream bos = new BufferedOutputStream(fos, buffer.length);
-
-                while ((size = bis.read(buffer, 0, buffer.length)) != -1) {
-                    bos.write(buffer, 0, size);
-                }
-
-                bos.flush();
-                bos.close();
-                fos.close();
-
-                bis.close();
-
-                def File pdfPluginFile = new File( jarredFile.getName() )
-
-                if ( ! pdfPluginFile.exists() ) {
-                    println( "***FAILURE in to unzip PDF plug-in jar file" )
-                    return null
-                }
-                else {
-                    println( "pdf.jar = " + jarredFile.getName() )
-                    return jarredFile.getName()
-                }
-            }
-        }
-        println( "***FAILURE pdf.jar not found")
-        return null
-    } catch (IOException e) { return null   }
 }
