@@ -335,6 +335,11 @@ public class PdfOutfile
      */
     public void addColumnsContentToDocument()
     {
+        // following test required if the [columns: command appears before any text
+        if( iTDocument == null || iTColumn == null ) {
+            return;
+        }
+
         iTStatus = ColumnText.NO_MORE_COLUMN;
 
         try
