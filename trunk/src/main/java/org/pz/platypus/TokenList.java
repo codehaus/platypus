@@ -118,5 +118,19 @@ public class TokenList extends ArrayList<Token>
             System.out.println( t.toString( gdd ));
         }
     }
+
+    public boolean isNextToken(int i, TokenType tokType) {
+        Token nextTok = getNextToken( i );
+        if (nextTok == null)
+            return false;
+        return nextTok.getType().equals( tokType );
+    }
+
+    public boolean areNextTokenContentsEqualTo(int i, String s) {
+        Token nextTok = getNextToken( i );
+        if (nextTok == null)
+            return false;
+        return nextTok.getContent().equals("[cr]");
+    }
 }
 
