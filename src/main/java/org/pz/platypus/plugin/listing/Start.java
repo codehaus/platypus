@@ -59,7 +59,8 @@ public class Start implements Pluggable
         }
     }
 
-    /**
+    /** TODO: This is used only in unit tests - refactor unit tests and remove this.
+     *  This is moved to the Strategy base class.
      * replaces reserved HTML characters to make text printable
      * @param text text to transform
      * @return text string with the transformation applied
@@ -100,21 +101,8 @@ public class Start implements Pluggable
      */
     public void emitClosingHtml( final FileWriter outputFile, final GDD gdd ) throws IOException
     {
-        if ( outputFile == null ) {
-            return;
-        }
-
-        try {
-            outputFile.write(
-                              "</div>\n" +
-                              "</ol>\n" +
-                              "</BODY>\n" +
-                              "</HTML>\n" );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
+        final String s = "</div>\n" + "</ol>\n" + "</BODY>\n" + "</HTML>\n";
+        outputIt( outputFile, gdd, s);
     }
 
     /**
@@ -129,17 +117,8 @@ public class Start implements Pluggable
                                 final FileWriter outputFile,
                                 final GDD gdd ) throws IOException
     {
-        if( outputFile == null ) {
-            return;
-        }
-
-        try {
-            outputFile.write( getHeaderHtml( gdd, inputFile ));
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
+        final String s = getHeaderHtml( gdd, inputFile );
+        outputIt( outputFile, gdd, s );
     }
 
     /**
@@ -156,74 +135,94 @@ public class Start implements Pluggable
         Token tok;
         int lineNumber = 0;
 
-        for( int i = 0; i < gdd.getInputTokens().size(); i++ ) {
-            tok = gdd.getInputTokens().get( i );
+        final TokenList tokensList = gdd.getInputTokens();
+        for( int i = 0; i < tokensList.size(); i++ ) {
+            tok = tokensList.get( i );
 
-            if( tok.getSource().getLineNumber() != lineNumber ){
-                outfile.write( "<li>");
-                lineNumber = tok.getSource().getLineNumber();
-            }
+            if(isItANewHtmlLine(tok, lineNumber))
+                lineNumber = startANewHtmlLine(outfile, gdd, tok);
 
-            if( tok.getContent().equals("[cr]" )) {
-                outfile.write( "" );
-            }
-            else if ( tok.getContent().endsWith( "[]" )) {
-                outfile.write( tok.getContent().substring( 0, tok.getContent().length() - 2 ));
-                outputNewLine( outfile, gdd );
-                if( gdd.getInputTokens().size() > i+1 ) {
-                    Token t =  gdd.getInputTokens().get( i+1 );
-                    if ( t != null && t.getContent().equals("[cr]" )) {
-                        i += 1; // skip the [cr] token after a []
-                    }
-                }
-            }
-            else if ( tok.getType().equals( TokenType.COMMAND )) {
-                // will the next record indicate the present command is a replacement?
-                // If so, don't print this command, just skip it. The next token
-                // (containing the original command) will be printed on the next loop cycle.
-                Token nextTok = gdd.getInputTokens().getNextToken( i );
-                if( nextTok != null && nextTok.getType().equals( TokenType.REPLACED_COMMAND )) {
-                    continue;
-                }
-                else {
-                    outputCommand( outfile, tok, gdd );
-                }
+            if (skipThisToken(tok, tokensList, i))
                 continue;
-            }
-            else if ( tok.getType().equals( TokenType.REPLACED_COMMAND )) {
-                outputCommand( outfile, tok, gdd );
-                continue;
-            }
-            else if ( tok.getType().equals( TokenType.COMPOUND_COMMAND )) {
-                i += outputCompoundCommand( outfile, tok, gdd, i );
-                continue;
-            }
-            else if ( tok.getType().equals( TokenType.MACRO )) {
-                outputMacro( outfile, tok, gdd );
-                continue;
-            }
-            else if ( tok.getType().equals( TokenType.LINE_COMMENT )) {
-                outputComment( outfile, tok, gdd );
-            }
-            else if ( tok.getType().equals( TokenType.BLOCK_COMMENT )) {
-                outputBlockComment( outfile, tok, gdd );
-                continue;
-            }
-            else if ( tok.getType().equals( TokenType.SYMBOL )) {
-                outputSymbol( outfile, tok, gdd );
-                continue;
-            }
-            else if ( tok.getType().equals( TokenType.TEXT )) {
-                outfile.write( convertToHtmlText( tok.getContent() ));
-                continue;
-            }
-            else {
-                System.err.println( "Unrecognized command type in Listing for: " + tok.getContent() );
-                continue;
-            }
 
-            outfile.write( "</li>\n" );
+            i += skipNextTokens(i, tok, gdd, tokensList);
+
+            printToken(outfile, gdd, tok);
         }
+    }
+
+    private void printToken(FileWriter outfile, GDD gdd, Token tok) throws IOException {
+        HtmlListingStrategy strategy = HtmlListingStrategy.getFormatStrategy( tok );
+        final String s = strategy.format(tok, gdd);
+        outputIt(outfile, gdd, s);
+        if (strategy.canOutputHtmlEndOfLine())
+            outfile.write( "</li>\n" );
+    }
+
+    /**
+     * Start a new Html line. This amounts to outputting an Html <li> token.
+     * @param outfile
+     * @param gdd
+     * @param tok
+     * @return the new / next line number.
+     * @throws IOException
+     */
+    private int startANewHtmlLine(FileWriter outfile, GDD gdd, Token tok) throws IOException {
+        outputIt(outfile, gdd, "<li>");
+        int lineNumber = tok.getSource().getLineNumber();
+        return lineNumber;
+    }
+
+    /**
+     *  Should we start a new Html line? Every token carries with it
+     *  the original source line number. If it changes, we start a new
+     *  Html line. 
+     * @param tok
+     * @param lineNumber
+     * @return
+     */
+    private boolean isItANewHtmlLine(Token tok, int lineNumber) {
+        return tok.getSource().getLineNumber() != lineNumber;
+    }
+
+    /**    will the next record indicate the present command is a replacement?
+     *     If so, don't print this command, just skip it. The next token
+     *     (containing the original command) will be printed on the next loop cycle.
+     *
+     * @param tok
+     * @param tokensList
+     * @param i
+     * @return
+     */
+    private boolean skipThisToken(Token tok, TokenList tokensList, int i) {
+        if ( tok.getType().equals( TokenType.COMMAND )) {
+            if ( tokensList.isNextToken( i, TokenType.REPLACED_COMMAND ) )
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     *  We skip next one or many tokens at times. For example, we process
+     * the explicit newline command i.e. "[]", and output a newline.
+     * If this token appears at the end of a line (i.e. next immediate token is "[cr]",
+     * we don't want to output one more Html newline. 
+     * @param currTokIndex
+     * @param tok
+     * @param gdd
+     * @param tokensList
+     * @return
+     * @throws IOException
+     */
+    private int skipNextTokens(int currTokIndex, Token tok, GDD gdd, TokenList tokensList) throws IOException {
+        if ( tok.getContent().endsWith( "[]" )) {
+            if ( tokensList.areNextTokenContentsEqualTo(currTokIndex, "[cr]") )
+                return 1;                
+        } else if ( tok.getType().equals( TokenType.COMPOUND_COMMAND )) {
+            return tokensToSkip( gdd.getInputTokens(), currTokIndex );
+        }
+
+        return 0;
     }
 
     /**
@@ -296,7 +295,7 @@ public class Start implements Pluggable
         return( fwOut );
     }
 
-    /**
+    /** TODO: This is used only in unit tests - refactor unit tests and remove this. 
      * Output the HTML literals for a new command, including the pop-up title words
      * @param outfile file to write the HTML to
      * @param tok the token for the command
@@ -320,8 +319,23 @@ public class Start implements Pluggable
                 "</font></span>";
         }
 
+        return outputIt(outfile, gdd, s);
+    }
+
+    /** Write a String to the output - deals with the business of actual writing.
+     *  If any exceptions happen while writing - are logged and rethrown. 
+     *
+     * @param outfile
+     * @param gdd
+     * @param s
+     * @return
+     * @throws IOException
+     */
+    private String outputIt(FileWriter outfile, GDD gdd, String s) throws IOException {
         try {
-            outfile.write( s );
+            if ( outfile != null ) {
+                outfile.write( s );
+            }
         }
         catch( IOException ioe ) {
             logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
@@ -332,35 +346,19 @@ public class Start implements Pluggable
     }
 
     /**
-     * Output the HTML literals for a new command, including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param tok the token for the command
-     * @param gdd the GDD. Only the literals are used
+     * We skip all compound commands tokens. 
+     * @param tokList
      * @param tokenNumber which token in the input stream tok is
      * @throws IOException in event of exception in writing to file
      * @return how many tokens to skip over for this command.
      */
-    public int outputCompoundCommand( final FileWriter outfile, final Token tok, GDD gdd, int
-                                          tokenNumber)
+    public int tokensToSkip( TokenList tokList, int tokenNumber)
             throws IOException
     {
-        final String s = "<span title=\"" +
-                         gdd.getLit( "COMPOUND_COMMAND" ) +
-                         "\"><font color=\"blue\">" +
-                         convertToHtmlText( tok.getContent() ) +
-                         "</font></span>";
-        try {
-            outfile.write( s );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
-
         int i;
-        for( i = tokenNumber + 1; i < gdd.getInputTokens().size(); i++ )
+        for( i = tokenNumber + 1; i < tokList.size(); i++ )
         {
-            Token nextTok = gdd.getInputTokens().get( i );
+            Token nextTok = tokList.get( i );
             if( nextTok.getType() == TokenType.COMPOUND_COMMAND_END ) {
                 break;
             }
@@ -368,90 +366,7 @@ public class Start implements Pluggable
         return( i - tokenNumber  );
     }
 
-    /**
-     * Output the HTML literals for a line comment, including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param tok the token for the command
-     * @param gdd the GDD. Only the literals are used
-     * @throws IOException in event of exception in writing to file
-     * @return string written to file, or null on error
-     */
-    public String outputComment( final FileWriter outfile, final Token tok, GDD gdd )
-            throws IOException
-    {
-        final String s = "<span title=\"" +
-                         gdd.getLit( "COMMENT" ) +
-                         "\"><font color=\"green\">" +
-                         convertToHtmlText( tok.getContent() ) +
-                         "</font></span>" +
-                         "<br>" ;
-
-        try {
-            outfile.write( s );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
-
-        return( s );
-    }
-
-    /**
-     * Output the HTML literals for a block comment, including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param tok the token for the command
-     * @param gdd the GDD. Only the literals are used
-     * @throws IOException in event of exception in writing to file
-     * @return string written to file, or null on error
-     */
-    public String outputBlockComment( final FileWriter outfile, final Token tok, GDD gdd )
-            throws IOException
-    {
-        final String s = "<span title=\"" +
-                         gdd.getLit( "BLOCK_COMMENT" ) +
-                         "\"><font color=\"green\">" +
-                         convertToHtmlText( tok.getContent() ) +
-                         "</font></span>";
-
-        try {
-            outfile.write( s );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
-
-        return( s );
-    }
-
-    /**
-     * Output the HTML literals for a new macro, including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param tok the token for the command
-     * @param gdd the GDD. Only the literals are used
-     * @throws IOException in event of exception in writing to file
-     * @return string written to file, or null on error
-     */
-    public String  outputMacro( final FileWriter outfile, final Token tok, GDD gdd )
-            throws IOException
-    {
-        final String s = "<span title=\"" +
-                         gdd.getLit( "MACRO" ) +
-                         "\"><font color=\"brown\"><b>" +
-                         convertToHtmlText( tok.getContent() ) +
-                         "</b></font></span>";
-        try {
-            outfile.write( s );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
-
-        return( s );
-    }
-    /**
+    /** TODO: This is used only in unit tests - refactor unit tests and remove this.
      * Output the HTML literals for a new paragraph including the pop-up title words
      * @param outfile file to write the HTML to
      * @param gdd the GDD. Only the literals are used
@@ -461,48 +376,11 @@ public class Start implements Pluggable
     public String outputNewLine( final FileWriter outfile, final GDD gdd )
             throws IOException
     {
-        String newLine;
-
-        try {
-            newLine =  "<span title=\"" +
-                       gdd.getLit( "NEW_PARAGRAPH" ) +
-                       "\"><font color=\"blue\">[]</font></span><br>";
-            outfile.write( newLine );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
-
+        final String newLine = "<span title=\"" +
+                               gdd.getLit( "NEW_PARAGRAPH" ) +
+                               "\"><font color=\"blue\">[]</font></span><br>";
+        outputIt( outfile, gdd, newLine );
         return( newLine );
-    }
-
-    /**
-     * Output the HTML literals for a line comment, including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param tok the token for the command
-     * @param gdd the GDD. Only the literals are used
-     * @throws IOException in event of exception in writing to file
-     * @return string written to file, or null on error
-     */
-    public String outputSymbol( final FileWriter outfile, final Token tok, GDD gdd )
-            throws IOException
-    {
-        final String s = "<span title=\"" +
-                         gdd.getLit( "SYMBOL" ) +
-                         "\"><font color=\"blue\">" + "<b>" +
-                         convertToHtmlText( tok.getContent() ) +
-                         "</b></font></span>";
-
-        try {
-            outfile.write( s );
-        }
-        catch( IOException ioe ) {
-            logger.severe( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
-            throw new IOException();
-        }
-
-        return( s );
     }
 
     /**
