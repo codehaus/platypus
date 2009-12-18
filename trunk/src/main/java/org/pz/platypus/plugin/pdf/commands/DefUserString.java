@@ -133,7 +133,7 @@ public class DefUserString implements OutputCommandable
         gdd.logWarning(
            gdd.getLit( "FILE#" ) + " " + source.getFileNumber() + " " +
            gdd.getLit( "LINE#" ) + " " + source.getLineNumber() + " " +
-           gdd.getLit( "ERROR.INVALID_USER_STRING" ) + " " + macro +
+           gdd.getLit( "ERROR.INVALID_USER_STRING" ) + " " + macro +  " " +
            gdd.getLit( "SKIPPED" ));
     }
 
