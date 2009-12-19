@@ -34,7 +34,7 @@ public class PdfColumnWidth implements OutputCommandable
         float colWidth = Conversions.convertParameterToPoints( tok.getParameter(), pdd );
         float writableAreaWidth =  pdd.getPageWidth() - pdd.getMarginLeft() - pdd.getMarginRight();
         if ( colWidth < 0 || colWidth * pdd.getColumnCount() > writableAreaWidth ) {
-            showErrorMsg( tok, pdd, colWidth );
+            showErrorMsg( tok, pdd );
             return;
         }
 
@@ -51,13 +51,16 @@ public class PdfColumnWidth implements OutputCommandable
      * @param tok contains the location data
      * @param pdd contains the location of the logger and literals file
      */
-    void showErrorMsg( final Token tok, final PdfData pdd, final float colWidth )
+    void showErrorMsg( final Token tok, final PdfData pdd )
     {
             GDD gdd = pdd.getGdd();
-            gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
-                            gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                            gdd.getLit( "ERROR.INVALID_COLUMN_WIDTH" ) + ": " + colWidth + " " +
-                            gdd.getLit( "IGNORED" ));
+            gdd.logWarning( gdd.getLit( "FILE#" ) + tok.getSource().getFileNumber() + " " +
+                            gdd.getLit( "LINE#" ) + tok.getSource().getLineNumber() + " " +
+                            pdd.getColumnCount() + " " + gdd.getLit( "COLUMNS" ) + " " +
+                            tok.getParameter().getAmount() + " " +
+                            Conversions.convertParameterUnitToString( tok.getParameter(), gdd ) + " " +
+                            gdd.getLit( "WIDE_WILL_NOT_FIT" ) + ". " +
+                            gdd.getLit( "NEW_COLUMN_SIZE_IGNORED" ));
     }
 
     public String getRoot()
