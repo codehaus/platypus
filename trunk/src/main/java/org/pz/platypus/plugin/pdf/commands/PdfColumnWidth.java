@@ -34,7 +34,7 @@ public class PdfColumnWidth implements OutputCommandable
         float colWidth = Conversions.convertParameterToPoints( tok.getParameter(), pdd );
         float writableAreaWidth =  pdd.getPageWidth() - pdd.getMarginLeft() - pdd.getMarginRight();
         if ( colWidth < 0 || colWidth * pdd.getColumnCount() > writableAreaWidth ) {
-            showErrorMsg( tok, pdd );
+            showErrorMsg( tok, pdd, colWidth );
             return;
         }
 
@@ -50,17 +50,27 @@ public class PdfColumnWidth implements OutputCommandable
      * Show error message, giving location in Platypus input file
      * @param tok contains the location data
      * @param pdd contains the location of the logger and literals file
+     * @param width which specifies whether column is specified as too wide or too narrow
      */
-    void showErrorMsg( final Token tok, final PdfData pdd )
+    void showErrorMsg( final Token tok, final PdfData pdd, final float width )
     {
-            GDD gdd = pdd.getGdd();
-            gdd.logWarning( gdd.getLit( "FILE#" ) + tok.getSource().getFileNumber() + " " +
-                            gdd.getLit( "LINE#" ) + tok.getSource().getLineNumber() + " " +
-                            pdd.getColumnCount() + " " + gdd.getLit( "COLUMNS" ) + " " +
+        GDD gdd = pdd.getGdd();
+        StringBuilder msg = new StringBuilder( 30 );
+        msg.append( gdd.getLit( "FILE#" ) + tok.getSource().getFileNumber() + " " +
+                    gdd.getLit( "LINE#" ) + tok.getSource().getLineNumber() + " "  );
+
+        if( width < 0 ) {
+            msg.append( gdd.getLit( "ERROR.COLUMN_WIDTH_CANNOT_BE_NEGATIVE" ));
+        }
+        else {
+            msg.append( pdd.getColumnCount() + " " + gdd.getLit( "COLUMNS" ) + " " +
                             tok.getParameter().getAmount() + " " +
                             Conversions.convertParameterUnitToString( tok.getParameter(), gdd ) + " " +
-                            gdd.getLit( "WIDE_WILL_NOT_FIT" ) + ". " +
-                            gdd.getLit( "NEW_COLUMN_SIZE_IGNORED" ));
+                            gdd.getLit( "WIDE_WILL_NOT_FIT" ) + "." );
+        }
+        msg.append( " " + gdd.getLit( "NEW_COLUMN_SIZE_IGNORED" ));
+
+        gdd.logWarning( msg.toString() );
     }
 
     public String getRoot()

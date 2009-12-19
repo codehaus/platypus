@@ -38,6 +38,8 @@ public class ConversionsTest
         cp = new CommandParameter();
     }
 
+    // tests convertParameterToPoints
+
     @Test
     public void test10Inches()
     {
@@ -97,6 +99,46 @@ public class ConversionsTest
         assertEquals( 25f,
                       Conversions.convertParameterToPoints( cp, pd ),
                       0.1f );
+    }
 
+    // test conversion of unit types into strings
+
+    @Test
+    public void testKnownUnitsToString()
+    {
+        cp.setUnit( UnitType.POINT );
+        cp.setAmount( 1f );
+        assertEquals( "POINTS", Conversions.convertParameterUnitToString( cp, gdd ) );
+
+        cp.setUnit( UnitType.PIXEL );
+        assertEquals( "PIXELS", Conversions.convertParameterUnitToString( cp, gdd ) );
+
+        cp.setUnit( UnitType.LINE );
+        assertEquals( "LINES", Conversions.convertParameterUnitToString( cp, gdd ) );
+
+        cp.setUnit( UnitType.INCH );
+        assertEquals( "INCHES", Conversions.convertParameterUnitToString( cp, gdd ) );
+
+        cp.setUnit( UnitType.CM );
+        assertEquals( "CM", Conversions.convertParameterUnitToString( cp, gdd ) );         
+    }
+
+    @Test
+    public void testUnknownUnitToString()
+    {
+        cp.setUnit( UnitType.UNKNOWN );
+        cp.setAmount( 25f );
+        assertEquals( " ", Conversions.convertParameterUnitToString( cp, gdd ) );
+    }
+
+    @Test
+    public void testNullParameters()
+    {
+        cp.setUnit( UnitType.UNKNOWN );
+        cp.setAmount( 25f );
+
+        assertEquals( "", Conversions.convertParameterUnitToString( cp, null ));
+        assertEquals( "", Conversions.convertParameterUnitToString( null, gdd ));
+        assertEquals( "", Conversions.convertParameterUnitToString( null, null ));
     }
 }
