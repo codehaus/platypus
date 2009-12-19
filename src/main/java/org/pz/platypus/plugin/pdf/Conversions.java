@@ -8,6 +8,7 @@
 package org.pz.platypus.plugin.pdf;
 
 import org.pz.platypus.CommandParameter;
+import org.pz.platypus.GDD;
 
 /**
  * Performs various conversions needed in the PDF plugin
@@ -53,6 +54,36 @@ public class Conversions
                 break;
         }
         return( points );
+    }
+
+    /**
+     * Converts a parameter unit type to a descriptive string (for error messages)
+     * @param cp the parameter containing the unit type
+     * @param gdd the GDD, containing the table of literals
+     * @return the name of the unit, or " " if it's not valid, or the empty string
+     *              for all other errors
+     */
+    public static String convertParameterUnitToString( final CommandParameter cp, GDD gdd )
+    {
+        if( cp == null || gdd == null ) {
+            return( "" );
+        }
+
+        switch( cp.getUnit() )
+        {
+            case CM:
+                return( gdd.getLit( "CM" ));
+            case INCH:
+                return( gdd.getLit( "INCHES" ));
+            case LINE:
+                return( gdd.getLit( "LINES" ));
+            case PIXEL:
+                return( gdd.getLit( "PIXELS" ));
+            case POINT:
+                return( gdd.getLit( "POINTS" ));
+            default:
+                return( " " );
+        }
     }
 }
 
