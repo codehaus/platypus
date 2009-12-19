@@ -79,7 +79,7 @@ public class PdfColumnWidthTest
 
         // should result in an error message in the logger
         MockLogger mockLog = (MockLogger) gdd.getLogger();
-        assertTrue( mockLog.getMessage().contains( "ERROR.INVALID_COLUMN_WIDTH" ));
+        assertTrue( mockLog.getMessage().contains( "NEW_COLUMN_SIZE_IGNORED" ));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class PdfColumnWidthTest
 
         // should result in an error message in the logger
         MockLogger mockLog = (MockLogger) gdd.getLogger();
-        assertTrue( mockLog.getMessage().contains( "ERROR.INVALID_COLUMN_WIDTH" ));
+        assertTrue( mockLog.getMessage().contains( "ERROR.COLUMN_WIDTH_CANNOT_BE_NEGATIVE" ));
     }
 
     @Test
