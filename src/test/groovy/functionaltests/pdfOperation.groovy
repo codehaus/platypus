@@ -24,8 +24,51 @@ def String javaRun = "java -jar " + jarUnderTest
 
 testPdfValidConfigThenInputAndOutputFiles( javaRun )
 testValidErrMessageWhenColumnWidthTooBig( javaRun )
+testNoNPEwhenSpecifyingIndents( javaRun )
 
 return
+
+
+def void testNoNPEwhenSpecifyingIndents( String javaRun )
+{
+  def String description =
+      "Test: No NPE when specifying indent (consult PLATYPUS-21)"
+
+      // create a file containing one line of text.
+      def String testFileName = "testText.plat"
+      def File testFile = new File( testFileName )
+      PrintWriter pw = new PrintWriter( testFile )
+      pw.write(
+          "[pagesize:A4]" +
+          "[paraindent:30pt]\n" +
+          "[paraindentR:2.5cm]\n"
+      );
+      pw.close()
+      if ( ! testFile.exists() ) {
+          println( "***FAILURE in ${description}. Could not create test file" )
+          return
+      }
+
+    // run it and test for error message as well as a generated PDF file
+    String commandLine =  javaRun + " ${testFileName} ${testFileName}.pdf "
+    def proc = commandLine.execute()
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${testFileName}.pdf" )
+
+    // tests coded oddly so that it's easy to comment out one of the test to do diagnosis
+    if( err != null &&  err.contains( "The input file did not generate any output." ) &&
+        ! pdfFile.exists()) {
+        println( "Success in " + description )
+    }
+    else  {
+        println( "***FAILURE in " + description )
+        println( err )
+    }
+
+    testFile.delete()
+    pdfFile.delete()
+}
 
 /**
  * See PLATYPUS-20 in JIRA at Codehaus. Tests that when [columnwidth: is too wide,
