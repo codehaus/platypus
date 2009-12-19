@@ -17,5 +17,8 @@ public class Limits
     public final static float PAGE_HEIGHT_MAX =   14400f;           // points
     public final static float PAGE_HEIGHT_MIN =       3f;           // points
     public final static float PAGE_WIDTH_MAX  =   14400f;           // points
-    public final static float PAGE_WIDTH_MIN  =       3f;           // points    
+    public final static float PAGE_WIDTH_MIN  =       3f;           // points
+
+    /** a value so high that setting the current column to it, forces a new page */
+    public final static int   COLUMN_COUNT_MAX =  999999999;
 }

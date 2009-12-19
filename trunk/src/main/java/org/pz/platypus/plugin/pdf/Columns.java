@@ -32,7 +32,7 @@ public class Columns
         this( DefaultValues.COLUMN_COUNT, 0f, pdf );
     }
 
-    public Columns( final int howMany, final float verticalSkip, PdfData pdf )
+    public Columns( final int howMany, final float verticalSkip, final PdfData pdf )
     {
         createColumns( howMany, verticalSkip, pdf );
     }
@@ -76,8 +76,7 @@ public class Columns
                 c = new Column( colWidth, 0f, verticalSkip, pdf );
             }
             else {
-                c = new Column( colWidth, gutterWidth,
-                                verticalSkip, pdf );
+                c = new Column( colWidth, gutterWidth, verticalSkip, pdf );
             }
 
             columns.add( c );
@@ -182,30 +181,18 @@ public class Columns
      * @return recommended size of gutter in points.
      */
     private float getRecommendedGutterSize( final int numberOfCols )
-//    , final float colWidth,
-//                                            final float textWidth, final PdfData pdd )
     {
         assert( numberOfCols > 0 );
-//        assert( colWidth >= 0f );
-//        assert( pdd != null );
 
-//        if( pdd.getUserSpecifiedColumnWidth() == 0f ) {
-            switch ( numberOfCols )
-            {
-                case 1: return(  0f );
-                case 2: return( 10f );
-                case 3: return(  8f );
-                case 4: return(  8f );
-                default: return( 6f );
-            }
+        switch ( numberOfCols )
+        {
+            case 1: return(  0f );
+            case 2: return( 10f );
+            case 3: return(  8f );
+            case 4: return(  8f );
+            default: return( 6f );
         }
-//        else {
-//            // it's the user specified column width * # of columns subtracted from total width.
-//            // the remainder is divided by the number of gutters (that is, number of cols - 1 )
-//            return(( textWidth - ( numberOfCols * colWidth )) / ( numberOfCols - 1 ));
-//        }
-//
-//    }
+    }
 
     public String dump( GDD gdd )
     {

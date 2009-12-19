@@ -12,11 +12,13 @@ import org.pz.platypus.Token;
 import org.pz.platypus.exceptions.InvalidCommandParameterException;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.plugin.pdf.Conversions;
 import org.pz.platypus.plugin.pdf.PdfData;
+import org.pz.platypus.plugin.pdf.TextIndenter;
 
 /**
  * Implementation of indentation of a full paragraph for PDF plugin
+ * Note: this class lends a lot of code to PdfPargraphIndentR. Logic errors found here
+ * should be corrected in that file as well.
  *
  * @author alb
  */
@@ -34,8 +36,10 @@ public class PdfParagraphIndent implements OutputCommandable
 
         PdfData pdf = (PdfData) context;
 
+        TextIndenter indenter = new TextIndenter( tok, pdf );
+
         try {
-            newIndent = obtainNewIndent( tok, pdf );
+            newIndent = indenter.calculateIndent();
         }
         catch( InvalidCommandParameterException icpe ) {
             showErrorMsg( tok, pdf );
@@ -46,30 +50,7 @@ public class PdfParagraphIndent implements OutputCommandable
             pdf.setParagraphIndent( newIndent, tok.getSource() );
         }
     }
-
-    /**
-     * Extracts the new indent amount from the token and verifies its value.
-     * @param tok token containing the new indent specification
-     * @param pdf current PDF status info
-     * @throws InvalidCommandParameterException if indent value is not valid
-     * @return the indent if value is valid
-     */
-    float obtainNewIndent( final Token tok, final PdfData pdf )
-            throws InvalidCommandParameterException
-    {
-        float newIndent = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
-
-        float colWidth = pdf.getUserSpecifiedColumnWidth();
-        if( colWidth == 0f ) { // if = 0; get computed size
-            colWidth = pdf.getColumns().getColumn( pdf.getCurrColumn() ).getWidth();
-        }
-        if ( newIndent < 0 || newIndent >= colWidth ) {
-            throw new InvalidCommandParameterException();
-        }
-
-        return( newIndent );
-    }
-
+    
     /**
      * Show error message, giving location in Platypus input file
      * @param tok contains the location data
@@ -78,8 +59,8 @@ public class PdfParagraphIndent implements OutputCommandable
     void showErrorMsg( final Token tok, final PdfData pdf )
     {
         GDD gdd = pdf.getGdd();
-        gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
-                        gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+        gdd.logWarning( gdd.getLit( "FILE#" ) + tok.getSource().getFileNumber() + " " +
+                        gdd.getLit( "LINE#" ) + tok.getSource().getLineNumber() + " " +
                         gdd.getLit( "ERROR.INVALID_PARAGRAPH_INDENT" ) + " " +
                         gdd.getLit( "IGNORED" ));
 

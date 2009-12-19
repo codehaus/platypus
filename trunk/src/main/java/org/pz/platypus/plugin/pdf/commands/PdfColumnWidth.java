@@ -17,6 +17,9 @@ import org.pz.platypus.plugin.pdf.*;
  * Change the width of columns on a page. This command specifies a width that is applied to
  * all the columns on the page.
  *
+ * TODO: make sure that at the new column size the existing indents are still valid. If they're
+ * not, then reset them so that they occupy the same fraction of the column as they presently do.
+ *
  * @author alb
  */
 public class PdfColumnWidth implements OutputCommandable

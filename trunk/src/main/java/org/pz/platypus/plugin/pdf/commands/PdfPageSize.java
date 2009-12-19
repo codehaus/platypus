@@ -13,6 +13,7 @@ import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
+import org.pz.platypus.plugin.pdf.Limits;
 import com.lowagie.text.Rectangle;
 
 import java.util.HashMap;
@@ -61,9 +62,9 @@ public class PdfPageSize implements OutputCommandable
             pdf.setPageWidth( size.getWidth(), tok.getSource() );
 
             // now force a new page and a new computation of column size by setting current
-            // column number past the last column allowed on a page. These actions are
-            // actually performed in PdfOutfile.addColumnsContentToDocument()
-            pdf.setCurrColumn( 999999999 );
+            // column number past the last column allowed on a page. The computations are
+            // triggered in PdfOutfile.addColumnsContentToDocument()
+            pdf.setCurrColumn( Limits.COLUMN_COUNT_MAX );
         }
     }
 
