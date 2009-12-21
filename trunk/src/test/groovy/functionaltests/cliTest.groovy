@@ -9,6 +9,8 @@
  *  @author alb
  */
 
+import org.apache.commons.cli.ParseException
+
 // the JAR to test should be passed to this script as args[0]
 if( ! args ) {
     println( "Error! Missing arg. Usage: " +
@@ -20,6 +22,7 @@ if( ! args ) {
 def String jarUnderTest = args[0]
 def String javaRun = "java -jar " + jarUnderTest
 
+
 testCopyrightString( javaRun )
 testHelpOutput( javaRun )
 testHelpOutputEqualToNoCommandLineArgs( javaRun )
@@ -27,6 +30,7 @@ testValidCLButMissingInputFile( javaRun )
 testEmptyInputFile( javaRun )
 testUnsupportedFormat( javaRun )
 testFormatSpecifiedButNoFiles( javaRun )
+testInputFileOnly( javaRun )
 testPdfInputOutput( javaRun )
 testPdfInputFileOutputFileVerbose( javaRun )
 testPdfInputFileOutputFileVeryVerbose( javaRun )
@@ -34,6 +38,7 @@ testListingSimpleInputOutput( javaRun )
 testListingInputOutputVeryVerbose( javaRun )
 testPdfInputOutputInvalidConfigFile( javaRun )
 testPdfInputOutputWithExtraUnsupportedOption( javaRun )
+testPdfValidConfigThenInputAndOutputFiles( javaRun )
 
 return
 
@@ -43,8 +48,17 @@ return
 def void testCopyrightString( String javaRun )
 {
     def String description = "Test: valid copyright message"
-    def proc = javaRun.execute()
-    def output = proc.in.text
+    def proc;
+    def output;
+
+    try {
+        proc = javaRun.execute()
+        output = proc.in.text
+    }
+    catch( ParseException th ) {
+        println( "***FAILURE in " + description + " Exception: " + th.dump() )
+        return
+    }
 
     if( output.contains( "(c) Copyright 2006-0" ) &&
         output.contains( "Pacific Data Works LLC. All Rights Reserved." ))
@@ -206,6 +220,45 @@ def void testFormatSpecifiedButNoFiles( String javaRun )
         print( "***FAILURE in " )
     }
     println( description );
+}
+
+/**
+ * Test of simple PDF file generation, when only the input file is specified.
+ */
+def void testInputFileOnly( String javaRun )
+{
+    def String description = "Test: input-file (only)"
+	// should generate a valid pdf file named hello.pdf
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "***FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // run it and test for error message
+    javaRun += " ${helloFileName}"
+    def proc = javaRun.execute()
+    def output = proc.in.text
+    def err = proc.err.text
+
+    def File pdfFile = new File( "hello.pdf" )
+
+    if(( err == null || err.isEmpty() ) && ( pdfFile.exists() )) {
+        print( "Success in " )
+    }
+    else  {
+        print( "***FAILURE in " )
+    }
+    println( description );
+
+    helloFile.delete()
+    pdfFile.delete()
 }
 
 /**
@@ -491,4 +544,54 @@ def void testPdfInputOutputWithExtraUnsupportedOption( String javaRun )
 
     helloFile.delete()
     pdfFile.delete()
+}
+
+/**
+ * See PLATYPUS-7 at Codehaus. This code tests for the -config option being specified
+ * before the input and output files. Previously, it generated an NPE. Now it works
+ * correctly. That is, it generates the expected output file without complaint.
+ */
+def void testPdfValidConfigThenInputAndOutputFiles( String javaRun )
+{
+    def String description =
+    "Test: -config valid-file input-file output-file.pdf [PLATYPUS-7]"
+
+    // create a file containing one line of text.
+    def String helloFileName = "hello.plat"
+    def File helloFile = new File( helloFileName )
+    PrintWriter pw = new PrintWriter( helloFile )
+    pw.write( "hello, world" )
+    pw.close()
+    if ( ! helloFile.exists() ) {
+        println( "***FAILURE in ${description}. Could not create text file" )
+        return
+    }
+
+    // point to the config file in PLATYPUS_HOME
+    def envVars = System.getenv()
+    def platypusHome = envVars['PLATYPUS_HOME']
+    def String configFileName = platypusHome + "/config/Config.properties"
+
+    // run it and test for error message as well as a generated PDF file
+    String commandLine =  javaRun +
+                            " -config ${configFileName}  ${helloFileName} ${helloFileName}.pdf "
+    def proc = commandLine.execute()
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${helloFileName}.pdf" )
+
+    if(
+        ( err.equals( null ) || err.isEmpty() )
+        &&  pdfFile.exists()
+                            ) {
+        println( "Success in " + description )
+    }
+    else  {
+        println( "***FAILURE in " + description )
+        println( err )
+    }
+
+    helloFile.delete()
+    pdfFile.delete()
+
 }
