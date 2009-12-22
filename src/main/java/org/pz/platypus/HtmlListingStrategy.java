@@ -1,28 +1,38 @@
-package org.pz.platypus;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.logging.Logger;
-
 /**
  * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  * <p/>
- * Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ * Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
+ */
+
+package org.pz.platypus;
+
+import java.io.IOException;
+import java.util.logging.Logger;
+
+/** The strategy base class.
+ *
+ * @author: ask
  */
 public abstract class HtmlListingStrategy {
     protected Logger logger;
 
     public abstract String format(Token tok, GDD gdd) throws IOException;
     public abstract boolean canOutputHtmlEndOfLine();
-    
+
+    /** The "factory method" for creating the correct Strategy instance.
+     *  Ideally, this would be the only "switching on types" code.
+     *
+     * @param The token that is to be processed
+     * @return The strategy object encapsulating the processing algorithm.
+     */
     public static HtmlListingStrategy getFormatStrategy(Token tok) {
 
         if (tok.getContent().equals("[cr]" )) {
             return new HtmlCRListingStrategy(tok);
         }
         else if ( tok.getContent().endsWith( "[]" ) ) {
-            return new HtmlExplicitNewLineListingStrategy(tok);
+            return new HtmlLineBreakStrategy(tok);
         }
         else if ( tok.getType().equals( TokenType.COMMAND ) ||
              tok.getType().equals( TokenType.REPLACED_COMMAND )) {
@@ -51,11 +61,12 @@ public abstract class HtmlListingStrategy {
     }
 
     /**
-     * replaces reserved HTML characters to make text printable
+     * Utility method used by subclasses.
+     * Replaces reserved HTML characters to make text printable
      * @param text text to transform
      * @return text string with the transformation applied
      */
-    protected String convertToHtmlText( final String text )
+    public static String convertToHtmlText( final String text )
     {
         char c;
 
