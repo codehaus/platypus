@@ -24,6 +24,7 @@ import java.util.logging.Logger;
  *      messages as a result of this.
  *
  * @author alb
+ * @author ask
  */
 public class Start implements Pluggable
 {
@@ -59,40 +60,6 @@ public class Start implements Pluggable
         }
     }
 
-    /** TODO: This is used only in unit tests - refactor unit tests and remove this.
-     *  This is moved to the Strategy base class.
-     * replaces reserved HTML characters to make text printable
-     * @param text text to transform
-     * @return text string with the transformation applied
-     */
-    public String convertToHtmlText( final String text )
-    {
-        char c;
-
-        if( text == null || text.isEmpty() ) {
-            return( "" );
-        }
-
-        StringBuilder sb = new StringBuilder( 2 * text.length() );
-
-        for( int i = 0; i < text.length(); i++ )
-        {
-            switch( c = text.charAt( i ))
-            {
-                case '<':   sb.append( "&lt;" );    break;
-                case '>':   sb.append( "&gt;" );    break;
-                case '(':   sb.append( "&#40;" );   break;
-                case ')':   sb.append( "&#41;" );   break;
-                case '"':   sb.append( "&quot;" );  break;
-                case '\'':  sb.append( "&#39;" );   break;
-                case '&':   sb.append( "&amp;" );   break;
-                case '#':   sb.append( "&#35;" );   break;
-                default:    sb.append( c );         break;
-            }
-        }
-        return( sb.toString() );
-    }
-
     /**
      * Emits the HTML closing code
      * @param outputFile the HTML is written to this file
@@ -102,7 +69,7 @@ public class Start implements Pluggable
     public void emitClosingHtml( final FileWriter outputFile, final GDD gdd ) throws IOException
     {
         final String s = "</div>\n" + "</ol>\n" + "</BODY>\n" + "</HTML>\n";
-        outputIt( outputFile, gdd, s);
+        writeStringToFile( outputFile, gdd, s);
     }
 
     /**
@@ -118,7 +85,7 @@ public class Start implements Pluggable
                                 final GDD gdd ) throws IOException
     {
         final String s = getHeaderHtml( gdd, inputFile );
-        outputIt( outputFile, gdd, s );
+        writeStringToFile( outputFile, gdd, s );
     }
 
     /**
@@ -131,7 +98,6 @@ public class Start implements Pluggable
     public void emitListing( final FileWriter outfile, final GDD gdd )
            throws IOException
     {
-
         Token tok;
         int lineNumber = 0;
 
@@ -151,10 +117,19 @@ public class Start implements Pluggable
         }
     }
 
+    /**
+     * Print the token contents with all the Html bells and whistles
+     * (colors, bold fonts, line breaks etc.)
+     * Get the Html string and output it to the output file.
+     * @param outfile
+     * @param gdd
+     * @param tok
+     * @throws IOException
+     */
     private void printToken(FileWriter outfile, GDD gdd, Token tok) throws IOException {
         HtmlListingStrategy strategy = HtmlListingStrategy.getFormatStrategy( tok );
         final String s = strategy.format(tok, gdd);
-        outputIt(outfile, gdd, s);
+        writeStringToFile(outfile, gdd, s);
         if (strategy.canOutputHtmlEndOfLine())
             outfile.write( "</li>\n" );
     }
@@ -168,7 +143,7 @@ public class Start implements Pluggable
      * @throws IOException
      */
     private int startANewHtmlLine(FileWriter outfile, GDD gdd, Token tok) throws IOException {
-        outputIt(outfile, gdd, "<li>");
+        writeStringToFile(outfile, gdd, "<li>");
         int lineNumber = tok.getSource().getLineNumber();
         return lineNumber;
     }
@@ -196,7 +171,7 @@ public class Start implements Pluggable
      */
     private boolean skipThisToken(Token tok, TokenList tokensList, int i) {
         if ( tok.getType().equals( TokenType.COMMAND )) {
-            if ( tokensList.isNextToken( i, TokenType.REPLACED_COMMAND ) )
+            if ( tokensList.isNextToken( i, TokenType.REPLACED_COMMAND ))
                 return true;
         }
         return false;
@@ -295,33 +270,6 @@ public class Start implements Pluggable
         return( fwOut );
     }
 
-    /** TODO: This is used only in unit tests - refactor unit tests and remove this. 
-     * Output the HTML literals for a new command, including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param tok the token for the command
-     * @param gdd the GDD. Only the literals are used
-     * @throws IOException in event of exception in writing to file
-     * @return string written to file, or null on error
-     */
-    public String  outputCommand( final FileWriter outfile, final Token tok, GDD gdd )
-            throws IOException
-    {
-        final String s;
-
-        if( tok.getRoot() != null && tok.getRoot().equals( "[CR]" )) { // print [CR] as a blank line
-            s = "<br>\n";
-        }
-        else {
-            s = "<span title=\"" +
-                gdd.getLit( "COMMAND" ) +
-                "\"><font color=\"blue\">" +
-                convertToHtmlText( tok.getContent() ) +
-                "</font></span>";
-        }
-
-        return outputIt(outfile, gdd, s);
-    }
-
     /** Write a String to the output - deals with the business of actual writing.
      *  If any exceptions happen while writing - are logged and rethrown. 
      *
@@ -331,7 +279,7 @@ public class Start implements Pluggable
      * @return
      * @throws IOException
      */
-    private String outputIt(FileWriter outfile, GDD gdd, String s) throws IOException {
+    public String writeStringToFile(FileWriter outfile, GDD gdd, String s) throws IOException {
         try {
             if ( outfile != null ) {
                 outfile.write( s );
@@ -364,23 +312,6 @@ public class Start implements Pluggable
             }
         }
         return( i - tokenNumber  );
-    }
-
-    /** TODO: This is used only in unit tests - refactor unit tests and remove this.
-     * Output the HTML literals for a new paragraph including the pop-up title words
-     * @param outfile file to write the HTML to
-     * @param gdd the GDD. Only the literals are used
-     * @throws IOException in event of exception in writing to file
-     * @return string written to the file, or null on error
-     */
-    public String outputNewLine( final FileWriter outfile, final GDD gdd )
-            throws IOException
-    {
-        final String newLine = "<span title=\"" +
-                               gdd.getLit( "NEW_PARAGRAPH" ) +
-                               "\"><font color=\"blue\">[]</font></span><br>";
-        outputIt( outfile, gdd, newLine );
-        return( newLine );
     }
 
     /**

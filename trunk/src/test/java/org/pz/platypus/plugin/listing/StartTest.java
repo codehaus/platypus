@@ -111,20 +111,20 @@ public class StartTest
     @Test
     public void testConvertToHtmlTextNull()
     {
-        assertEquals( "", start.convertToHtmlText( null ));
+        assertEquals( "", HtmlListingStrategy.convertToHtmlText( null ));
     }
 
     @Test
     public void testConvertToHtmlTextEmptyString()
     {
-        assertEquals( "", start.convertToHtmlText( "" ));
+        assertEquals( "", HtmlListingStrategy.convertToHtmlText( "" ));
     }
 
     @Test
     public void testConvertToHtmlTextValid()
     {
         assertEquals( "&lt;&gt;&quot; &amp;hello",
-                      start.convertToHtmlText( "<>\" &hello" ));
+                      HtmlListingStrategy.convertToHtmlText( "<>\" &hello" ));
     }
 
     @Test
@@ -226,7 +226,7 @@ public class StartTest
         final Token tok = new Token( new Source( 6 ), TokenType.COMMAND,
                                     "[leading:", leading15,  null );
         try {
-            start.outputCommand( fw, tok, gdd );
+            start.writeStringToFile( fw, gdd, tok.getContent() );
         }
         catch( IOException ioe ) {
             fail( "threw unexpected exception in Start.outputCommand()" );
@@ -247,7 +247,7 @@ public class StartTest
         final Token tok = new Token( new Source( 6 ), TokenType.COMMAND,
                                      "[leading:", leading15, null );
         try {
-            start.outputCommand( fw, tok, gdd );
+            start.writeStringToFile( fw, gdd, tok.getContent() );
         }
         catch( IOException ioe ) {
          assertTrue( 2 != 1 );
@@ -336,21 +336,21 @@ public class StartTest
         assertEquals( "</li>\n", fw.getText() );
     }
 
-    @Test
-    public void testOutputNewLineException()
-    {
-        MockFileWriter fw = new MockFileWriter();
-        fw.setWriteShouldGenerateException( true );
-
-        try {
-            start.outputNewLine( fw, gdd );
-        }
-        catch( IOException ioe ) {
-         assertTrue( 2 != 1 );
-            return;
-        }
-        fail( "didn't throw expected exception on Start.outputNewLine()" );
-    }
+//    @Test
+//    public void testOutputNewLineException()
+//    {
+//        MockFileWriter fw = new MockFileWriter();
+//        fw.setWriteShouldGenerateException( true );
+//
+//        try {
+//            start.outputNewLine( fw, gdd );
+//        }
+//        catch( IOException ioe ) {
+//         assertTrue( 2 != 1 );
+//            return;
+//        }
+//        fail( "didn't throw expected exception on Start.outputNewLine()" );
+//    }
 
     @Test
     public void testEmitListingValidHardCr()

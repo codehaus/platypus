@@ -1,12 +1,20 @@
+/**
+ * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
+ * <p/>
+ * Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
+ */
+
 package org.pz.platypus;
 
 import java.io.IOException;
 
 /**
- * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- * <p/>
- * Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
- * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
+ * The "[cr]" token processing strategy.
+ * Decides how the carriage return token will be outputted as Html.
+ *
+ * @author: ask
+ *
  */
 public class HtmlCRListingStrategy extends HtmlListingStrategy {
     private final Token tok;
