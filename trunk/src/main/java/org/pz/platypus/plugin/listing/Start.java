@@ -111,7 +111,7 @@ public class Start implements Pluggable
             if (skipThisToken(tok, tokensList, i))
                 continue;
 
-            i += skipNextTokens(i, tok, gdd, tokensList);
+            i += skipNextTokens(i, tok, tokensList);
 
             printToken(outfile, gdd, tok);
         }
@@ -184,17 +184,16 @@ public class Start implements Pluggable
      * we don't want to output one more Html newline. 
      * @param currTokIndex
      * @param tok
-     * @param gdd
      * @param tokensList
      * @return
      * @throws IOException
      */
-    private int skipNextTokens(int currTokIndex, Token tok, GDD gdd, TokenList tokensList) throws IOException {
+    private int skipNextTokens(int currTokIndex, Token tok, TokenList tokensList) throws IOException {
         if ( tok.getContent().endsWith( "[]" )) {
             if ( tokensList.areNextTokenContentsEqualTo(currTokIndex, "[cr]") )
                 return 1;                
         } else if ( tok.getType().equals( TokenType.COMPOUND_COMMAND )) {
-            return tokensToSkip( gdd.getInputTokens(), currTokIndex );
+            return tokensToSkip( tokensList, currTokIndex );
         }
 
         return 0;
