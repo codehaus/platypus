@@ -119,6 +119,12 @@ public class TokenList extends ArrayList<Token>
         }
     }
 
+    /**
+     * See if next immediate token (if any), is of type tokType.
+     * @param i the current position
+     * @param tokType tokType to compare with
+     * @return if i+1 th token type is equal to tokType.
+     */
     public boolean isNextToken(int i, TokenType tokType) {
         Token nextTok = getNextToken( i );
         if (nextTok == null)
@@ -126,11 +132,17 @@ public class TokenList extends ArrayList<Token>
         return nextTok.getType().equals( tokType );
     }
 
+    /**
+     * See if the next immediate token (if any), is equal to s.
+     * @param i the current position
+     * @param s the token str
+     * @return if i+1 th token contents are equal to s.
+     */
     public boolean areNextTokenContentsEqualTo(int i, String s) {
         Token nextTok = getNextToken( i );
         if (nextTok == null)
             return false;
-        return nextTok.getContent().equals("[cr]");
+        return nextTok.getContent().equals(s);
     }
 }
 
