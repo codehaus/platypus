@@ -144,5 +144,22 @@ public class TokenList extends ArrayList<Token>
             return false;
         return nextTok.getContent().equals(s);
     }
+
+    /** Start searching for tokType token in the list.
+     *  Search from currTokIndex + 1 to the end.
+     *
+     * @param currTokIndex
+     * @param tokType
+     * @return the index at which tokType is found
+     */
+    public int searchAheadFor(int currTokIndex, TokenType tokType) {
+        for( int i = currTokIndex + 1; i < size(); i++ ) {
+            Token nextTok = get( i );
+            if( nextTok.getType() == tokType ) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("Token " + tokType + " not found");
+    }
 }
 

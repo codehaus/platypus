@@ -302,15 +302,8 @@ public class Start implements Pluggable
     public int tokensToSkip( TokenList tokList, int tokenNumber)
             throws IOException
     {
-        int i;
-        for( i = tokenNumber + 1; i < tokList.size(); i++ )
-        {
-            Token nextTok = tokList.get( i );
-            if( nextTok.getType() == TokenType.COMPOUND_COMMAND_END ) {
-                break;
-            }
-        }
-        return( i - tokenNumber  );
+        int i = tokList.searchAheadFor(tokenNumber, TokenType.COMPOUND_COMMAND_END);
+        return i - tokenNumber;
     }
 
     /**
