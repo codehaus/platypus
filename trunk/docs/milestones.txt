@@ -1,0 +1,76 @@
+[align:center][ff:{Adobe Garamond Pro}][fsize:16pt][+b][+u]Platypus Implementation Plan[-u][-b][paraskip:1][]
+[fsize:11][+i]v. 2.0[-i]
+
+[align:left][fsize:14][ff:Arial][+u]Milestone 1[-u][ff:Gentium][fsize:11]  [+i](Released as v. 0.1.6.x)[-i][]
+Sufficient for many letters and short documents:[]
+- Text using basic Type 1 fonts[]
+- Bold, italics, underline[]
+- Strikethrough text[]
+- Foreign characters: enough to do French, Spanish, and German completely, plus a few symbols[]
+- Justification: full, center, and right[]
+- Page size, including 50 pre-defined page sizes and custom sizes[]
+- Margins, including separate margins for left/right pages[]
+- Paragraphs with/without indents[]
+- Page-number footer[]
+- Debugging features (dump of variables w/ line numbers where they were set)
+
+[fsize:14][ff:Arial][+u]Milestone 1.5[-u][ff:Gentium][fsize:11] [+i](Released as v. 0.2.0, December 2009)[-i][]
+[fsize:11]New Architecture And New Key Features[]
+- Plug-in architecture[]
+- Plug-in for colorized Platypus listings in HTML[]
+- Use of OpenType and TrueType fonts and TrueType collections[]
+- Multiple columns[]
+- Paragraph indentation from either or both sides[]
+- Enhanced debug capabilities
+
+[fsize:14][ff:Arial][+u]Milestone 2[-u] [ff:Gentium][fsize:11][+i](end of 1Q 2010)[-i][]
+[fsize:11]All features of Wiki mark up, markdown, etc. []
+- Colored text and background[]
+- Formatted code listings[]
+- Part, chapter, and sections: heading and applicable styles[]
+- Embedded URLs and links that can be followed[]
+- HTML output[]
+- Bulleted items and lists[]
+- More symbols and foreign characters
+
+[fsize:14][ff:Arial][+u]Milestone 3[-u][ff:Gentium][]
+[fsize:11]Features sufficient for most documents without tables or images:[]
+- Hyphenation in multiple languages[]
+- Ability to specify hyphenation character[]
+- Full headers and footers[]
+- Footnotes[]
+- Superscripts, subscripts[]
+- Tabs/Tabbed columns[]
+- Graphics and images
+
+[fsize:14][ff:Arial][+u]Milestone 4[-u][ff:Gentium][]
+[fsize:11](At this point, begin initial promotional efforts, presentations, etc.)[]
+Features sufficient for most documents without equations:[]
+- Anchored references automatically updated[]
+- Tables[]
+- Marginal text[]
+- Language-specific support for listings:[paraskip:0]
+
+[paraindent:24pt]- Line numbers (starting from 1, other #, or built-in variable)[]
+- Knowledge of where to break line and indent subsequent text[]
+- Knowledge of what constitutes a comment, add formatting to it[noindent]
+
+[paraindent:0pt]- Position text; move up/down, right/left at will[]
+- Barcodes[paraskip:1]
+
+[fsize:14][ff:Arial][+u]Milestone 5[-u][]
+[font|face:Gentium|size:11](Release 1.0! Greater promotion, including possible articles, etc.)[]
+Features should be sufficient for all documents:[]
+- Combine/include Platypus files[]
+- Equations[]
+- Index generation[]
+- Full scripting[]
+- Templates[]
+- Macros (partially implemented now)[]
+- Colored background[]
+- Watermarks[]
+- eText support
+
+[fsize:10pt]Note: Priorities can change based on user needs and requests. Feedback is welcome and should be sent to [+i]platypus@pz.org[-i]
+[]
+[fsize:10][+i] (This document was created using Platypus; and revised in December 2009. To see the original Platypus input, go to:[] [url:http://platypus.pz.org/examples/milestones.txt])[-i]
