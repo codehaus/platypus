@@ -528,15 +528,23 @@ public class PdfOutfile
      * processing of symbols and special characters.
      *
      * @param ch char to be emitted
+     * @param fontName fontName to use. If null, use current font.
      */
-    public void emitChar( final String ch )
+    public void emitChar( final String ch, final String fontName)
     {
         if( iTPara == null ) {
             startNewParagraph();
         }
 
         FontSelector fs = new FontSelector();
-        fs.addFont( pdfData.getFont().getItextFont() );
+        if( fontName == null ) {
+            fs.addFont( pdfData.getFont().getItextFont() );
+        }
+        else {
+            PdfFont newFont = new PdfFont( pdfData.getGdd(), fontName, pdfData.getFont() );
+            fs.addFont( newFont.getItextFont() );
+        }
+        
         Phrase phr = fs.process( ch );
         iTPara.add( phr );
     }

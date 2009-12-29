@@ -99,4 +99,12 @@ public class PdfSymbolTest
 
         pds.process( null, tok, 7  );
     }
+
+    @Test
+    public void testExtractValidFontName()
+    {
+        String fontName = new PdfSymbol( "", "" ).extractFontName( "{SYMBOL}\\\\u00E4", null, null );
+        assertEquals( "SYMBOL", fontName );
+
+    }
 }
