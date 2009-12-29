@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -12,9 +12,6 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.pdf.BaseFont;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
-import org.pz.platypus.FontDirectoryList;
-
-import java.awt.*;
 
 /**
  * Handles fonts for the PDF plugin
@@ -55,6 +52,25 @@ public class PdfFont
     }
 
     /**
+     * Constructor for cloning an existing PdfFont, but specifying a different typeface.
+     *
+     * @param Gdd needed for error messages
+     * @param fontName the name of the new font/typeface
+     * @param existingFont the font to clone the other attributes from
+     */
+    public PdfFont( GDD Gdd, String fontName, PdfFont existingFont )
+    {
+        gdd = Gdd;
+        typeface = fontName;
+        size = existingFont.getSize();
+        bold = existingFont.getBold();
+        italics = existingFont.getItalics();
+        source = existingFont.getSource();
+
+        iTfont = createFont( this );
+    }
+
+    /**
      * Initializes all PdfFont fields to defaults, and sets line number to 0
      */
     public void setToDefault()
@@ -90,8 +106,8 @@ public class PdfFont
                     size, style );
         }
         catch( Exception ex ) {
-            System.out.println( "Exception in PdfFont.createFont() for FontFactory.getFont() for "
-            + iTextFontName );
+            System.out.println( "Exception in PdfFont.createFont() for FontFactory.getFont() for " +
+                                iTextFontName );
             font = null;
         }
 
@@ -260,6 +276,16 @@ public class PdfFont
     }
 
     //=== getters and setters ===//
+
+    public boolean getBold()
+    {
+        return( bold );
+    }
+
+    public boolean getItalics()
+    {
+        return( italics );
+    }
     /**
      * Get the iText font
      *

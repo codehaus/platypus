@@ -9,21 +9,26 @@
 # Any character other than [ in the first column, turns that line
 # into a comment.
 #
-# Do not alter without first checking the documentation. Also note 
-# that any changes made here by you will result in a non-standard Platypus 
-# distribution, which will affect the portability of documents generated 
+# Do not alter without first checking the documentation. Also note
+# that any changes made here by you will result in a non-standard Platypus
+# distribution, which will affect the portability of documents generated
 # by this version of Platypus.
 #
 [a']
 [a^]
 [a`]
 [a"]
+[ae]
 [A']
 [A^]
 [A`]
 [A"]
+[AE]
+[cents]
 [copyright]
+[currency]
 [c_]
+#[ct]
 [C_]
 [dlq]
 [drq]
@@ -31,10 +36,16 @@
 [e^]
 [e`]
 [e"]
+[euro]
 [E']
 [E^]
 [E`]
 [E"]
+#[ff]
+#[ffi]
+#[fi]
+#[fl]
+#[ffl]
 [i']
 [i^]
 [i`]
@@ -51,12 +62,17 @@
 [o^]
 [o`]
 [o"]
+[oe]
 [O']
 [O^]
 [O`]
 [O"]
+[OE]
 [slq]
 [srq]
+[st]
+[sterling]
+[trademark]
 [u']
 [u^]
 [u`]
@@ -65,6 +81,7 @@
 [U^]
 [U`]
 [U"]
+[yen]
 [/]
 [!^]
 [?^]
