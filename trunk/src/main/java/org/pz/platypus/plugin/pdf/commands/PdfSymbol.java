@@ -94,8 +94,6 @@ public class PdfSymbol implements OutputCommandable
         }
 
         return( fontName.substring( 1, closingbrace ));
-
-        // return "";  // erase when programming complete on this method <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     }
 
     /**
