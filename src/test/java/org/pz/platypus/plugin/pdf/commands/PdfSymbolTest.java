@@ -17,6 +17,8 @@ import org.pz.platypus.test.mocks.*;
 
 import java.util.logging.Level;
 
+import com.lowagie.text.Paragraph;
+
 /**
  * Test processing of symbols and special characters in PDF plugin.
  *
@@ -55,8 +57,11 @@ public class PdfSymbolTest
         String pdfSymbol   = "\\\\u2013";
         pds = new PdfSymbol( platySymbol, pdfSymbol  );
 
+        // note this test requires an iText paragraph in the mock outfile.
         MockPdfOutfile mo = new MockPdfOutfile();
         pdd.setOutfile( mo );
+        mo.setPdfData( pdd );
+        mo.setItPara( new Paragraph() );
 
         CommandParameter cp = new CommandParameter();
         cp.setString( pdfSymbol );
@@ -64,7 +69,7 @@ public class PdfSymbolTest
 
         pds.process( pdd, tok, 7  );
 
-        assertEquals( "\u2013", mo.getContent() );
+        assertEquals( "\u2013", mo.getItPara().getContent() );
     }
 
     @Test
