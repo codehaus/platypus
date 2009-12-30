@@ -70,23 +70,7 @@ public class Token
      */
     public String toString( final GDD gdd )
     {
-        String toktyp;
-
-        switch( type )
-        {
-            case BLOCK_COMMENT:     toktyp = "Block Comment        "; break;
-            case COMMAND:           toktyp = "Command              "; break;
-            case COMPOUND_COMMAND:  toktyp = "Compound Command     "; break;
-            case COMPOUND_COMMAND_END:
-                                    toktyp = "Compound Command End "; break;
-            case LINE_COMMENT:      toktyp = "Line Comment         "; break;
-            case MACRO:             toktyp = "Macro                "; break;
-            case MACRO_TEXT:        toktyp = "Text in Variable     "; break;
-            case REPLACED_COMMAND:  toktyp = "Replaced Command (see previous command) "; break;
-            case SYMBOL:            toktyp = "Symbol               "; break;
-            case TEXT:              toktyp = "Text                 "; break;
-            default:                toktyp = "Unknown Type         "; break;
-        }
+        String toktyp = type.toString();
 
         // don't print out the CR/LF at the end of an input line
         if( content == null ) {
