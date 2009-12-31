@@ -24,7 +24,6 @@ import java.util.MissingResourceException;
 public class Platypus
 {
     private static Literals lits;
-    private static PluginLoader pluginLoader;
 
     /**
      * add the input file to the file list
@@ -156,7 +155,7 @@ public class Platypus
     static private void runOutputPlugin( final String pluginName,
                                          final GDD gdd, final CommandLineArgs clArgs )
     {
-        pluginLoader = new PluginLoader( pluginName, gdd );
+        PluginLoader pluginLoader = new PluginLoader( pluginName, gdd );
         gdd.log( "Transferring control to output plug-in." );
         pluginLoader.load( clArgs );
     }
@@ -177,10 +176,12 @@ public class Platypus
 
     /**
      * Process the command line: store it, validate it, and process the args.
+     *
      * @param args the command-line args
      * @param gdd the GDD
      * @throws HelpMessagePrinted if the user specified -help on the command line. In this case,
      *         no further processing is needed (after the help message has been displayed).
+     * @throws ParseException it the CLI args handling fails in CommandLineArgs
      * @return the CommandLineArgs structure that is filled in by this method
      */
     static public CommandLineArgs processCommandLine( final String[] args, GDD gdd ) throws
