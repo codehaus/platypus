@@ -54,13 +54,13 @@ public class PdfOutfileTest
     @Test(expected = IOException.class)
     public void testNullFilenameOpen() throws IOException
     {
-        pout.open( gdd, null, null );
+        pout.open( null, null );
     }
 
     @Test(expected = IOException.class)
     public void testEmptyFilenameOpen() throws IOException
     {
-        pout.open( gdd, "", null );
+        pout.open( "", null );
     }
 
     @Test(expected = IOException.class)

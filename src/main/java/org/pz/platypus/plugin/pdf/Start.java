@@ -86,7 +86,7 @@ public class Start implements Pluggable
         }
 
         try {
-            processTokens( gdd, pdfData, outFilename );
+            processTokens( pdfData, outFilename );
             outfile.close();
             gdd.log( "Closed output PDF file" );
         }
@@ -123,15 +123,15 @@ public class Start implements Pluggable
     /**
      * Where the token stream is translated into text and actions.
      *
-     * @param gdd the GDD. Only the literals are used
      * @param pdfData state info about the PDF file
      * @param outfileName the file being written to
      * @throws IOException in the event the file can't be written to
      */
-    public void processTokens( final GDD gdd, final PdfData pdfData, final String outfileName )
+    public void processTokens( final PdfData pdfData, final String outfileName )
            throws IOException
     {
         Token tok;
+        GDD gdd = pdfData.getGdd();
         TokenList tokenList = gdd.getInputTokens();
 
         for( int i = 0; i < tokenList.size(); i++ ) {
@@ -158,7 +158,7 @@ public class Start implements Pluggable
                     processText( gdd, outfileName, tok.getContent() );
                     break;
                 case SYMBOL:
-                    processSymbol( gdd, outfileName, tok, i, pdfData );
+                    processSymbol( outfileName, tok, i, pdfData );
                     break;
                 case MACRO:
                     processMacro();
@@ -287,18 +287,16 @@ public class Start implements Pluggable
     /**
      * Process a symbol or foreign character
      *
-     * @param gdd the GDD
      * @param filename name of the output file (in the event the output file is not open yet)
      * @param tok the Token containing the symbol info
      * @param tokNum the number of the token
      * @param pdd the PDF document data
      * @throws IOException if any error occurred
      */
-    void processSymbol( final GDD gdd, final String filename, final Token tok, final int tokNum,
-                        final PdfData pdd )
+    void processSymbol( final String filename, final Token tok, final int tokNum, final PdfData pdd )
             throws IOException
     {
-        if( gdd == null || filename == null || tok == null || pdd == null ) {
+        if( filename == null || tok == null || pdd == null ) {
             return; // should we log a warning here?
         }
 
@@ -307,7 +305,7 @@ public class Start implements Pluggable
         // we don't open the file until we have text to output.
         if( ! outfile.isOpen() ) {
             try {
-                outfile.open( gdd, filename, pdfData );
+                outfile.open( filename, pdfData );
             }
             catch( IOException ioe ) {
                 throw new IOException();
@@ -340,7 +338,7 @@ public class Start implements Pluggable
         // we don't open the file until we have text to output.
         if( ! outfile.isOpen() ) {
             try {
-                outfile.open( gdd, filename, pdfData );
+                outfile.open( filename, pdfData );
             }
             catch( IOException ioe ) {
                 throw new IOException();

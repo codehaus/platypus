@@ -194,6 +194,11 @@ public class Platypus
         clArgs.process( gdd );
         gdd.log( "Command line: " + commandLine );
 
+
+        final String outputFile = clArgs.lookup( "outputFile" );
+        gdd.getSysStrings().add( "_outputFile", outputFile == null? "" : outputFile );
+        gdd.log( "Output file: " + outputFile );        
+
         return( clArgs );
     }
 
