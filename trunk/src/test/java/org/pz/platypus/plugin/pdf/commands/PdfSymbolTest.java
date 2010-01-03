@@ -91,6 +91,28 @@ public class PdfSymbolTest
         assertEquals( "Ñ", mo.getContent() );
     }
 
+    @Test
+    public void testValidUnicodeWithFontChange()
+    {
+        String platySymbol = "[trademark]";
+        String pdfSymbol   = "{SYMBOL}\\\\u00E4";
+        pds = new PdfSymbol( platySymbol, pdfSymbol  );
+
+        // note this test requires an iText paragraph in the mock outfile.
+        MockPdfOutfile mo = new MockPdfOutfile();
+        pdd.setOutfile( mo );
+        mo.setPdfData( pdd );
+        mo.setItPara( new Paragraph() );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( pdfSymbol );
+        Token tok = new Token( new Source(), TokenType.SYMBOL, platySymbol, pdfSymbol, cp );
+
+        pds.process( pdd, tok, 7  );
+
+        assertEquals( "\u00E4", mo.getItPara().getContent() );
+    }
+
     @Test (expected=IllegalArgumentException.class)
     public void testValidCallToProcess()
     {

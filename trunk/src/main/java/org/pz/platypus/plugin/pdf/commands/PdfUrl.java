@@ -25,20 +25,34 @@ public class PdfUrl implements OutputCommandable
 
     public void process( final OutputContextable context, final Token tok, final int tokNum )
     {
-        if( context == null || tok == null ) {
+        if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();
         }
 
         PdfData pdf = (PdfData) context;
+        String urlParameter = tok.getParameter().getString();
+        String url;
+        String coverText = null;
 
-        String url = tok.getParameter().getString();
+        // test for "|text: after URL, which would signal presence of cover text. If found,
+        // set url and coverText to the respective strings in urlParameter; else, it's all
+        // URL, so set url and leave coverText = null
+        int textFlag = urlParameter.indexOf( "|text:" );
+        if( textFlag > 0 ) {
+            coverText = urlParameter.substring( textFlag + "|text:".length() );
+            url = urlParameter.substring( 0, textFlag - 1);
+        }
+        else {
+            url = urlParameter;
+        }
+
         if( url == null ) {
             showErrorMsg( tok, pdf );
             return;
         }
 
         PdfOutfile outfile = pdf.getOutfile();
-        outfile.addUrl( url, null );
+        outfile.addUrl( url, coverText );
     }
 
     /**

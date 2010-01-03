@@ -232,7 +232,8 @@ public class StartTest
             fail( "threw unexpected exception in Start.outputCommand()" );
         }
         assertEquals(
-                "<span title=\"COMMAND\"><font color=\"blue\">[leading:15pt]</font></span>",
+ //               "<span title=\"COMMAND\"><font color=\"blue\">[leading:15pt]</font></span>",
+                leading15,
                 fw.getText() );
     }
 

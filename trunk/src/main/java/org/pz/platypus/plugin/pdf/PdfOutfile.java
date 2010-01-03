@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -14,6 +14,7 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.command.Alignment;
 import org.pz.platypus.exceptions.FileCloseException;
+import org.pz.platypus.exceptions.PlatyException;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -57,14 +58,15 @@ public class PdfOutfile
 
     /**
      * Open the output file. Does basic checks, calls openPdfFile(), and handles any exceptions
-     * @param gdd Global document data
      * @param filename name of file to open
-     * @param pdf the PDF data class
+     * @param pdd the PDF data class
      * @throws IOException in event of a problem opening the file
      */
-    public void open( final GDD gdd, final String filename, final PdfData pdf ) throws IOException
+    public void open( final String filename, final PdfData pdd ) throws IOException
     {
-        assert( gdd != null );
+        assert( pdd != null );
+
+        GDD gdd = pdd.getGdd();
 
         if( filename == null || filename.isEmpty() ) {
             gdd.logSevere( gdd.getLit( "ERROR.MISSING_INPUT_FILE" ) + " " +
@@ -75,10 +77,8 @@ public class PdfOutfile
             pdfFilename = filename;
         }
 
-        assert( pdf != null );
-
         try {
-            openPdfFile( gdd, pdf, filename );
+            openPdfFile( gdd, pdd, filename );
         }
         catch( IOException ioe ) {
             gdd.logSevere( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE" ) + ": " +
@@ -492,6 +492,27 @@ public class PdfOutfile
     }
 
     /**
+     * Used to make sure file is open in the event that the first item is not text, such
+     * as if it is a URL.
+     */
+    void makeSureOutfileIsOpen()
+    {
+        GDD gdd = pdfData.getGdd();
+        String outputFilename = gdd.getSysStrings().getString( "_outputFile" );
+
+        if( !isOpen() ) {
+            try {
+                open( outputFilename , pdfData );
+            }
+            catch( IOException ioe ) {
+                gdd.logSevere( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE" ) + ": " +
+                    outputFilename + " " + gdd.getLit( "EXITING" ));
+                throw new PlatyException( "" );
+            }
+        }
+    }
+
+    /**
      * Writes text to the PDF file. Because text can be written either as a Chunk or a Phrase
      * in iText, this method has to manage both entities within the larger context of a Paragraph.
      *
@@ -499,6 +520,8 @@ public class PdfOutfile
      */
     public void emitText( String s )
     {
+        assert( s != null ) : "s parameter null in PdfOutfile.emitChar()";
+
         // check if we are in an existing paragraph. If not, create a new one.
         if ( iTPara == null ) {
            startNewParagraph();
@@ -532,6 +555,8 @@ public class PdfOutfile
      */
     public void emitChar( final String ch, final String fontName)
     {
+        assert( ch != null ) : "ch parameter null in PdfOutfile.emitChar()";
+
         if( iTPara == null ) {
             startNewParagraph();
         }
@@ -551,8 +576,8 @@ public class PdfOutfile
 
     /**
      * Emits a URL with the specified cover text. Creates a clickable link in the PDF doc.
-     * If no cover text is specified, then it defaults to the URL itself. (In other words,
-     * http://pz.org would print as is.)
+     * If no cover text is null (so, not specified), then the text defaults to the URL itself.
+     * (In other words, http://pz.org would print as is.)
      *
      * @param url the URL of the link
      * @param coverText words to be printed and made linkable (in lieu of printing the URL)
@@ -564,9 +589,14 @@ public class PdfOutfile
         }
 
         Anchor anchor = new Anchor( url, pdfData.getFont().getItextFont() );
-        if( coverText == null ) {
-            anchor.setReference( url );
+        anchor.setReference( coverText == null ? url : coverText );
+
+        makeSureOutfileIsOpen();
+        
+        if( iTPara == null ) {
+            startNewParagraph();
         }
+
         iTPara.add( anchor );
     }
 

@@ -119,7 +119,7 @@ public class CommandLineArgs {
      * what any argument for it is.
      *
      * @param argToFind argument to lookup
-     * @return null if the item was not specified; "" if the item was specified by had no argument,
+     * @return null if the item was not specified; "" if the item was specified but had no argument,
      *         and the argument if item was specified and has an argument.
      */
     public String lookup(final String argToFind) {
