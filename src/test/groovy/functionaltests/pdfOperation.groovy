@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  *
  *  Runs functional tests on the operation of the PDF plugin, which is everything in
@@ -25,6 +25,8 @@ def String javaRun = "java -jar " + jarUnderTest
 testPdfValidConfigThenInputAndOutputFiles( javaRun )
 testValidErrMessageWhenColumnWidthTooBig( javaRun )
 testNoNPEwhenSpecifyingIndents( javaRun )
+testNoNPEwhenURLisFirstElementInFile( javaRun )
+testNoNPEwhenSymbolisFirstElementInFile( javaRun )
 
 return
 
@@ -85,7 +87,7 @@ def void testValidErrMessageWhenColumnWidthTooBig( String javaRun )
       "Test: Useful error msg when [columnwidth: is too wide (consult PLATYPUS-20)"
 
       // create a file containing one line of text.
-      def String testFileName = "testText.plat"
+      def String testFileName = "testText.ptp"
       def File testFile = new File( testFileName )
       PrintWriter pw = new PrintWriter( testFile )
       pw.write(
@@ -130,7 +132,7 @@ def void testPdfValidConfigThenInputAndOutputFiles( String javaRun )
     "Test: input begins with [+footer] [columns:3] (consult PLATYPUS-19)"
 
     // create a file containing one line of text.
-    def String testFileName = "testText.plat"
+    def String testFileName = "testText.ptp"
     def File testFile = new File( testFileName )
     PrintWriter pw = new PrintWriter( testFile )
     pw.write(
@@ -174,3 +176,88 @@ def void testPdfValidConfigThenInputAndOutputFiles( String javaRun )
     testFile.delete()
     pdfFile.delete()
 }
+
+/**
+ * See PLATYPUS-26 in JIRA at Codehaus. Tests that when a URL is the first element
+ * of a in input file, the output file is opened correctly, without causing and NPE.
+ */
+def void testNoNPEwhenURLisFirstElementInFile( String javaRun )
+{
+  def String description =
+      "Test: No exceptions if URL is first element in an input file (consult PLATYPUS-26)"
+
+      // create a file containing one line of text.
+      def String testFileName = "testURL.ptp"
+      def File testFile = new File( testFileName )
+      PrintWriter pw = new PrintWriter( testFile )
+      pw.write(
+          "[url:http://www.cnn.com]\n" );
+      pw.close()
+      if ( ! testFile.exists() ) {
+          println( "***FAILURE in ${description}. Could not create test file" )
+          return
+      }
+
+    // run it and test for error message as well as a generated PDF file
+    String commandLine =  javaRun + " ${testFileName} ${testFileName}.pdf "
+    def proc = commandLine.execute()
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${testFileName}.pdf" )
+
+    // tests coded oddly so that it's easy to comment out one of the test to do diagnosis
+    if( pdfFile.exists()
+                            ) {
+        println( "Success in " + description )
+    }
+    else  {
+        println( "***FAILURE in " + description )
+        println( err )
+    }
+
+    testFile.delete()
+    pdfFile.delete()
+}
+
+/**
+ * See PLATYPUS-26 in JIRA at Codehaus. Tests that when a URL is the first element
+ * of a in input file, the output file is opened correctly, without causing and NPE.
+ */
+def void testNoNPEwhenSymbolisFirstElementInFile( String javaRun )
+{
+  def String description =
+      "Test: No exceptions if symbol is first element in an input file"
+
+      // create a file containing one line of text.
+      def String testFileName = "testSymbol.ptp"
+      def File testFile = new File( testFileName )
+      PrintWriter pw = new PrintWriter( testFile )
+      pw.write(
+          "[trademark][copyright]\n" );
+      pw.close()
+      if ( ! testFile.exists() ) {
+          println( "***FAILURE in ${description}. Could not create test file" )
+          return
+      }
+
+    // run it and test for error message as well as a generated PDF file
+    String commandLine =  javaRun + " ${testFileName} ${testFileName}.pdf "
+    def proc = commandLine.execute()
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${testFileName}.pdf" )
+
+    // tests coded oddly so that it's easy to comment out one of the test to do diagnosis
+    if( pdfFile.exists()
+                            ) {
+        println( "Success in " + description )
+    }
+    else  {
+        println( "***FAILURE in " + description )
+        println( err )
+    }
+
+    testFile.delete()
+ //   pdfFile.delete()
+}
+
