@@ -1,26 +1,28 @@
 /**
  * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- * <p/>
+ *
  * Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus;
+package org.pz.platypus.plugin.listing;
 
-import java.io.FileWriter;
+import org.pz.platypus.Token;
+import org.pz.platypus.GDD;
+
 import java.io.IOException;
 
 /**
- * The macro processing strategy.
+ * The block comment processing strategy.
+ * Decides how the block comment token will be formatted as Html.
  *
  * @author: ask
  */
-
-public class HtmlMacroListingStrategy extends HtmlListingStrategy {
+public class HtmlBlockCommentListingStrategy extends HtmlListingStrategy {
 
     private final Token tok;
 
-    public HtmlMacroListingStrategy(Token tok) {
+    public HtmlBlockCommentListingStrategy(Token tok) {
         this.tok = tok;
     }
 
@@ -30,11 +32,11 @@ public class HtmlMacroListingStrategy extends HtmlListingStrategy {
 
     public String format(Token tok, GDD gdd) throws IOException {
         final String s = "<span title=\"" +
-                         gdd.getLit( "MACRO" ) +
-                         "\"><font color=\"brown\"><b>" +
+                         gdd.getLit( "BLOCK_COMMENT" ) +
+                         "\"><font color=\"green\">" +
                          convertToHtmlText( tok.getContent() ) +
-                         "</b></font></span>";
-        return s;        
+                         "</font></span>";
+        return s;
     }
         
 }

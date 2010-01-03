@@ -5,11 +5,12 @@
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus;
+package org.pz.platypus.plugin.listing;
 
-import java.io.FileWriter;
+import org.pz.platypus.Token;
+import org.pz.platypus.GDD;
+
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * The "%%" token (line Comment) processing strategy.

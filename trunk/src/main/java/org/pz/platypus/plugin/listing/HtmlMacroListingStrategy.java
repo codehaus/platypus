@@ -5,22 +5,24 @@
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus;
+package org.pz.platypus.plugin.listing;
 
-import java.io.FileWriter;
+import org.pz.platypus.Token;
+import org.pz.platypus.GDD;
+
 import java.io.IOException;
 
 /**
- * The block comment processing strategy.
- * Decides how the block comment token will be formatted as Html.
+ * The macro processing strategy.
  *
  * @author: ask
  */
-public class HtmlBlockCommentListingStrategy extends HtmlListingStrategy {
+
+public class HtmlMacroListingStrategy extends HtmlListingStrategy {
 
     private final Token tok;
 
-    public HtmlBlockCommentListingStrategy(Token tok) {
+    public HtmlMacroListingStrategy(Token tok) {
         this.tok = tok;
     }
 
@@ -30,11 +32,11 @@ public class HtmlBlockCommentListingStrategy extends HtmlListingStrategy {
 
     public String format(Token tok, GDD gdd) throws IOException {
         final String s = "<span title=\"" +
-                         gdd.getLit( "BLOCK_COMMENT" ) +
-                         "\"><font color=\"green\">" +
+                         gdd.getLit( "MACRO" ) +
+                         "\"><font color=\"brown\"><b>" +
                          convertToHtmlText( tok.getContent() ) +
-                         "</font></span>";
-        return s;
+                         "</b></font></span>";
+        return s;        
     }
         
 }

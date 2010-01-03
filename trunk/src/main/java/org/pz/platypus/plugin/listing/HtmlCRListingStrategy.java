@@ -5,31 +5,32 @@
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus;
+package org.pz.platypus.plugin.listing;
 
-import java.io.FileWriter;
+import org.pz.platypus.Token;
+import org.pz.platypus.GDD;
+
 import java.io.IOException;
 
 /**
- * The bare text processing strategy.
+ * The "[cr]" token processing strategy.
+ * Decides how the carriage return token will be outputted as Html.
  *
  * @author: ask
+ *
  */
-
-public class HtmlTextListingStrategy extends HtmlListingStrategy {
-
+public class HtmlCRListingStrategy extends HtmlListingStrategy {
     private final Token tok;
 
-    public HtmlTextListingStrategy(Token tok) {
+    public HtmlCRListingStrategy(Token tok) {
         this.tok = tok;
     }
 
-    public boolean canOutputHtmlEndOfLine() {
-        return false;  
-    }
-
     public String format(Token tok, GDD gdd) throws IOException {
-        return convertToHtmlText( tok.getContent() );
+        return "";
     }
 
+    public boolean canOutputHtmlEndOfLine() {
+        return true;
+    }
 }

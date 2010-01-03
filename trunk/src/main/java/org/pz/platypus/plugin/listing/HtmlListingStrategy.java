@@ -1,11 +1,15 @@
 /**
  * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- * <p/>
- * Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *
+ * Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus;
+package org.pz.platypus.plugin.listing;
+
+import org.pz.platypus.Token;
+import org.pz.platypus.GDD;
+import org.pz.platypus.TokenType;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -23,7 +27,7 @@ public abstract class HtmlListingStrategy {
     /** The "factory method" for creating the correct Strategy instance.
      *  Ideally, this would be the only "switching on types" code.
      *
-     * @param The token that is to be processed
+     * @param tok token that is to be processed
      * @return The strategy object encapsulating the processing algorithm.
      */
     public static HtmlListingStrategy getFormatStrategy(Token tok) {
