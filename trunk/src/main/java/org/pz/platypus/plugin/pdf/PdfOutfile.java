@@ -14,7 +14,6 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.command.Alignment;
 import org.pz.platypus.exceptions.FileCloseException;
-import org.pz.platypus.exceptions.PlatyException;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -61,10 +60,14 @@ public class PdfOutfile
      * @param filename name of file to open
      * @param pdd the PDF data class
      * @throws IOException in event of a problem opening the file
+     * @throws IllegalArgumentException if pdd is null
      */
     public void open( final String filename, final PdfData pdd ) throws IOException
     {
-        assert( pdd != null );
+        if( pdd == null ) {
+            throw new IllegalArgumentException( "null PdfData passed to PdfOutfile.open() ");
+        }
+
 
         GDD gdd = pdd.getGdd();
 
@@ -492,10 +495,12 @@ public class PdfOutfile
     }
 
     /**
-     * Used to make sure file is open in the event that the first item is not text, such
+     * Make sure file is open in the event that the first item is not text, such
      * as if it is a URL.
+     *
+     * @throws IOException in the event that the call to open() throws this exception
      */
-    void makeSureOutfileIsOpen()
+    void makeSureOutfileIsOpen() throws IOException
     {
         GDD gdd = pdfData.getGdd();
         String outputFilename = gdd.getSysStrings().getString( "_outputFile" );
@@ -505,9 +510,8 @@ public class PdfOutfile
                 open( outputFilename , pdfData );
             }
             catch( IOException ioe ) {
-                gdd.logSevere( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE" ) + ": " +
-                    outputFilename + " " + gdd.getLit( "EXITING" ));
-                throw new PlatyException( "" );
+                // Just rethrow. The error message for the exception was already shown in the open() method.
+                throw new IOException();
             }
         }
     }
@@ -591,7 +595,12 @@ public class PdfOutfile
         Anchor anchor = new Anchor( url, pdfData.getFont().getItextFont() );
         anchor.setReference( coverText == null ? url : coverText );
 
-        makeSureOutfileIsOpen();
+        try {
+            makeSureOutfileIsOpen();
+        }
+        catch( IOException ioe ) {
+            return;
+        }
         
         if( iTPara == null ) {
             startNewParagraph();
