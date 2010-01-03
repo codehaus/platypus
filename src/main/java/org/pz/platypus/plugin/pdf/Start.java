@@ -97,6 +97,9 @@ public class Start implements Pluggable
             gdd.logWarning( gdd.getLit( "ERROR.CLOSING_OUTPUT_FILE" ) + ": " +
                            fce.getMessage() );
         }
+        catch( Throwable anyException ) {
+            anyException.printStackTrace();
+        }
     }
 
     /**
