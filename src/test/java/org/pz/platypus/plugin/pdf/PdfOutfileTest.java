@@ -43,6 +43,7 @@ public class PdfOutfileTest
         pout = new PdfOutfile();
         pdat = new PdfData( gdd );
         pout.setPdfData( pdat );
+
     }
 
     @Test
@@ -51,13 +52,13 @@ public class PdfOutfileTest
         assertFalse( pout.isOpen() );
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testNullFilenameOpen() throws IOException
     {
         pout.open( null, null );
     }
 
-    @Test(expected = IOException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testEmptyFilenameOpen() throws IOException
     {
         pout.open( "", null );
