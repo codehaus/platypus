@@ -54,13 +54,14 @@ public class PdfFont
     /**
      * Constructor for cloning an existing PdfFont, but specifying a different typeface.
      *
-     * @param Gdd needed for error messages
+     * @param pdd PDF data
      * @param fontName the name of the new font/typeface
      * @param existingFont the font to clone the other attributes from
      */
-    public PdfFont( GDD Gdd, String fontName, PdfFont existingFont )
+    public PdfFont( PdfData pdd, String fontName, PdfFont existingFont )
     {
-        gdd = Gdd;
+        gdd = pdd.getGdd();
+        pdfData = pdd;
         typeface = fontName;
         size = existingFont.getSize();
         bold = existingFont.getBold();
@@ -97,18 +98,18 @@ public class PdfFont
         Font font;
 
         String iTextFontName = createItextFontName( f );
+        if( iTextFontName == null ) { // if the font is not in the fontlist nor is it a Base14 font
+            f.typeface = DefaultValues.FONT_TYPEFACE;
+            iTextFontName = BaseFont.TIMES_ROMAN;
+        }
+
         if( ! isBase14Font( f.typeface )) {
             style = computeItextStyle();
         }
 
-        try {
-        font = FontFactory.getFont( iTextFontName, BaseFont.CP1252, BaseFont.EMBEDDED,
-                    size, style );
-        }
-        catch( Exception ex ) {
-            System.out.println( "Exception in PdfFont.createFont() for FontFactory.getFont() for " +
-                                iTextFontName );
-            font = null;
+        font = getIdentityHFont( iTextFontName, size, style );
+        if( font == null ) {
+            font = getCp1252Font( iTextFontName, size, style );
         }
 
         if( font == null || font.getBaseFont() == null ) {
@@ -120,6 +121,33 @@ public class PdfFont
         return( font );
     }
 
+    Font getIdentityHFont( final String fontName, float size, int style )
+    {
+        Font font;
+        try {
+
+            font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style );
+        }
+        catch( Exception ex ) {
+            font = null;
+        }
+
+        return( font );
+    }
+
+    Font getCp1252Font( final String fontName, float size, int style )
+    {
+        Font font;
+        try {
+
+            font = FontFactory.getFont( fontName, BaseFont.CP1252, BaseFont.EMBEDDED, size, style );
+        }
+        catch( Exception ex ) {
+            font = null;
+        }
+
+        return( font );
+    }
 
     /**
      * Determines whehter the current font is one of the Base14 Acrobat fonts, built into
@@ -213,20 +241,21 @@ public class PdfFont
         // then look up this font among them. If it's still not there, then return
         // a TIMES_ROMAN and note the error.
         {
-//            if( pdfData.getTypefaceMap() == null ) {
-//                TypefaceMap typefaceMap = new TypefaceMap( pdfData.getGdd() );
-//                typefaceMap.loadFamilies();
-//                pdfData.setTypefaceMap( typefaceMap );
-//            }
-
             // if the font files for this typeface/font family have not been previously registered,
             // then get the filenames from the typefaceMap and register them in iText's FontFactory
             if( ! FontFactory.isRegistered( typefaceName )) {
                 String[] fontFiles = pdfData.getTypefaceMap().getFamilyFilenames( typefaceName );
-                for( String fontFile : fontFiles ) {
-                    FontFactory.register( fontFile );
+                if( fontFiles.length == 0 ) {
+                    gdd.logWarning( "Could not find " + typefaceName + " font. Using TIMES_ROMAN." );
+      //              return( BaseFont.TIMES_ROMAN );
+                    return( null );
                 }
-                gdd.log( "Registered fonts for " + typefaceName + " in iText" );
+                else {
+                    for( String fontFile : fontFiles ) {
+                        FontFactory.register( fontFile );
+                    }
+                    gdd.log( "Registered fonts for " + typefaceName + " in iText" );
+                }
             }
 
             if( FontFactory.isRegistered( typefaceName )) {
@@ -234,8 +263,9 @@ public class PdfFont
             }
             else {
             // the filename does not exist on the system, so substitute TIMES_ROMAN
-                iTextFontName = BaseFont.TIMES_ROMAN;
+                iTextFontName = null;
             }
+
 //            }
 //            else {
 //                gdd.logInfo(

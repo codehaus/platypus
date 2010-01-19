@@ -570,7 +570,7 @@ public class PdfOutfile
             fs.addFont( pdfData.getFont().getItextFont() );
         }
         else {
-            PdfFont newFont = new PdfFont( pdfData.getGdd(), fontName, pdfData.getFont() );
+            PdfFont newFont = new PdfFont( pdfData, fontName, pdfData.getFont() );
             fs.addFont( newFont.getItextFont() );
         }
         
