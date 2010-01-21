@@ -121,11 +121,18 @@ public class PdfFont
         return( font );
     }
 
+    /**
+     * Opens a font using the IDENTITY-H encoding.
+     *
+     * @param fontName
+     * @param size
+     * @param style
+     * @return the Font if opened; null if an error occurred.
+     */
     Font getIdentityHFont( final String fontName, float size, int style )
     {
         Font font;
         try {
-
             font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style );
         }
         catch( Exception ex ) {
@@ -172,8 +179,10 @@ public class PdfFont
 
     /**
      * Get the name by which iText refers to this font. This routine is mostly occupied
-     * with the special handling of the base14 fonts. For all other fonts, this routine
-     * simply returns its existing name.
+     * with the special handling of the base14 fonts.
+     *
+     * For all other fonts, this method makes sure the font is registered with iText and
+     * returns its name as registered by iText (which is the family name for the font).
      *
      * @param f PdfFont whose iText name we're getting
      * @return a string containing the iText usable name for this font.
@@ -237,24 +246,13 @@ public class PdfFont
             iTextFontName = BaseFont.ZAPFDINGBATS;
         }
         else
-        // not a base14 font. So make sure we've loaded the font files for Platypus
+        // It's not a base14 font. So make sure we've loaded the font files for Platypus
         // then look up this font among them. If it's still not there, then return
         // a TIMES_ROMAN and note the error.
         {
-            // if the font files for this typeface/font family have not been previously registered,
-            // then get the filenames from the typefaceMap and register them in iText's FontFactory
             if( ! FontFactory.isRegistered( typefaceName )) {
-                String[] fontFiles = pdfData.getTypefaceMap().getFamilyFilenames( typefaceName );
-                if( fontFiles.length == 0 ) {
-                    gdd.logWarning( "Could not find " + typefaceName + " font. Using TIMES_ROMAN." );
-      //              return( BaseFont.TIMES_ROMAN );
-                    return( null );
-                }
-                else {
-                    for( String fontFile : fontFiles ) {
-                        FontFactory.register( fontFile );
-                    }
-                    gdd.log( "Registered fonts for " + typefaceName + " in iText" );
+                if ( ! findAndRegisterFont(typefaceName)) {
+                    return (null);
                 }
             }
 
@@ -262,21 +260,37 @@ public class PdfFont
                 iTextFontName = typefaceName;
             }
             else {
-            // the filename does not exist on the system, so substitute TIMES_ROMAN
+                // in theory, cannot get here.
+                gdd.logWarning( gdd.getLit( "COULD_NOT_FIND") + " " + typefaceName + " " +
+                                gdd.getLit( "IN_FONT_REGISTER" ) + ". " +
+                                gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
                 iTextFontName = null;
             }
-
-//            }
-//            else {
-//                gdd.logInfo(
-//                        gdd.getLit( "FILE#" ) + " " + source.getFileNumber() + " " +
-//                        gdd.getLit( "LINE#" ) + " " + source.getLineNumber() + ": " +
-//                        gdd.getLit( "ERROR.INVALID_FONT_TYPEFACE" ) + " " +
-//                        f.typeface + " " +
-//                        gdd.getLit( "IGNORED" ));
-//                iTextFontName = typeface;
         }
         return( iTextFontName );
+    }
+
+    /**
+     * Get the filenames from the typefaceMap and register them in iText's FontFactory.
+     *
+     * @param typefaceName name of the typeface
+     * @return true if the font is now registered, false if an error occurred. (Font was not in fontlist.)
+     */
+    boolean findAndRegisterFont( String typefaceName )
+    {
+        String[] fontFiles = pdfData.getTypefaceMap().getFamilyFilenames( typefaceName );
+        if( fontFiles.length == 0 ) {
+            gdd.logWarning( gdd.getLit( "COULD_NOT_FIND") + " " + typefaceName + " " +
+                            gdd.getLit( "IN_FONT_LIST" ) + ". " +  gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
+            return( false );
+        }
+        else {
+            for( String fontFile : fontFiles ) {
+                FontFactory.register( fontFile, typefaceName );
+            }
+            gdd.log( "Registered fonts for " + typefaceName + " in iText" );
+            return( true );
+        }
     }
 
     /**
