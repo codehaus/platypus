@@ -124,9 +124,9 @@ public class PdfFont
     /**
      * Opens a font using the IDENTITY-H encoding.
      *
-     * @param fontName
-     * @param size
-     * @param style
+     * @param fontName  the name assigned to the font in the font list
+     * @param size the size in points
+     * @param style bold, italic, etc.
      * @return the Font if opened; null if an error occurred.
      */
     Font getIdentityHFont( final String fontName, float size, int style )
