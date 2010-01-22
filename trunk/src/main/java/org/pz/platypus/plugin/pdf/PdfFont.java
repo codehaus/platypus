@@ -134,6 +134,7 @@ public class PdfFont
         Font font;
         try {
             font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style );
+         // font = FontFactory.getFont( fontName, BaseFont.WINANSI, BaseFont.EMBEDDED, size, style );
         }
         catch( Exception ex ) {
             font = null;
