@@ -12,6 +12,7 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.pdf.BaseFont;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
+import org.pz.platypus.TypefaceMap;
 
 /**
  * Handles fonts for the PDF plugin
@@ -95,7 +96,7 @@ public class PdfFont
     {
         int style = 0;
  //       Color col  = new Color( color.getR(), color.getG(), color.getB() );
-        Font font;
+        Font font = null;
 
         String iTextFontName = createItextFontName( f );
         if( iTextFontName == null ) { // if the font is not in the fontlist nor is it a Base14 font
@@ -105,14 +106,14 @@ public class PdfFont
 
         if( ! isBase14Font( f.typeface )) {
             style = computeItextStyle();
+            font = getIdentityHFont( iTextFontName, size, style );
         }
 
-        font = getIdentityHFont( iTextFontName, size, style );
         if( font == null ) {
             font = getCp1252Font( iTextFontName, size, style );
         }
 
-        if( font == null || font.getBaseFont() == null ) {
+        if( font == null || font.getBaseFont() == null ) { //TODO: Make error msg use literals
             gdd.logWarning( "iText could not find font for: " + iTextFontName + ". Using Times-Roman" );
             font = FontFactory.getFont( BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.EMBEDDED,
                     size, style );
@@ -127,14 +128,22 @@ public class PdfFont
      * @param fontName  the name assigned to the font in the font list
      * @param size the size in points
      * @param style bold, italic, etc.
-     * @return the Font if opened; null if an error occurred.
+     * @return the Font if opened; null if the file could not be opened or an error occurred.
      */
     Font getIdentityHFont( final String fontName, float size, int style )
     {
+        // for the time being, if the font is an .otf font, don't open it with IDENTITY-H. Symbola is an
+        // exception that seems to work.
+        // need to explore the problem further in iText. It's recorded as PLATYPUS-32 in JIRA at Codehaus.
+        // returning null forces the calling routine to open the font with CP1252 encoding, which is
+        // fine for .otf fonts
+        if( isFileOtf( fontName ) && ( ! fontName.toLowerCase().equals( "symbola" ))) {
+            return( null );
+        }
+
         Font font;
         try {
             font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style );
-         // font = FontFactory.getFont( fontName, BaseFont.WINANSI, BaseFont.EMBEDDED, size, style );
         }
         catch( Exception ex ) {
             font = null;
@@ -143,6 +152,29 @@ public class PdfFont
         return( font );
     }
 
+    /**
+     * Looks up a font in the fontlist and determines whether it uses the .otf font format.
+     * @param fontName name of font to verify
+     * @return true if it's an .otf font, otherwise false.
+     */
+    private boolean isFileOtf(String fontName)
+    {
+        String[] fontFilenames = lookupFontFilenames( fontName );
+        if( fontFilenames.length > 0 ) {
+            if( fontFilenames[0].endsWith( ".otf" )) {
+                return( true );
+            }
+        }
+        return( false );
+    }
+
+    /**
+     * Gets the font with CP1252 (aka WINANSI) encoding
+     * @param fontName name of font to get
+     * @param size  size in points
+     * @param style bold, italic, etc.
+     * @return the font, or null if an error occurred.
+     */
     Font getCp1252Font( final String fontName, float size, int style )
     {
         Font font;
@@ -279,7 +311,7 @@ public class PdfFont
      */
     boolean findAndRegisterFont( String typefaceName )
     {
-        String[] fontFiles = pdfData.getTypefaceMap().getFamilyFilenames( typefaceName );
+        String[] fontFiles = lookupFontFilenames( typefaceName );
         if( fontFiles.length == 0 ) {
             gdd.logWarning( gdd.getLit( "COULD_NOT_FIND") + " " + typefaceName + " " +
                             gdd.getLit( "IN_FONT_LIST" ) + ". " +  gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
@@ -292,6 +324,24 @@ public class PdfFont
             gdd.log( "Registered fonts for " + typefaceName + " in iText" );
             return( true );
         }
+    }
+
+    /**
+     * Get the names of the actual font files that are the implementation of this typeface
+     * @param typefaceName the typefaces
+     * @return an array of strings containing the file names.
+     */
+    String[] lookupFontFilenames( String typefaceName )
+    {
+        assert pdfData != null;
+        assert typefaceName != null;
+
+        TypefaceMap typefaceMap = pdfData.getTypefaceMap();
+        if( typefaceMap == null  ) {
+            pdfData.loadTypefaceMap();
+        }
+
+        return( typefaceMap.getFamilyFilenames( typefaceName ));
     }
 
     /**

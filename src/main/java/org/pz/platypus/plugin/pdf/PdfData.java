@@ -180,6 +180,14 @@ public class PdfData implements OutputContextable
     public void init()
     {
         columns = new Columns( this );
+        loadTypefaceMap();
+    }
+
+    /**
+     * Load the typefaces from the fontlist into the typefaceMap.
+     */
+    public void loadTypefaceMap()
+    {
         typefaceMap.loadMapFromFile();
     }
 
