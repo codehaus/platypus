@@ -113,8 +113,8 @@ public class Platypus
     }
 
     /**
-     * Get the PLATYPUS_HOME directory, tack on the \plugins subdir, then add the output format.jar;
-     * Then, try to load this output plugin.
+     * Gets the full canonical name of the plugin (full path + file name). By getting
+     * the PLATYPUS_HOME directory, tacking on the \plugins subdir, then adding the output format.jar;
      *
      * @param gdd the GDD
      * @param clArgs the command line args
@@ -136,13 +136,22 @@ public class Platypus
             throw new InvalidInputException( errMsg, Status.ERR_UNSUPPORTED_FORMAT );
         }
 
-        String pluginJar =
-                PlatypusDir + "plugins" + gdd.getFileSeparator() + jarFilename;
-        pluginJar = findPluginJar( pluginJar, gdd );
+        String pluginCanonicalName;
 
+        // if jarFilename ends with .class, it shows a development version is being used and
+        // it is loaded as a class, rather than a JAR file.
+        // Note: this functionality was never completed. Code for it left here in the event
+        // it's needed at a later point. ALB 2010-02-06
+        if( jarFilename.endsWith( ".class" )) {
+            pluginCanonicalName = jarFilename;
+        }
+        else {
+            String pluginJarName = PlatypusDir + "plugins" + gdd.getFileSeparator() + jarFilename;
+            pluginCanonicalName = findPluginJar( pluginJarName, gdd );
+        }
 
-        gdd.log( "Loading output plug-in: " + pluginJar );
-        return( pluginJar );
+        gdd.log( "Loading output plug-in: " + pluginCanonicalName );
+        return( pluginCanonicalName );
     }
 
     /**

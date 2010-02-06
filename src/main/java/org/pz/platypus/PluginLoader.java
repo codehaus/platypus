@@ -1,13 +1,14 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
 package org.pz.platypus;
 
 import org.pz.platypus.exceptions.InvalidConfigFileException;
+import org.pz.platypus.utilities.TextTransforms;
 
 import java.net.*;
 import java.lang.reflect.*;
@@ -38,7 +39,7 @@ public class PluginLoader
     {
         URL pluginUrl = createPluginUrl();
         if ( pluginUrl == null ) {
-            return;   // error messages generated in called method
+            return;   // TODO: create an error message
         }
 
         URL[] urls = { pluginUrl };
@@ -46,6 +47,7 @@ public class PluginLoader
         Thread.currentThread().setContextClassLoader( pluginLoader );
 
         try {
+            String className;
 
                 //curr: figure out how to not hard code the class path
 //
@@ -55,8 +57,16 @@ public class PluginLoader
             //------ due to bug in JDK 1.6, must use Class.forName(), rather than code above.
             // see:  http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6434149
 
-            String className = "org.pz.platypus.plugin." +
+            if( pluginLocation.endsWith( "Start.class" )) {
+            // Note: this functionality was never completed. Code for it left here in the event
+            // it's needed at a later point. ALB 2010-02-06
+                className = TextTransforms.truncate( pluginLocation, ".class".length() );
+            }
+            else {
+                className = "org.pz.platypus.plugin." +
                                gdd.getOutputPluginPrefix() + ".Start";
+            }
+            
             Class pluginStart = Class.forName( className, false, pluginLoader );
 
             Object plugin = pluginStart.newInstance();
@@ -79,18 +89,18 @@ public class PluginLoader
                 return; //error message has already been displayed
             }
             catch( InvocationTargetException ite ) {
-                System.out.println( "Invocation target exception" + ite );
+                System.err.println( "Invocation target exception" + ite );
                 ite.printStackTrace();
             }
         }
         catch ( ClassNotFoundException cnf ) {
-            System.out.println( "class not found " + cnf );
+            System.err.println( "class not found " + cnf );
         }
         catch ( InstantiationException ie ) {
-            System.out.println( ie );
+            System.err.println( ie );
         }
         catch ( IllegalAccessException ie ) {
-            System.out.println( ie );
+            System.err.println( ie );
         }        
     }
 
