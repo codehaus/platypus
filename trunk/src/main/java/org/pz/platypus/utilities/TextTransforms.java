@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.  
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -70,9 +70,9 @@ public class TextTransforms
      * @return the new string with the substitution completed
      */
     public static String replaceSubstringAtLocation( String baseString,
-                                            final String oldSubstring,
-                                            final String newSubstring,
-                                            int startPoint )
+                                                     final String oldSubstring,
+                                                     final String newSubstring,
+                                                     int startPoint )
     {
         assert( baseString != null );
         assert( oldSubstring != null && newSubstring != null );
@@ -87,5 +87,20 @@ public class TextTransforms
         sb.append( baseString.substring( startPoint + oldSubstring.length() ));
 
         return( sb.toString() );
+    }
+
+    /**
+     * Truncates count number of bytes from the end of a string
+     * @param text the string to truncate
+     * @param count how much to truncate
+     * @return the truncated string or, in the case of error, the original string.
+     */
+    public static String truncate( String text, final int count )
+    {
+        if( text == null || count < 0 || count > text.length() ) {
+            return( text );
+        }
+        
+        return( text.substring( 0, text.length() - count ));
     }
 }
