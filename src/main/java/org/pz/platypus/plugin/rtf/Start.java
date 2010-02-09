@@ -37,7 +37,75 @@ public class Start implements Pluggable
      */
     public Start()
     {
-        System.out.println("In the RTF Plugin!");
+     //  System.out.println("In the RTF Plugin!");
+    }
+
+    /**
+     * This is the main line of the plug-in.
+     * Platypus calls only the Start constructor and this method.
+     *
+     * @param gdd  The Global Document Data
+     * @param clArgs command-line arguments in a hash map (key = argument, value = parameters)
+     */
+    public void process( GDD gdd, final CommandLineArgs clArgs )
+    {
+        FileWriter outputFile;
+        String inputFile;
+
+        assert( gdd != null && clArgs != null );
+
+        logger = gdd.getLogger();
+
+        try {
+            inputFile = clArgs.lookup( "inputFile" );
+            outputFile = openOutputFile( clArgs.lookup( "outputFile" ), gdd );
+            processInputTokens( gdd, outputFile );
+            closeOuputFile( outputFile, gdd );
+        }
+        catch( IOException ioe ) {
+            return; //todo: log an error message
+        }
+    }
+
+    /**
+     * Where the content of the listing file is written out
+     *
+     * @param outFile the file being written to
+     * @param gdd the GDD.
+     * @throws java.io.IOException in the event the file can't be written to
+     */
+    public void processInputTokens( GDD gdd, final FileWriter outFile )
+           throws IOException
+    {
+        Token tok;
+
+        final TokenList tokensList = gdd.getInputTokens();
+        for( int i = 0; i < tokensList.size(); i++ )
+        {
+            tok = tokensList.get( i );
+            processToken( gdd, tok, outFile );
+        }
+    }
+
+    /**
+     * Processes the individual tokens
+     *
+     * @param gdd  global document data (data structure)
+     * @param tok token being processed
+     * @param outFile output RTF file being created
+     * @return returns the number of tokens to skip. In vast majority of cases, returns 1.
+     */
+    public int processToken( final GDD gdd, final Token tok, final FileWriter outFile )
+    {
+        if ( tok.getType().equals( TokenType.TEXT )) {
+            processText( gdd, tok, outFile );
+        }
+        return( 1 );
+    }
+
+    public void processText(  final GDD gdd, final Token tok, final FileWriter outFile  )
+    {
+
     }
 
     /**
@@ -264,7 +332,7 @@ public class Start implements Pluggable
             fwOut = new FileWriter( filename );
         }
         catch ( IOException e ) {
-            logger.severe( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE") + " " + filename );
+            logger.severe( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE" ) + " " + filename );
             throw new IOException();
         }
 
@@ -308,36 +376,7 @@ public class Start implements Pluggable
         return i - tokenNumber;
     }
 
-    /**
-     * This is the main line of the plug-in.
-     * Platypus calls only the Start constructor and this method.
-     *
-     * @param gdd  The Global Document Data
-     * @param clArgs command-line arguments in a hash map (key = argument, value = parameters)
-     */
-    public void process( GDD gdd, final CommandLineArgs clArgs )
-    {
-        FileWriter outputFile;
-        String inputFile;
 
-        assert( gdd != null && clArgs != null );
-
-        logger = gdd.getLogger();
-
-        try {
-            inputFile = clArgs.lookup( "inputFile" );
-            outputFile = openOutputFile( clArgs.lookup( "outputFile" ), gdd );
-
-            emitHtmlHeader( inputFile, outputFile, gdd );
-            emitListing( outputFile, gdd );
-            emitClosingHtml( outputFile, gdd );
-
-            closeOuputFile( outputFile, gdd );
-        }
-        catch( IOException ioe ) {
-            return; //todo: log an error message
-        }
-    }
 
     //=== getters and setters ===
 
