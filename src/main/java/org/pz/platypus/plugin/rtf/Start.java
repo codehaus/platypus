@@ -96,6 +96,7 @@ public class Start implements Pluggable
      * @return returns the number of tokens to skip. In vast majority of cases, returns 1.
      */
     public int processToken( final GDD gdd, final Token tok, final FileWriter outFile )
+            throws IOException
     {
         if ( tok.getType().equals( TokenType.TEXT )) {
             processText( gdd, tok, outFile );
@@ -103,9 +104,26 @@ public class Start implements Pluggable
         return( 1 );
     }
 
+    /**
+     * Validates that there is text to output and then writes it as a string to the file.
+     *
+     * @param gdd the GDD
+     * @param tok the token containing text
+     * @param outFile the file to write the text to
+     * @throws IOException occurs if an I/O error occurred during output
+     */
     public void processText(  final GDD gdd, final Token tok, final FileWriter outFile  )
+            throws IOException
     {
+        assert( gdd != null );
+        assert( tok != null );
+        assert( outFile != null );
 
+        String text = tok.getContent();
+
+        if( text != null && ! text.isEmpty() ) {
+             writeStringToFile( outFile,  gdd, text );
+        }
     }
 
     /**
