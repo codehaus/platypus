@@ -19,6 +19,7 @@ import java.util.logging.*;
  * Global document data. Is a singleton, although not created as such due to testing repercussions.
  * 
  * @author alb
+ * @author atul
  */
 public class GDD 
 {
