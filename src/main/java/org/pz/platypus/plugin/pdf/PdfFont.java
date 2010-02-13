@@ -13,6 +13,7 @@ import com.lowagie.text.pdf.BaseFont;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
+import org.pz.platypus.DefaultValues;
 
 /**
  * Handles fonts for the PDF plugin

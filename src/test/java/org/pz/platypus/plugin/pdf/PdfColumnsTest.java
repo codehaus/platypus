@@ -10,6 +10,7 @@ package org.pz.platypus.plugin.pdf;
 import static org.junit.Assert.*;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
+import org.pz.platypus.DefaultValues;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.test.mocks.MockLiterals;
 import org.junit.Test;

@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.GDD;
+import org.pz.platypus.DefaultValues;
 import org.pz.platypus.exceptions.InvalidConfigFileException;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.test.mocks.MockLiterals;

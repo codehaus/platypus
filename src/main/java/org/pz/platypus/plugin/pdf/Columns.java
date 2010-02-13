@@ -8,6 +8,7 @@
 package org.pz.platypus.plugin.pdf;
 
 import org.pz.platypus.GDD;
+import org.pz.platypus.DefaultValues;
 
 import java.util.ArrayList;
 

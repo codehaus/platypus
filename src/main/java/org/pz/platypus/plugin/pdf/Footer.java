@@ -7,9 +7,8 @@
 
 package org.pz.platypus.plugin.pdf;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.pdf.*;
 import org.pz.platypus.Source;
+import org.pz.platypus.DefaultValues;
 
 
 /**
