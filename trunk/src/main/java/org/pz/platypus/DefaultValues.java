@@ -5,7 +5,7 @@
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus.plugin.pdf;
+package org.pz.platypus;
 
 import org.pz.platypus.command.Alignment;
 import org.pz.platypus.command.EolTreatment;
@@ -19,6 +19,7 @@ public class DefaultValues
 {
     public static final float   POINTS_PER_INCH = 72f;
     public final static float   PIXELS_PER_INCH = 96f;
+    public final static float   TWIPS_PER_POINT = 20f;
 
     public static final int     ALIGNMENT = Alignment.LEFT;
     public final static float   BASELINE_LOCATION = 20f;                 // used in footer
@@ -40,7 +41,7 @@ public class DefaultValues
     public static final float   MARGIN = 1.0f * POINTS_PER_INCH;
     public static final boolean MARGINS_MIRRORED = false;
     public static final boolean NO_INDENT = false;
-    public static final float   PAGE_HEIGHT = 11f * POINTS_PER_INCH;
+    public static final float   PAGE_HEIGHT = 11f  * POINTS_PER_INCH;
     public static final float   PAGE_WIDTH  = 8.5f * POINTS_PER_INCH;
     public static final float   PARA_INDENT = 0f;
     public static final float   PARA_INDENT_RIGHT = 0f;

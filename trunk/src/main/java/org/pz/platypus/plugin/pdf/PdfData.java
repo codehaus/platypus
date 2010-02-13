@@ -10,6 +10,7 @@ package org.pz.platypus.plugin.pdf;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
+import org.pz.platypus.DefaultValues;
 import org.pz.platypus.interfaces.OutputContextable;
 
 import javax.script.ScriptEngine;

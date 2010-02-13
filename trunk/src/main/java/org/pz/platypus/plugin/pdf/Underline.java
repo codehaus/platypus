@@ -8,6 +8,7 @@
 package org.pz.platypus.plugin.pdf;
 
 import org.pz.platypus.Source;
+import org.pz.platypus.DefaultValues;
 
 /**
  * Contains the values that define the underline characteristics
