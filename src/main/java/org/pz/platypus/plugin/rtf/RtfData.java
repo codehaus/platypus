@@ -10,7 +10,8 @@ package org.pz.platypus.plugin.rtf;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
-import org.pz.platypus.plugin.pdf.*;
+import org.pz.platypus.DefaultValues;
+import org.pz.platypus.plugin.rtf.*;
 import org.pz.platypus.interfaces.OutputContextable;
 
 import javax.script.ScriptEngine;
@@ -91,20 +92,20 @@ public class RtfData implements OutputContextable
     }
 
     private GDD gdd;
-    private PdfOutfile pdfOutfile;
+    private RtfOutfile rtfOutfile;
 
     private boolean inCode = false;
 
     private Value alignment;
     private Value columnCount;
     private Value userSpecifiedColumnWidth;
-    private Columns columns;
+ //   private Columns columns;
     private int currColumn;
     private boolean eolPending;
     private Value eolTreatment;
     private Value firstLineIndent;
     private RtfFont font;
-    private Footer footer;
+ //   private Footer footer;
     private Value leading;
     private Value lineHeight;   // not the same as leading
     private Value marginBottom;
@@ -123,7 +124,7 @@ public class RtfData implements OutputContextable
 //    private ScriptEngine scriptEngine;
     private Value strikethru;
     private TypefaceMap typefaceMap;
-    private Underline underline;
+//    private Underline underline;
 
     /**
      * Initializes the state of the PDF document.
@@ -144,7 +145,6 @@ public class RtfData implements OutputContextable
 
         firstLineIndent = new Value( DefaultValues.FIRST_LINE_INDENT );
         font            = new RtfFont( this );
-   //     footer          = new Footer( this );
 
         leading         = new Value( DefaultValues.LEADING );
         lineHeight      = new Value( DefaultValues.LEADING );
@@ -166,10 +166,9 @@ public class RtfData implements OutputContextable
         paragraphSkip   = new Value( DefaultValues.PARA_SKIP_LINES );
         pixelsPerInch   = new Value( DefaultValues.PIXELS_PER_INCH );
 
-//        scriptEngine    = createNewScriptEngine();
         strikethru      = new Value( false );
         typefaceMap     = new TypefaceMap( gdd );
-        underline       = new Underline();
+  //      underline       = new Underline();
         userSpecifiedColumnWidth = new Value( DefaultValues.COLUMN_WIDTH );
     }
 
@@ -314,16 +313,16 @@ public class RtfData implements OutputContextable
         setValue( columnCount, newCount, fileAndLine, "_columnCount" );
     }
 
-    public Columns getColumns()
-    {
-        return( columns );
-    }
-
-    public void setColumns( final Columns newColumnsList )
-    {
-        columns = newColumnsList;
-        columnCount = new Value( newColumnsList.size() );
-    }
+//    public Columns getColumns()
+//    {
+//        return( columns );
+//    }
+//
+//    public void setColumns( final Columns newColumnsList )
+//    {
+//        columns = newColumnsList;
+//        columnCount = new Value( newColumnsList.size() );
+//    }
 
     public int getCurrColumn()
     {
@@ -342,28 +341,28 @@ public class RtfData implements OutputContextable
 
     public void setEolPending( final boolean newEol )
     {
-        // newEol = false only when resetting flag; there is
-        // no user command to do this. It's only done as a
-        // result of processing EOL.
-        if( newEol == false ) {
-            eolPending = false;
-            return;
-        }
-
-        // [cr] has been encountered
-        if( eolPending == false ) {
-            eolPending = true;
-            return;
-        }
-
-        // If there's an EOL already pending, then the second one means a new paragraph.
-        // However, if paragraph == null, iText needs a single blank space before skipping the line.
-        if( pdfOutfile.getItPara() == null ) {
-            pdfOutfile.emitText( " " );
-        }
-
-        pdfOutfile.startNewParagraph();
-        eolPending = false;
+//        // newEol = false only when resetting flag; there is
+//        // no user command to do this. It's only done as a
+//        // result of processing EOL.
+//        if( newEol == false ) {
+//            eolPending = false;
+//            return;
+//        }
+//
+//        // [cr] has been encountered
+//        if( eolPending == false ) {
+//            eolPending = true;
+//            return;
+//        }
+//
+//        // If there's an EOL already pending, then the second one means a new paragraph.
+//        // However, if paragraph == null, iText needs a single blank space before skipping the line.
+//        if( rtfOutfile.getItPara() == null ) {
+//            rtffOutfile.emitText( " " );
+//        }
+//
+//        rtfOutfile.startNewParagraph();
+//        eolPending = false;
     }
 
     public int getEolTreatment()
@@ -426,15 +425,15 @@ public class RtfData implements OutputContextable
         font.setSize( newSize, newSource );
     }
 
-    public Footer getFooter()
-    {
-        return( footer );
-    }
-
-    public void setFooter( final Footer newFooter )
-    {
-        footer = newFooter;
-    }
+//    public Footer getFooter()
+//    {
+//        return( footer );
+//    }
+//
+//    public void setFooter( final Footer newFooter )
+//    {
+//        footer = newFooter;
+//    }
 
     public GDD getGdd()
     {
@@ -564,14 +563,14 @@ public class RtfData implements OutputContextable
         setValue( noIndent, trueFalse, fileAndLine, "_noIndent" );
     }
 
-    public PdfOutfile getOutfile()
+    public RtfOutfile getOutfile()
     {
-        return( pdfOutfile );
+        return( rtfOutfile );
     }
 
-    public void setOutfile( final PdfOutfile newOutfile)
+    public void setOutfile( final RtfOutfile newOutfile)
     {
-        pdfOutfile = newOutfile;
+        rtfOutfile = newOutfile;
     }
 
     public float getPageHeight()
@@ -700,10 +699,10 @@ public class RtfData implements OutputContextable
         typefaceMap = tfMap;
     }
 
-    public Underline getUnderline()
-    {
-        return( underline );
-    }
+//    public Underline getUnderline()
+//    {
+//        return( underline );
+//    }
 
     public float getUserSpecifiedColumnWidth()
     {
