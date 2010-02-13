@@ -13,9 +13,7 @@ import com.lowagie.text.pdf.BaseFont;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
-import org.pz.platypus.plugin.pdf.PdfData;
-import org.pz.platypus.plugin.pdf.DefaultValues;
-import org.pz.platypus.plugin.pdf.PdfFont;
+import org.pz.platypus.DefaultValues;
 
 /**
  * Handles fonts for the RTF plugin

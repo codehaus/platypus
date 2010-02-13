@@ -52,6 +52,7 @@
                  main-jar,
                  plugin-listing-jar,
                  plugin-pdf-jar,
+				 plugin-rtf-jar,
                  setup-config-files,
                  setup-docs,
 				 setup-licenses,
@@ -130,7 +131,6 @@
 	</jar>
 </target>
 
-
 <target name="plugin-pdf-jar" description="Create JAR for pdf plugins">
     <delete dir="${jar.dir}\plugins\pdf\" />
     <mkdir dir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin\pdf" />
@@ -151,6 +151,24 @@
     <delete dir="${jar.dir}\plugins\pdf\" />
 </target>
 
+<target name="plugin-rtf-jar" description="Create JAR for rtf plugins">
+    <delete dir="${jar.dir}\plugins\rtf\" />
+    <mkdir dir="${jar.dir}\plugins\rtf\org\pz\platypus\plugin\rtf" />
+	<copy todir="${jar.dir}\plugins\rtf\org\pz\platypus\plugin\rtf">
+		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\rtf" />
+    </copy>
+
+	<jar destfile="${jar.dir}\plugins\rtf.jar"
+		 basedir="${jar.dir}\plugins\rtf\" >
+        <manifest>
+			<attribute name="Implementation-Title" value="Platypus RTF output plugin" />
+			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
+			<attribute name="Implementation-Version" value="Platypus ${version}" />
+        <!--    <attribute name="Class-Path" value="..\lib\iText-2.1.3.jar" />  -->
+		</manifest>
+    </jar>
+</target>
+	
 <target  name="setup-config-files" description="Set up config files">
     <delete dir="${jar.dir}\config\"/>
 	<mkdir  dir="${jar.dir}\config\" />
