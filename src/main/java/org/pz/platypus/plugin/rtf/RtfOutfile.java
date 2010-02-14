@@ -121,13 +121,14 @@ public class RtfOutfile
         }
 
     }
+
     /**
      * Write a String of text to the RTF file.
      *
      * @param text text to write
      * @throws IOException in the event of an I/O error
      */
-    public void writeTextToFile( String text ) throws IOException
+    public void writeText( String text ) throws IOException
     {
         if( text == null ) {
             return;
@@ -145,7 +146,31 @@ public class RtfOutfile
             throw new IOException();
         }
     }
+    
+    /**
+     * Write a command string to the RTF file.
+     *
+     * @param command text to write
+     * @throws IOException in the event of an I/O error
+     */
+    public void writeCommand( String command ) throws IOException
+    {
+        if( command == null ) {
+            return;
+        }
 
+        try {
+            if( ! isOpen ) {
+                open( filename, gdd.getLogger() );
+            }
+
+            fwOut.write( command );
+        }
+        catch( IOException ioe ) {
+            gdd.logSevere( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
+            throw new IOException();
+        }
+    }
 
     /**
      * Close the file

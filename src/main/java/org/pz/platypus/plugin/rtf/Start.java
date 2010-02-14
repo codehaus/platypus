@@ -81,7 +81,8 @@ public class Start implements Pluggable
         for( int i = 0; i < tokensList.size(); i++ )
         {
             tok = tokensList.get( i );
-            processToken( gdd, tok, outfile );
+            int tokensToSkip = processToken( gdd, tok, outfile );
+            i += tokensToSkip;
         }
     }
 
@@ -97,10 +98,36 @@ public class Start implements Pluggable
     public int processToken( final GDD gdd, final Token tok, final RtfOutfile outfile )
             throws IOException
     {
-        if ( tok.getType().equals( TokenType.TEXT )) {
-            processText( gdd, tok, outfile );
+        int tokensToSkip = 0;
+
+        switch( tok.getType() )
+        {
+            case BLOCK_COMMENT:
+            case LINE_COMMENT:
+                break;
+
+            case COMMAND: //TODO
+                break;
+
+            case COMPOUND_COMMAND: //TODO
+                break;
+
+            case COMPOUND_COMMAND_END: //TODO
+                break;
+
+            case SYMBOL:  //TODO
+                break;
+
+            case TEXT:
+                processText( gdd, tok, outfile );
+                break;
+
+            default:
+                gdd.logWarning( "ERROR.INVALID_TOKEN" ); //TODO: Add file and line # of error
+            
         }
-        return( 1 );
+
+        return( tokensToSkip );
     }
 
     /**
@@ -121,7 +148,7 @@ public class Start implements Pluggable
         String text = tok.getContent();
 
         if( text != null && ! text.isEmpty() ) {
-             outfile.writeTextToFile( text );
+             outfile.writeText( text );
         }
     }
 
@@ -152,59 +179,5 @@ public class Start implements Pluggable
 //
 //            printToken(outfile, gdd, tok);
 //        }
-    }
-
-
-    /**    will the next record indicate the present command is a replacement?
-     *     If so, don't print this command, just skip it. The next token
-     *     (containing the original command) will be printed on the next loop cycle.
-     *
-     * @param tok
-     * @param tokensList
-     * @param i
-     * @return
-     */
-    private boolean skipThisToken(Token tok, TokenList tokensList, int i) {
-        if ( tok.getType().equals( TokenType.COMMAND )) {
-            if ( tokensList.isNextToken( i, TokenType.REPLACED_COMMAND ))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     *  We skip next one or many tokens at times. For example, we process
-     * the explicit newline command i.e. "[]", and output a newline.
-     * If this token appears at the end of a line (i.e. next immediate token is "[cr]",
-     * we don't want to output one more Html newline. 
-     * @param currTokIndex
-     * @param tok
-     * @param tokensList
-     * @return
-     * @throws java.io.IOException
-     */
-    private int skipNextTokens(int currTokIndex, Token tok, TokenList tokensList) throws IOException {
-        if ( tok.getContent().endsWith( "[]" )) {
-            if ( tokensList.areNextTokenContentsEqualTo(currTokIndex, "[cr]") )
-                return 1;                
-        } else if ( tok.getType().equals( TokenType.COMPOUND_COMMAND )) {
-            return tokensToSkip( tokensList, currTokIndex );
-        }
-
-        return 0;
-    }
-
-    /**
-     * We skip all compound commands tokens. 
-     * @param tokList
-     * @param tokenNumber which token in the input stream tok is
-     * @throws java.io.IOException in event of exception in writing to file
-     * @return how many tokens to skip over for this command.
-     */
-    public int tokensToSkip( TokenList tokList, int tokenNumber)
-            throws IOException
-    {
-        int i = tokList.searchAheadFor(tokenNumber, TokenType.COMPOUND_COMMAND_END);
-        return i - tokenNumber;
     }
 }
