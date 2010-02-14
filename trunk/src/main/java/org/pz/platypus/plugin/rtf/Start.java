@@ -28,7 +28,6 @@ import java.util.logging.Logger;
  */
 public class Start implements Pluggable
 {
-    private Logger logger;
     private RtfOutfile outfile;
     private RtfData rtd;
     private RtfCommandTable ctable;
@@ -46,19 +45,17 @@ public class Start implements Pluggable
      * This is the main line of the plug-in.
      * Platypus calls only the Start constructor and this method.
      *
-     * @param gdd  The Global Document Data
+     * @param gdd  The Global Document Data structure
      * @param clArgs command-line arguments in a hash map (key = argument, value = parameters)
      */
     public void process( GDD gdd, final CommandLineArgs clArgs )
     {
         assert( gdd != null && clArgs != null );
 
-        logger = gdd.getLogger();
         rtd = new RtfData( gdd );
         outfile = new RtfOutfile( clArgs.lookup( "outputFile" ), rtd );
         ctable = new RtfCommandTable();
         ctable.load( gdd );
-
 
         try {
             processInputTokens( gdd, outfile );
@@ -74,7 +71,7 @@ public class Start implements Pluggable
      *
      * @param outfile the file being written to
      * @param gdd the GDD.
-     * @throws java.io.IOException in the event the file can't be written to
+     * @throws IOException in the event the file can't be written to
      */
     public void processInputTokens( GDD gdd, final RtfOutfile outfile )
            throws IOException
@@ -96,6 +93,7 @@ public class Start implements Pluggable
      * @param gdd  global document data (data structure)
      * @param tok token being processed
      * @param outfile output RTF file being created
+     * @param tokenNumber where the token is in the input token stream
      * @return returns the number of tokens to skip. In vast majority of cases, returns 1.
      * @throws IOException in event of an I/O error
      */
@@ -160,6 +158,7 @@ public class Start implements Pluggable
         OutputCommandable command = commandTable.getCommand( tok.getRoot() );
         if( command == null ) {
             //TODO: error message
+            return;
         }
 
         command.process( rtd, tok, tokNum );          // < <<<<<< resume here 

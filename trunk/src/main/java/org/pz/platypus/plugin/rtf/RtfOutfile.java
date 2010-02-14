@@ -45,7 +45,7 @@ public class RtfOutfile
             throws IOException
     {
         if( filename == null || filename.isEmpty() ) {
-            log.severe( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE") + " " + filename );
+            log.severe( gdd.getLit( "ERROR.OPENING_OUTPUT_FILE" ) + " " + filename );
             throw new IOException();
         }
 
@@ -73,7 +73,11 @@ public class RtfOutfile
     private void emitRtfProlog()
             throws IOException
     {
-        final String prologString = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Times New Roman;}}";
+        final String prologString = "{\\rtf1\\ansi";
+        final String resetStyles = "\\plain";
+        final String defaultFont = "\\deff0{\\fonttbl{\\f0 Times New Roman;}}";
+        final String docComment = "{\\info{\\doccomm " + gdd.getLit( "CREATED_BY_PLATYPUS" ) + " " +
+                                   gdd.getLit( "VERSION") + " " + gdd.getLit( "AVAILABLE_AT_PZ_ORG" ) + "}}";
         final String widowControlOn = "\\widowctrl";
         final String pageWidth =  "\\paperw" + (int)( rtd.getPageWidth()  * DefaultValues.TWIPS_PER_POINT );
         final String pageHeight = "\\paperh" + (int)( rtd.getPageHeight() * DefaultValues.TWIPS_PER_POINT );
@@ -85,6 +89,9 @@ public class RtfOutfile
 
         try {
             fwOut.write( prologString );
+            fwOut.write( resetStyles );
+            fwOut.write( defaultFont );
+            fwOut.write( docComment );
             fwOut.write( widowControlOn );
             fwOut.write( pageWidth );
             fwOut.write( pageHeight );
