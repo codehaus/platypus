@@ -31,6 +31,7 @@ public class Start implements Pluggable
     private Logger logger;
     private RtfOutfile outfile;
     private RtfData rtd;
+    private RtfCommandTable ctable;
 
     /**
      * Start() is always called first by Platypus, followed by a call to process()
@@ -55,6 +56,9 @@ public class Start implements Pluggable
         logger = gdd.getLogger();
         rtd = new RtfData( gdd );
         outfile = new RtfOutfile( clArgs.lookup( "outputFile" ), rtd );
+        ctable = new RtfCommandTable();
+        ctable.load( gdd );
+
 
         try {
             processInputTokens( gdd, outfile );
@@ -81,7 +85,7 @@ public class Start implements Pluggable
         for( int i = 0; i < tokensList.size(); i++ )
         {
             tok = tokensList.get( i );
-            int tokensToSkip = processToken( gdd, tok, outfile );
+            int tokensToSkip = processToken( gdd, tok, outfile, i );
             i += tokensToSkip;
         }
     }
@@ -95,7 +99,8 @@ public class Start implements Pluggable
      * @return returns the number of tokens to skip. In vast majority of cases, returns 1.
      * @throws IOException in event of an I/O error
      */
-    public int processToken( final GDD gdd, final Token tok, final RtfOutfile outfile )
+    public int processToken( final GDD gdd, final Token tok,
+                             final RtfOutfile outfile, final int tokenNumber )
             throws IOException
     {
         int tokensToSkip = 0;
@@ -106,13 +111,17 @@ public class Start implements Pluggable
             case LINE_COMMENT:
                 break;
 
-            case COMMAND: //TODO
+            case COMMAND:
+                processCommand( gdd, ctable, tok, tokenNumber );
                 break;
 
             case COMPOUND_COMMAND: //TODO
                 break;
 
             case COMPOUND_COMMAND_END: //TODO
+                break;
+
+            case REPLACED_COMMAND: //TODO
                 break;
 
             case SYMBOL:  //TODO
@@ -128,6 +137,32 @@ public class Start implements Pluggable
         }
 
         return( tokensToSkip );
+    }
+
+    /**
+     * Gets the RTF command and executes it.
+     *
+     * @param gdd the GDD
+     * @param commandTable the command table holding the commands for RTF
+     * @param tok the token containing text
+     * @param tokNum the number of the token
+     * @throws IOException occurs if an I/O error occurred during output
+     */
+    public void processCommand( final GDD gdd, final RtfCommandTable commandTable,
+                                final Token tok, final int tokNum  )
+            throws IOException
+    {
+        assert( gdd != null );
+        assert( commandTable != null );
+        assert( tok != null );
+        assert( outfile != null );
+
+        OutputCommandable command = commandTable.getCommand( tok.getRoot() );
+        if( command == null ) {
+            //TODO: error message
+        }
+
+        command.process( rtd, tok, tokNum );          // < <<<<<< resume here 
     }
 
     /**

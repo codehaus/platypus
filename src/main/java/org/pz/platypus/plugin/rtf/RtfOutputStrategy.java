@@ -8,22 +8,13 @@
 package org.pz.platypus.plugin.rtf;
 
 import org.pz.platypus.Token;
-import org.pz.platypus.GDD;
-import org.pz.platypus.TokenType;
-import org.pz.platypus.plugin.listing.*;
-
-import java.io.IOException;
-import java.util.logging.Logger;
 
 /** The strategy base class.
  *
  * @author: ask
  */
 public abstract class RtfOutputStrategy {
-    protected Logger logger;
 
-    public abstract String format(Token tok, GDD gdd) throws IOException;
-    public abstract boolean canOutputHtmlEndOfLine();
 
     /** The "factory method" for creating the correct Strategy instance.
      *  Ideally, this would be the only "switching on types" code.
@@ -64,40 +55,6 @@ public abstract class RtfOutputStrategy {
 //        }
 //        throw new IllegalArgumentException( "Html Listing Strategy not supported for " + tok.getType() );
 //        // return null;
-    }
-
-    /**
-     * Utility method used by subclasses.
-     * Replaces reserved HTML characters to make text printable
-     * @param text text to transform
-     * @return text string with the transformation applied
-     */
-    public static String convertToHtmlText( final String text )
-    {
-        char c;
-
-        if( text == null || text.isEmpty() ) {
-            return( "" );
-        }
-
-        StringBuilder sb = new StringBuilder( 2 * text.length() );
-
-        for( int i = 0; i < text.length(); i++ )
-        {
-            switch( c = text.charAt( i ))
-            {
-                case '<':   sb.append( "&lt;" );    break;
-                case '>':   sb.append( "&gt;" );    break;
-                case '(':   sb.append( "&#40;" );   break;
-                case ')':   sb.append( "&#41;" );   break;
-                case '"':   sb.append( "&quot;" );  break;
-                case '\'':  sb.append( "&#39;" );   break;
-                case '&':   sb.append( "&amp;" );   break;
-                case '#':   sb.append( "&#35;" );   break;
-                default:    sb.append( c );         break;
-            }
-        }
-        return( sb.toString() );
     }
 
 }
