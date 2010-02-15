@@ -49,19 +49,26 @@ public class RtfMarginRight implements OutputCommandable
         float currRMargin = rtd.getMarginRight();
 
         if ( rMargin != currRMargin ) {
-            rtd.setMarginRight( rMargin, tok.getSource() );
-            try {
-                RtfOutfile outfile = rtd.getOutfile();
-                if( outfile.isOpen() ) {
+            RtfOutfile outfile = rtd.getOutfile();
+            if( ! outfile.isOpen() ) {
+                rtd.setMarginRight( rMargin, tok.getSource() );
+                try {
                     outfile.writeCommand( "\\margr" + (int)( rMargin * DefaultValues.TWIPS_PER_POINT ) + " " );
                 }
+                catch( IOException ioe ) {
+                    GDD gdd = rtd.getGdd();
+                    // the error has already been communicated, this notice just provides additional data
+                    gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                                    gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                                    gdd.getLit( "COMMAND" ) + ": " + root + " " +
+                                    gdd.getLit( "IGNORED" ));
+                }
             }
-            catch( IOException ioe ) {
+            else {
                 GDD gdd = rtd.getGdd();
-                // the error has already been communicated, this notice just provides additional data
                 gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                                 gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                                gdd.getLit( "COMMAND" ) + ": " + root + " " +
+                                gdd.getLit( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ) + ": " + root + " " +
                                 gdd.getLit( "IGNORED" ));
             }
         }
