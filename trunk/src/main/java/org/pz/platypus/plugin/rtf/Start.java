@@ -54,6 +54,7 @@ public class Start implements Pluggable
 
         rtd = new RtfData( gdd );
         outfile = new RtfOutfile( clArgs.lookup( "outputFile" ), rtd );
+        rtd.setOutfile( outfile );
         ctable = new RtfCommandTable();
         ctable.load( gdd );
 

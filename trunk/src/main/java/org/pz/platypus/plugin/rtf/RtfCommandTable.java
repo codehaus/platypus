@@ -8,8 +8,7 @@
 package org.pz.platypus.plugin.rtf;
 
 import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.plugin.pdf.commands.*;
-import org.pz.platypus.plugin.pdf.PdfSymbolsTable;
+import org.pz.platypus.plugin.rtf.commands.*;
 import org.pz.platypus.GDD;
 
 import java.util.HashMap;
@@ -73,7 +72,7 @@ public class RtfCommandTable
 //        add( new PdfLink() );
 //        add( new PdfMarginBottom() );
 //        add( new PdfMarginLeft() );
-//        add( new PdfMarginRight() );
+        add( new RtfMarginRight() );
 //        add( new PdfMarginTop() );
 //        add( new PdfMarginsMirrored() );
 //        add( new PdfNewPage() );
@@ -101,11 +100,11 @@ public class RtfCommandTable
     void loadSymbols( final GDD gdd )
     {
         try {
-            PdfSymbolsTable pst = new PdfSymbolsTable( gdd );
-            Set<String> symbols = pst.keySet();
-            for( String symbol : symbols ) {
-                add( new PdfSymbol( symbol, pst.getPropertyFile().lookup( symbol )));
-            }
+//            PdfSymbolsTable pst = new PdfSymbolsTable( gdd );
+//            Set<String> symbols = pst.keySet();
+//            for( String symbol : symbols ) {
+//                add( new PdfSymbol( symbol, pst.getPropertyFile().lookup( symbol )));
+//            }
         }
         catch( MissingResourceException mre ) {
             // Do nothing. Error message has already been displayed.

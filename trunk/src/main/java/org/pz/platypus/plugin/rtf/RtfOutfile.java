@@ -34,11 +34,11 @@ public class RtfOutfile
         this.rtd = rtd;
     }
     /**
-     *  Get an instance of FileWriter, to which we will emit HTML output
+     *  Get an instance of FileWriter, to which we will emit RTF output
      *
      *  @param filename of file to open (obtained from the command line)
      *  @param log logger for error messages
-     *  @throws java.io.IOException in the event the file can't be opened
+     *  @throws IOException in the event the file can't be opened
      *  @return the open FileWriter
      */
     public FileWriter open( final String filename, final Logger log )
@@ -68,24 +68,25 @@ public class RtfOutfile
      * Writes the required header parts of the RTF file. Called from the RTF-file open routine,
      * so we know for sure the file exists and is writable.
      *
-     * @throws java.io.IOException in the event of an I/O error
+     * @throws IOException in the event of an I/O error
      */
     private void emitRtfProlog()
             throws IOException
     {
-        final String prologString = "{\\rtf1\\ansi";
-        final String resetStyles = "\\plain";
-        final String defaultFont = "\\deff0{\\fonttbl{\\f0 Times New Roman;}}";
+        // the CR/LF chars at end of some commands are for readability only. They're not part of the RTF commands.
+        final String prologString = "{\\rtf1\\ansi\n";
+        final String resetStyles = "\\plain\n";
+        final String defaultFont = "\\deff0{\\fonttbl{\\f0 Times New Roman;}}\n";
         final String docComment = "{\\info{\\doccomm " + gdd.getLit( "CREATED_BY_PLATYPUS" ) + " " +
-                                   gdd.getLit( "VERSION") + " " + gdd.getLit( "AVAILABLE_AT_PZ_ORG" ) + "}}";
-        final String widowControlOn = "\\widowctrl";
+                                   gdd.getLit( "VERSION") + " " + gdd.getLit( "AVAILABLE_AT_PZ_ORG" ) + "}}\n";
+        final String widowControlOn = "\\widowctrl\n";
         final String pageWidth =  "\\paperw" + (int)( rtd.getPageWidth()  * DefaultValues.TWIPS_PER_POINT );
-        final String pageHeight = "\\paperh" + (int)( rtd.getPageHeight() * DefaultValues.TWIPS_PER_POINT );
+        final String pageHeight = "\\paperh" + (int)( rtd.getPageHeight() * DefaultValues.TWIPS_PER_POINT ) + "\n";
         final String marginR = "\\margr" + (int)( rtd.getMarginRight()    * DefaultValues.TWIPS_PER_POINT );
         final String marginL = "\\margl" + (int)( rtd.getMarginLeft()     * DefaultValues.TWIPS_PER_POINT );
         final String marginT = "\\margt" + (int)( rtd.getMarginTop()      * DefaultValues.TWIPS_PER_POINT );
-        final String marginB = "\\margb" + (int)( rtd.getMarginBottom()   * DefaultValues.TWIPS_PER_POINT );
-        final String eoCommands = " ";
+        final String marginB = "\\margb" + (int)( rtd.getMarginBottom()   * DefaultValues.TWIPS_PER_POINT ) + "\n";
+        final String eoCommands = "\n";
 
         try {
             fwOut.write( prologString );
@@ -126,7 +127,6 @@ public class RtfOutfile
             gdd.logSevere( gdd.getLit( "ERROR.WRITING_TO_OUTPUT_FILE" ));
             throw new IOException();
         }
-
     }
 
     /**
@@ -200,5 +200,12 @@ public class RtfOutfile
             log.severe( gdd.getLit( "ERROR.CLOSING_OUTPUT_FILE" ));
             throw new IOException();
         }
+    }
+
+    //==== getters and setters ====//
+    
+    public boolean isOpen()
+    {
+        return( isOpen );
     }
 }
