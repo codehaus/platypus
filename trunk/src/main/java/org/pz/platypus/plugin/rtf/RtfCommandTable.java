@@ -71,7 +71,7 @@ public class RtfCommandTable
 //        add( new PdfLeading() );
 //        add( new PdfLink() );
 //        add( new PdfMarginBottom() );
-//        add( new PdfMarginLeft() );
+        add( new RtfMarginLeft() );
         add( new RtfMarginRight() );
 //        add( new PdfMarginTop() );
 //        add( new PdfMarginsMirrored() );
