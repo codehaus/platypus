@@ -9,15 +9,8 @@ package org.pz.platypus.plugin.rtf.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.DefaultValues;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.plugin.rtf.Conversions;
-import org.pz.platypus.plugin.rtf.Limits;
-import org.pz.platypus.plugin.rtf.RtfData;
-import org.pz.platypus.plugin.rtf.RtfOutfile;
-
-import java.io.IOException;
+import org.pz.platypus.interfaces.*;
+import org.pz.platypus.plugin.rtf.*;
 
 /**
  * Implementation of changing the size of the right margin
@@ -52,17 +45,6 @@ public class RtfMarginRight implements OutputCommandable
             RtfOutfile outfile = rtd.getOutfile();
             if( ! outfile.isOpen() ) {
                 rtd.setMarginRight( rMargin, tok.getSource() );
-                try {
-                    outfile.writeCommand( "\\margr" + (int)( rMargin * DefaultValues.TWIPS_PER_POINT ) + " " );
-                }
-                catch( IOException ioe ) {
-                    GDD gdd = rtd.getGdd();
-                    // the error has already been communicated, this notice just provides additional data
-                    gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
-                                    gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                                    gdd.getLit( "COMMAND" ) + ": " + root + " " +
-                                    gdd.getLit( "IGNORED" ));
-                }
             }
             else {
                 GDD gdd = rtd.getGdd();
