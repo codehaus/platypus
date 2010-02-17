@@ -70,10 +70,10 @@ public class RtfCommandTable
 //        add( new PdfHardCR() );
 //        add( new PdfLeading() );
 //        add( new PdfLink() );
-//        add( new PdfMarginBottom() );
+        add( new RtfMarginBottom() );
         add( new RtfMarginLeft() );
         add( new RtfMarginRight() );
-//        add( new PdfMarginTop() );
+        add( new RtfMarginTop() );
 //        add( new PdfMarginsMirrored() );
 //        add( new PdfNewPage() );
 //        add( new PdfNoIndent() );

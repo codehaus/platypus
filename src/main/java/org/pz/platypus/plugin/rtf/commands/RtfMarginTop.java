@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -9,11 +9,8 @@ package org.pz.platypus.plugin.rtf.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.plugin.pdf.Conversions;
-import org.pz.platypus.plugin.pdf.PdfData;
-import org.pz.platypus.plugin.pdf.Limits;
+import org.pz.platypus.interfaces.*;
+import org.pz.platypus.plugin.rtf.*;
 
 /**
  * Implementation of changing the size of the top margin
@@ -30,11 +27,11 @@ public class RtfMarginTop implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        PdfData pdf = (PdfData) context;
+        RtfData rtd = (RtfData) context;
 
-        float tMargin = Conversions.convertParameterToPoints( tok.getParameter(), pdf );
-        if ( tMargin < 0 || tMargin > Limits.PAGE_HEIGHT_MAX || tMargin < Limits.PAGE_HEIGHT_MIN ) {
-            GDD gdd = pdf.getGdd();
+        float tMargin = Conversions.convertParameterToPoints( tok.getParameter(), rtd );
+        if ( tMargin < 0 || tMargin > Limits.PAGE_WIDTH_MAX || tMargin < Limits.PAGE_WIDTH_MIN ) {
+            GDD gdd = rtd.getGdd();
             gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_TOP_MARGIN" ) + ": " + tMargin + " " +
@@ -42,11 +39,20 @@ public class RtfMarginTop implements OutputCommandable
             return;
         }
 
-        float currTMargin = pdf.getMarginTop();
+        float currtMargin = rtd.getMarginTop();
 
-        if ( tMargin != currTMargin ) {
-            pdf.setMarginTop( tMargin, tok.getSource() );
-            return;
+        if ( tMargin != currtMargin ) {
+            RtfOutfile outfile = rtd.getOutfile();
+            if( ! outfile.isOpen() ) {
+                rtd.setMarginTop( tMargin, tok.getSource() );
+            }
+            else {
+                GDD gdd = rtd.getGdd();
+                gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                                gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                                gdd.getLit( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ) + ": " + root + " " +
+                                gdd.getLit( "IGNORED" ));
+            }
         }
     }
 
