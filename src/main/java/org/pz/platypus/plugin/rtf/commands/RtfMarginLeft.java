@@ -35,7 +35,7 @@ public class RtfMarginLeft implements OutputCommandable
             GDD gdd = rtd.getGdd();
             gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
-                            gdd.getLit( "ERROR.INVALID_RIGHT_MARGIN" ) + ": " + lMargin + " " +
+                            gdd.getLit( "ERROR.INVALID_LEFT_MARGIN" ) + ": " + lMargin + " " +
                             gdd.getLit( "IGNORED" ));
             return;
         }
