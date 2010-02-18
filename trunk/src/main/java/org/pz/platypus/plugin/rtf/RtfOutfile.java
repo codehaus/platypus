@@ -33,6 +33,7 @@ public class RtfOutfile
         this.gdd = rtd.getGdd();
         this.rtd = rtd;
     }
+
     /**
      *  Get an instance of FileWriter, to which we will emit RTF output
      *

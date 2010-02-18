@@ -11,6 +11,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.*;
+import org.pz.platypus.test.mocks.MockLiterals;
+import org.pz.platypus.test.mocks.MockLogger;
+import org.pz.platypus.test.mocks.MockFileWriter;
+import org.pz.platypus.test.mocks.MockRtfOutfile;
 import org.pz.platypus.plugin.rtf.RtfData;
 import org.pz.platypus.plugin.rtf.RtfOutfile;
 
@@ -26,6 +30,9 @@ public class MarginsTest
     private RtfMarginLeft   lM;
     private RtfMarginRight  rM;
     private RtfMarginTop    tM;
+    private MockRtfOutfile mockOutfile;
+    private MockLogger mockLogger;
+    private MockLiterals mockLits;
 
     @Before
     public void setUp()
@@ -33,6 +40,12 @@ public class MarginsTest
         gdd = new GDD();
         gdd.initialize();
         rtd = new RtfData( gdd );
+        mockLits = new MockLiterals();
+        gdd.setLits( mockLits );
+        mockLogger = new MockLogger();
+        gdd.setLogger( mockLogger );
+        mockOutfile = new MockRtfOutfile( "", rtd );
+        rtd.setOutfile( mockOutfile );
     }
 
     @Test
@@ -139,10 +152,77 @@ public class MarginsTest
         assertEquals( 42, rtd.getMarginTopLine().getLineNumber() );
     }
 
+    @Test
+    public void testTopMarginErrorMessageIfOutfileIsOpen()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[tmargin", 144.0f );
+        tM = new RtfMarginTop();
+        tM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ));
+    }
+
+    @Test
+    public void testTopMarginErrorMessageInvalidSize()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[tmargin", -114.0f );
+        tM = new RtfMarginTop();
+        tM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.INVALID_TOP_MARGIN" ));
+    }
+
+    @Test
+    public void testRightMarginErrorMessageInvalidSize()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[rmargin", -124.0f );
+        rM = new RtfMarginRight();
+        rM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.INVALID_RIGHT_MARGIN" ));
+    }
+
+
+    @Test
+    public void testLeftMarginErrorMessageInvalidSize()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[lmargin", -134.0f );
+        lM = new RtfMarginLeft();
+        lM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.INVALID_LEFT_MARGIN" ));
+    }
+
+
+    @Test
+    public void testBottomMarginErrorMessageInvalidSize()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[bmargin", -144.0f );
+        bM = new RtfMarginBottom();
+        bM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.INVALID_BOTTOM_MARGIN" ));
+    }
+
     private Token createMarginToken( final String root, final float width )
     {
         CommandParameter cp = new CommandParameter();
-        cp.setAmount( 144.0f );
+        cp.setAmount( width );
         cp.setUnit( UnitType.POINT );
         Token token = new Token( new Source( 1, 42 ), TokenType.COMMAND, root, root, cp );
         return( token );
