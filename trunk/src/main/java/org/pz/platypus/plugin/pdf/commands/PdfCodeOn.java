@@ -10,8 +10,11 @@ package org.pz.platypus.plugin.pdf.commands;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.Token;
+import org.pz.platypus.command.EolTreatment;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.FormatStack;
+import org.pz.platypus.plugin.pdf.PdfFont;
+import org.pz.platypus.plugin.pdf.Underline;
 
 /**
  * Begin a code section
@@ -38,10 +41,30 @@ public class PdfCodeOn implements OutputCommandable
         formatStack.saveCurrentFormat( pdd );
 
         // now switch to code format
-        ///>>>> resume here <<<<
+        PdfFont currFont = pdd.getFont();
+        currFont.setFace( "Bitstream Vera Sans Mono", tok.getSource() );
+        currFont.setBold( false, tok.getSource() );
+        currFont.setItalics( false, tok.getSource() );
+        pdd.setStrikethru( false, tok.getSource() );
+        setUnderlineToFalse( pdd, tok );
+        setEolTreatmentToHard( pdd, tok );
 
         pdd.setInCode( true );
+    }
 
+    private void setEolTreatmentToHard( final PdfData pdd, Token token )
+    {
+        EolTreatment eolHandler = new EolTreatment();
+        int hardEol = eolHandler.toInteger( "hard" );
+        if( pdd.getEolTreatment() != hardEol ) {
+            pdd.setEolTreatment( hardEol, token.getSource());
+        }
+    }
+
+    private void setUnderlineToFalse( final PdfData pdd, Token token )
+    {
+        Underline underline = pdd.getUnderline();
+        underline.setInEffect( false, token.getSource() );
     }
 
     public String getRoot()
