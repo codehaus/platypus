@@ -58,9 +58,19 @@
 				 setup-licenses,
                  setup-vendor-libs,
                  setup-fonts,
+                 test-report,
                  zip-all"
         description="Run all major targets">
 	<echo> ${message} </echo>
+</target>
+
+<target name ="test-report">
+  <junitreport todir="${build.dir}/docs">
+  <fileset dir="${build.dir}/test-reports">
+    <include name="TEST-*.groovy.xml"/>
+  </fileset>
+  <report format="frames" todir="${build.dir}/docs/html"/>
+</junitreport>
 </target>
 
 <target name="compile" description="Compile with Java 6">
