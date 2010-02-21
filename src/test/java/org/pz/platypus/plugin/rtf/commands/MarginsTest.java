@@ -158,9 +158,48 @@ public class MarginsTest
         int tokNumber = 99;
         mockOutfile.setOpenStatus( true );
 
-        Token tok = createMarginToken( "[tmargin", 144.0f );
+        Token tok = createMarginToken( "[tmargin:", 144.0f );
         tM = new RtfMarginTop();
         tM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ));
+    }
+
+    @Test
+    public void testRightMarginErrorMessageIfOutfileIsOpen()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[rmargin:", 144.0f );
+        rM = new RtfMarginRight();
+        rM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ));
+    }
+
+    @Test
+    public void testLeftMarginErrorMessageIfOutfileIsOpen()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[lmargin:", 144.0f );
+        lM = new RtfMarginLeft();
+        lM.process( rtd, tok, tokNumber );
+        String loggerContents = mockLogger.getMessage();
+        assertTrue( loggerContents.contains( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ));
+    }
+
+    @Test
+    public void testBottomMarginErrorMessageIfOutfileIsOpen()
+    {
+        int tokNumber = 99;
+        mockOutfile.setOpenStatus( true );
+
+        Token tok = createMarginToken( "[bmargin:", 144.0f );
+        bM = new RtfMarginBottom();
+        bM.process( rtd, tok, tokNumber );
         String loggerContents = mockLogger.getMessage();
         assertTrue( loggerContents.contains( "ERROR.MARGIN_MUST_BE_SET_BEFORE_TEXT_IN_RTF" ));
     }
@@ -171,7 +210,7 @@ public class MarginsTest
         int tokNumber = 99;
         mockOutfile.setOpenStatus( true );
 
-        Token tok = createMarginToken( "[tmargin", -114.0f );
+        Token tok = createMarginToken( "[tmargin:", -114.0f );
         tM = new RtfMarginTop();
         tM.process( rtd, tok, tokNumber );
         String loggerContents = mockLogger.getMessage();
@@ -184,7 +223,7 @@ public class MarginsTest
         int tokNumber = 99;
         mockOutfile.setOpenStatus( true );
 
-        Token tok = createMarginToken( "[rmargin", -124.0f );
+        Token tok = createMarginToken( "[rmargin:", -124.0f );
         rM = new RtfMarginRight();
         rM.process( rtd, tok, tokNumber );
         String loggerContents = mockLogger.getMessage();
@@ -198,7 +237,7 @@ public class MarginsTest
         int tokNumber = 99;
         mockOutfile.setOpenStatus( true );
 
-        Token tok = createMarginToken( "[lmargin", -134.0f );
+        Token tok = createMarginToken( "[lmargin:", -134.0f );
         lM = new RtfMarginLeft();
         lM.process( rtd, tok, tokNumber );
         String loggerContents = mockLogger.getMessage();
@@ -212,7 +251,7 @@ public class MarginsTest
         int tokNumber = 99;
         mockOutfile.setOpenStatus( true );
 
-        Token tok = createMarginToken( "[bmargin", -144.0f );
+        Token tok = createMarginToken( "[bmargin:", -144.0f );
         bM = new RtfMarginBottom();
         bM.process( rtd, tok, tokNumber );
         String loggerContents = mockLogger.getMessage();
