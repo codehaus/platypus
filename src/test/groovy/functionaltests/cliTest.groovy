@@ -19,11 +19,23 @@ if( ! args ) {
     return;
 }
 
+// structures used for generating JUnit-format test results //
+def String testSuite = "cliTest.groovy"
+def String testClassName = "cliTest.groovy"
+class TestResult {
+    String testName;
+    String description;
+    String errorNotice;
+    String duration;
+}
+def ArrayList<TestResult> testResults = new ArrayList<TestResult>(20)
+
+// command line
 def String jarUnderTest = args[0]
 def String javaRun = "java -jar " + jarUnderTest
 
 
-testCopyrightString( javaRun )
+testCopyrightString( javaRun, testResults )
 testHelpOutput( javaRun )
 testHelpOutputEqualToNoCommandLineArgs( javaRun )
 testValidCLButMissingInputFile( javaRun )
@@ -40,16 +52,59 @@ testPdfInputOutputInvalidConfigFile( javaRun )
 testPdfInputOutputWithExtraUnsupportedOption( javaRun )
 testPdfValidConfigThenInputAndOutputFiles( javaRun )
 
+//outputTestResults( testResults )
+
 return
+
+def void outputTestResults( ArrayList<TestResult> results )
+{
+    int testCount = results.size();
+    int errorCount = 0;
+
+    def fw = new FileWriter( "TEST-cliTest.groovy.xml" )
+    fw.write( "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<testsuites>\n" )
+    for( TestResult tr : results ) {
+        if(  tr.getErrorNotice() != null )
+            errorCount += 1
+    }
+
+    Date date = new Date();
+
+    fw.write( "<testsuite errors=\"" + errorCount +"\" failures=\"0\" hostname=\" \" id=\"0\" " +
+              "name=\"cliTest.groovy\"  package=\"org.pz.platypus\" tests=\"" + testCount + "\" " +
+              "time=\"0.0\" timestamp=\"" + date.getDateString() + "\">\n" )
+    fw.write( "<properties>\n<property name=\"user.language\" value=\"en\" />\n</properties>\n" )
+    for( TestResult tr : results ) {
+        fw.write( "<testcase classname=\"" + tr.testName + "\" name=\"" + tr.description +"\"" +
+                  "time=\"0.0\"" )
+        if( tr.errorNotice == null )
+            fw.write( " />\n" )
+        else {
+            fw.write( " >\n" )
+            fw.write( "<error message=\"failure\" type=\"failure\" >\n" )
+            fw.write( "</error>\n" )
+            fw.write( "</testcase>\n" )
+        }
+    fw.write( "</testsuite>\n</testsuites>\n" )
+    }
+    fw.flush()
+    fw.close()        
+}
 
 /**
  * Are we generating a valid copyright strings as part of the output to the console?
  */
-def void testCopyrightString( String javaRun )
+def void testCopyrightString( String javaRun, ArrayList<TestResult> results )
 {
     def String description = "Test: valid copyright message"
     def proc;
     def output;
+
+    def TestResult result = new TestResult()
+    result.setTestName( "testCopyrightString" )
+    result.setDescription( description )
+    result.setErrorNotice( null )
+    result.setDuration( "0.00")
 
     try {
         proc = javaRun.execute()
@@ -60,12 +115,16 @@ def void testCopyrightString( String javaRun )
         return
     }
 
-    if( output.contains( "(c) Copyright 2006-0" ) &&
+    if( output.contains( "(c) Copyright 2006-" ) &&
         output.contains( "Pacific Data Works LLC. All Rights Reserved." ))
         print( "Success in " )
-    else
+    else {
         print( "***FAILURE in " )
+        result.setErrorNotice( "Failure" )
+    }
+
     println( description );
+    results.add( result )
 }
 
 /**
