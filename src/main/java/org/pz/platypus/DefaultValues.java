@@ -45,7 +45,8 @@ public class DefaultValues
     public static final float   PAGE_WIDTH  = 8.5f * POINTS_PER_INCH;
     public static final float   PARA_INDENT = 0f;
     public static final float   PARA_INDENT_RIGHT = 0f;
-    public final static float   PARA_SKIP_LINES = 1f;
+    public static final float   PARA_SKIP_LINES = 1f;
+    public static final boolean STRIKETHRU = false;
     public static final float   UNDERLINE_THICKNESS = 0.6f;
-    public final static float   UNDERLINE_POSITION = -2.0f;
+    public static final float   UNDERLINE_POSITION = -2.0f;
 }

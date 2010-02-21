@@ -46,7 +46,7 @@ public class PdfFont
     private GDD gdd;
     private PdfData pdfData;
 
-    PdfFont( PdfData pdfData )
+    public PdfFont( PdfData pdfData )
     {
         this.pdfData = pdfData;
         gdd = pdfData.getGdd();

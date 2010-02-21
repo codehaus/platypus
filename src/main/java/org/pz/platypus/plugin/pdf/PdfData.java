@@ -96,6 +96,7 @@ public class PdfData implements OutputContextable
     private boolean inCode = false;
 
     private Value alignment;
+    private Value codeSection;
     private Value columnCount;
     private Value userSpecifiedColumnWidth;
     private Columns columns;
@@ -105,6 +106,7 @@ public class PdfData implements OutputContextable
     private Value firstLineIndent;
     private PdfFont font;
     private Footer footer;
+    private FormatStack formatStack;
     private Value leading;
     private Value lineHeight;   // not the same as leading
     private Value marginBottom;
@@ -125,6 +127,8 @@ public class PdfData implements OutputContextable
     private TypefaceMap typefaceMap;
     private Underline underline;
 
+    private FormatStack formats;
+
     /**
      * Initializes the state of the PDF document.
      *
@@ -136,6 +140,7 @@ public class PdfData implements OutputContextable
 
         alignment       = new Value( DefaultValues.ALIGNMENT );
 
+        codeSection     = new Value( false );
         columnCount     = new Value( DefaultValues.COLUMN_COUNT );
         currColumn      = 0;
 
@@ -182,6 +187,7 @@ public class PdfData implements OutputContextable
     {
         columns = new Columns( this );
         loadTypefaceMap();
+        formatStack = new FormatStack( this );
     }
 
     /**
@@ -297,6 +303,21 @@ public class PdfData implements OutputContextable
     public void setAlignment( final int newAlignment, final Source fileAndLine )
     {
         setValue( alignment, newAlignment, fileAndLine, "_alignment" );
+    }
+
+    public boolean inCodeSection()
+    {
+        return( codeSection.bval );
+    }
+
+    public Source getCodeSecitonLine()
+    {
+        return( codeSection.source );
+    }
+
+    public void setCodeSection( final boolean inCode, final Source fileAndLine )
+    {
+        setValue( codeSection, inCode, fileAndLine, "_inCodeSection" );
     }
 
     public int getColumnCount()
@@ -434,6 +455,11 @@ public class PdfData implements OutputContextable
     public void setFooter( final Footer newFooter )
     {
         footer = newFooter;
+    }
+
+    public FormatStack getFormatStack()
+    {
+        return( formatStack );
     }
 
     public GDD getGdd()
