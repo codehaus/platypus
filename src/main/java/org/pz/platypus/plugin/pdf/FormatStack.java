@@ -50,7 +50,7 @@ public class FormatStack
         saveFormat( f );
     }
 
-    public Format getFormat()
+    public Format restoreLastFormat()
     {
         if( formats.size() == 1 ) {
             return( formats.elementAt( 0 ));
@@ -69,5 +69,15 @@ public class FormatStack
                 DefaultValues.LEADING );
 
         return( defaultFormat );
+    }
+
+    /**
+     * Used primarily (exclusively?) for testing
+     *
+     * @return number of formats in the stack (min = 1)
+     */
+    public int getSize()
+    {
+        return( formats.size() );
     }
 }
