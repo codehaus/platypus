@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -28,10 +28,12 @@ public class PdfItalicsOff implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        PdfData pdf = (PdfData) context;
+        PdfData pdd = (PdfData) context;
 
-        PdfFont font = pdf.getFont();
-        font.setItalics( false, tok.getSource() );
+        PdfFont font = pdd.getFont();
+        if( font.getItalics() ) {
+            font.setItalics( false, tok.getSource() );
+        }
     }
 
     public String getRoot()
