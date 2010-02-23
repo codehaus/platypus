@@ -93,8 +93,6 @@ public class PdfData implements OutputContextable
     private GDD gdd;
     private PdfOutfile pdfOutfile;
 
-    private boolean inCode = false;
-
     private Value alignment;
     private Value codeSection;
     private Value columnCount;
@@ -310,12 +308,12 @@ public class PdfData implements OutputContextable
         return( codeSection.bval );
     }
 
-    public Source getCodeSecitonLine()
+    public Source getCodeSectionLine()
     {
         return( codeSection.source );
     }
 
-    public void setCodeSection( final boolean inCode, final Source fileAndLine )
+    public void setInCodeSection( final boolean inCode, final Source fileAndLine )
     {
         setValue( codeSection, inCode, fileAndLine, "_inCodeSection" );
     }
@@ -465,16 +463,6 @@ public class PdfData implements OutputContextable
     public GDD getGdd()
     {
         return( gdd );
-    }
-
-    public boolean isInCode()
-    {
-        return( inCode );
-    }
-
-    public void setInCode( final boolean newState )
-    {
-        inCode = newState;
     }
 
     public float getLeading()
