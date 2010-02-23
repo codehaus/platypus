@@ -20,7 +20,7 @@ import org.pz.platypus.DefaultValues;
  *
  * @author alb
  */
-public class PdfFont
+public class PdfFont implements Cloneable
 {
     /** the iText font */
     private Font iTfont = null;
@@ -86,6 +86,20 @@ public class PdfFont
         source    = new Source();
 
         iTfont = createFont( this );
+    }
+
+    public Object clone()
+    {
+        Object clonedFont = null;
+
+        try {
+            clonedFont = super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            //This should not happen, since this class is Cloneable.
+        }
+
+        return( clonedFont );
     }
 
     /**
