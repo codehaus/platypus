@@ -36,16 +36,19 @@ public class FormatStack
     /**
      * Returns a format data structure containing the current format
      * @param pdd the PDF data structure
-     * @return the format
      */
     public void saveCurrentFormat( PdfData pdd )
     {
+        float currLeading      = pdd.getLeading();
+        boolean currStrikethru = pdd.getStrikethru();
+        int currEolTreatment   = pdd.getEolTreatment();
+
         Format f = new Format (
-            pdd.getFont(),
-            pdd.getStrikethru(),
-            pdd.getUnderline(),
-            pdd.getEolTreatment(),
-            pdd.getLeading() );
+            pdd.getFont().clone(),
+            currStrikethru,
+            pdd.getUnderline().clone(),
+            currEolTreatment,
+            currLeading );
 
         saveFormat( f );
     }

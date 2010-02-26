@@ -33,7 +33,7 @@ public class PdfRestoreFormat implements OutputCommandable
     }
 
     /**
-     * Save the current format. This is called so often, it's made static here.
+     * Restore the current format. This is called so often, it's made static here.
      *
      * @param pdd the PDF data
      * @param source file and line # where this action took place
