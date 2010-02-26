@@ -88,7 +88,8 @@ public class PdfFont implements Cloneable
         iTfont = createFont( this );
     }
 
-    public Object clone()
+    @Override
+    public PdfFont clone()
     {
         Object clonedFont = null;
 
@@ -99,7 +100,7 @@ public class PdfFont implements Cloneable
             //This should not happen, since this class is Cloneable.
         }
 
-        return( clonedFont );
+        return( (PdfFont) clonedFont );
     }
 
     /**

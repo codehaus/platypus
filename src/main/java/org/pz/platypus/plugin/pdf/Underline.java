@@ -15,7 +15,7 @@ import org.pz.platypus.DefaultValues;
  *
  * @author alb
  */
-public class Underline
+public class Underline implements Cloneable
 {
     private boolean inEffect = false;
 
@@ -31,6 +31,26 @@ public class Underline
         thickness = DefaultValues.UNDERLINE_THICKNESS;
         position = DefaultValues.UNDERLINE_POSITION;
         source = new Source();
+    }
+
+    /**
+     * Clone used in saving format
+     *
+     * @return a cloned Underline object
+     */
+    @Override
+    public Underline clone()
+    {
+        Object clonedUnderline = null;
+
+        try {
+            clonedUnderline = super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            //This should not happen, since this class is Cloneable.
+        }
+
+        return( (Underline) clonedUnderline );
     }
 
     public boolean isInEffect()
