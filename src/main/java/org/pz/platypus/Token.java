@@ -70,7 +70,13 @@ public class Token
      */
     public String toString( final GDD gdd )
     {
+        // make sure the length of the type info is 21 chars (padded w/ spaces if need be) 
+        String blanks21 = "                     ";
         String toktyp = type.toString();
+        int paddingToAdd = blanks21.length() - toktyp.length();
+        if( paddingToAdd > 0 ) {
+            toktyp += blanks21.substring( 0, paddingToAdd );
+        }
 
         // don't print out the CR/LF at the end of an input line
         if( content == null ) {
