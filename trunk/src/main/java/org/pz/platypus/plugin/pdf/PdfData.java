@@ -457,6 +457,12 @@ public class PdfData implements OutputContextable
         footer = newFooter;
     }
 
+    // used principally (exclusively?) for testing
+    public void setFormatStack( final FormatStack formats )
+    {
+        formatStack = formats;
+    }
+
     public FormatStack getFormatStack()
     {
         return( formatStack );
