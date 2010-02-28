@@ -90,7 +90,7 @@ public class TextTransforms
     }
 
     /**
-     * Truncates count number of bytes from the end of a string
+     * Truncates count number of bytes from the back (right end) of a string
      * @param text the string to truncate
      * @param count how much to truncate
      * @return the truncated string or, in the case of error, the original string.
@@ -100,7 +100,22 @@ public class TextTransforms
         if( text == null || count < 0 || count > text.length() ) {
             return( text );
         }
-        
+
         return( text.substring( 0, text.length() - count ));
+    }
+
+    /**
+     * Truncates count number of bytes from the front (left end) of a string
+     * @param text the string to truncate
+     * @param count how much to truncate
+     * @return the truncated string or, in the case of error, the original string.
+     */
+    public static String lop( String text, final int count )
+    {
+        if( text == null || count < 0 || count > text.length() ) {
+            return( text );
+        }
+
+        return( text.substring( count ));
     }
 }

@@ -109,6 +109,8 @@ public class PdfData implements OutputContextable
     private FormatStack formatStack;
     private Value leading;
     private Value lineHeight;   // not the same as leading
+    private Value lineNumberSkip;
+    private Value lineNumberLast;
     private Value marginBottom;
     private Value marginLeft;
     private Value marginRight;
@@ -153,6 +155,8 @@ public class PdfData implements OutputContextable
 
         leading         = new Value( DefaultValues.LEADING );
         lineHeight      = new Value( DefaultValues.LEADING );
+        lineNumberLast  = new Value( DefaultValues.LINE_NUMBER_LAST );
+        lineNumberSkip  = new Value( DefaultValues.LINE_NUMBER_SKIP );
 
         marginBottom    = new Value( DefaultValues.MARGIN );
         marginLeft      = new Value( DefaultValues.MARGIN );
@@ -501,6 +505,36 @@ public class PdfData implements OutputContextable
     public void setLineHeight( final float newLineHeight, final Source fileAndLine )
     {
         setValue( lineHeight, newLineHeight, fileAndLine, "_lineHeight" );
+    }
+
+    public int getLineNumberLast()
+    {
+        return lineNumberLast.ival;
+    }
+
+    public Source getLineNumberLastLine()
+    {
+        return lineNumberLast.source;
+    }
+
+    public void setLineNumberLast( final int newLastLineNumber, final Source fileAndLine )
+    {
+        setValue( lineNumberLast, newLastLineNumber, fileAndLine, "_lastLineNumber" );
+    }
+
+    public int getLineNumberSkip()
+    {
+        return lineNumberSkip.ival;
+    }
+
+    public Source getLineNumberSkipLine()
+    {
+        return lineNumberSkip.source;
+    }
+
+    public void setLineNumberSkip( final int newLineNumberSkip, final Source fileAndLine )
+    {
+        setValue( lineNumberSkip, newLineNumberSkip, fileAndLine, "_lineNumberSkip" );
     }
 
     public float getMarginBottom() {

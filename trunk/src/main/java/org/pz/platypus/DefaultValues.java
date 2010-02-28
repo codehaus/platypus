@@ -38,6 +38,8 @@ public class DefaultValues
     public static final String  FOOTER_TYPEFACE = "TIMES_ROMAN";
     public static final float   LEADING_TO_FONT_SIZE_RATIO = 1.2f;
     public static final float   LEADING = FONT_SIZE * LEADING_TO_FONT_SIZE_RATIO;
+    public static final int     LINE_NUMBER_LAST = 0;
+    public static final int     LINE_NUMBER_SKIP = 0;   // don't print any line numbers
     public static final float   MARGIN = 1.0f * POINTS_PER_INCH;
     public static final boolean MARGINS_MIRRORED = false;
     public static final boolean NO_INDENT = false;
