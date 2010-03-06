@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -54,6 +54,9 @@ public class PdfCommandTable
         add( new PdfAlignment() );
         add( new PdfBoldOff() );
         add( new PdfBoldOn() );
+        add( new PdfCodeOff() );
+        add( new PdfCodeOn() );
+        add( new PdfCodeWithOptions() );
         add( new PdfColumnCount() );
         add( new PdfColumnWidth() );
         add( new PdfDump() );
@@ -69,6 +72,7 @@ public class PdfCommandTable
         add( new PdfItalicsOn() );
         add( new PdfHardCR() );
         add( new PdfLeading() );
+        add( new PdfLink() );
         add( new PdfMarginBottom() );
         add( new PdfMarginLeft() );
         add( new PdfMarginRight() );
@@ -83,6 +87,8 @@ public class PdfCommandTable
         add( new PdfParagraphIndentRight() );
         add( new PdfParagraphSkip() );
         add( new PdfPrintVariable() );
+        add( new PdfRestoreFormat() );
+        add( new PdfSaveFormat() );
 //        add( new PdfScript() );
         add( new PdfStrikethruOff() );
         add( new PdfStrikethruOn() );
