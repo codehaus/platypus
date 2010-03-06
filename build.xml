@@ -33,7 +33,8 @@
     <property name="src.pdf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\pdf"/>
     <property name="src.rtf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\rtf"/>	
 	<property name="src.test.dir"   		location="\${top.dir}\src\test\java" />	
-	<property name="config.dir"				location="${top.dir}\src\main\resources\" />
+	<!--<property name="config.dir"				location="${top.dir}\src\main\resources\" /> -->
+	<property name="config.dir"				location="${top.dir}\config\" />
     <property name="docs.dir"       		location="${top.dir}\docs\" />
     <property name="fonts.dir"      		location="${top.dir}\fonts\" />
 	<property name="licenses.dir"			location="${top.dir}\licenses\" />	
@@ -268,23 +269,14 @@
 	</javac>
 </target>
 
-<target name="unit-test" depends="compile-unit-tests" 
-	description="Run unit tests, create report">
-	<delete dir="${test.report.dir}"/>
-	<mkdir  dir="${test.report.dir}" />
-	
+<target name="unit-test" depends="compile-unit-tests" description="Run unit tests, create report">
 	<copy todir="${jar.dir}">
 		<fileset dir="${top.dir}" >
-            <include name="platypus.home" />
-        </fileset>
+			<include name="platypus.home" />
+		</fileset>
     </copy>
-	
-	<!--
-	<exec executable="cmd.exe">
-	  <env key="PLATYPUS_HOME" value="${jar.dir}"/>	
-	  <arg line="/c set" />
-	</exec>
-	-->
+	<delete dir="${test.report.dir}"/>
+	<mkdir  dir="${test.report.dir}" />
 
 	<junit fork="yes" printsummary="no" haltonfailure="no" showoutput="yes" >
 		<formatter type="xml"/>
