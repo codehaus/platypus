@@ -20,7 +20,7 @@
 					 This facilitates its use by various CI servers. 
 	2010-03-05	alb	added RTF plugin processing
 				alb	migrated unit test runs to this build file
-
+	2010-03-06	alb	added platypus.home file as an attempt to solve CI's inability to set environment variables
 -->
 
 <project name="platypus-build" default="all" basedir=".">
