@@ -119,6 +119,11 @@
 	<mkdir  dir="${jar.dir}"/>
     <delete dir="${jar.dir}\plugins\" />
 	<mkdir  dir="${jar.dir}\plugins\" />
+    <copy todir="${jar.dir}">
+		<fileset dir="${top.dir}" >
+            <include  name="platypus.home" />
+        </fileset>
+    </copy>
 </target>
 
 <target name="main-jar" depends="compile" description="Build main JAR file">
@@ -245,6 +250,7 @@
 
  
 <target name="zip-all">
+    <delete file="${jar.dir}\platypus.home" />
     <zip destfile="${build.dir}\platypus-${version}.zip"
          basedir="${jar.dir}" >
     </zip>
