@@ -273,6 +273,12 @@
 	<delete dir="${test.report.dir}"/>
 	<mkdir  dir="${test.report.dir}" />
 	
+	<copy todir="${jar.dir}">
+		<fileset dir="${top.dir}" >
+            <include name="platypus.home" />
+        </fileset>
+    </copy>
+	
 	<!--
 	<exec executable="cmd.exe">
 	  <env key="PLATYPUS_HOME" value="${jar.dir}"/>	
