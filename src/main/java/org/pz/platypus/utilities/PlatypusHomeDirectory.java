@@ -9,6 +9,8 @@ package org.pz.platypus.utilities;
 
 import org.pz.platypus.Platypus;
 import java.net.URL;
+import java.io.File;
+import java.util.MissingResourceException;
 
 /**
  * Gets the home directory for Platypus as set in the user environment.
@@ -44,6 +46,10 @@ public class PlatypusHomeDirectory
         final String PlatypusEnvString = "PLATYPUS_HOME";
 
         homeDirectory =  System.getenv( PlatypusEnvString );
+        if( homeDirectory == null ) {
+            homeDirectory = getHomeDirectoryFromTextFile();
+        }
+
         if ( homeDirectory != null ) {
             final String separator = System.getProperty( "file.separator" );
 
@@ -51,6 +57,27 @@ public class PlatypusHomeDirectory
                 homeDirectory += separator;
             }
         }
+        else {
+            throw new MissingResourceException( null, null, null );
+        } 
+    }
+
+    /**
+     * Looks to see if the current directory holds a file called 'platypus.home'. If it does, and there is
+     * a subdirectory called 'config' than the current directory is deemed the home directory.
+     *
+     * @return
+     */
+    String getHomeDirectoryFromTextFile()
+    {
+        String homeDir = null;
+        final String textFileName = "platypus.home";
+        File textFile = new File( textFileName );
+        if( textFile.exists() && new File( "config" ).exists() ) {
+           homeDir = textFile.getAbsolutePath();
+           return( TextTransforms.truncate( homeDir, textFileName.length() ));
+        }
+        return( homeDir );
     }
 
     /**
