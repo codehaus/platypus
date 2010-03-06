@@ -4,7 +4,7 @@
 
 	Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
 	Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
-	This is the full Platypus build file, that creates all the
+	This is the full Platypus build file, that creates all the 
 		the plugins and bundles them will all necessary files.
 	Requires directories set up as they are in the downloadable source.
 
@@ -91,7 +91,7 @@
 
  <target name="compile-prep" description="Clean compilation output directory" >
 	<mkdir dir="${classes.dir}"/>
-    <delete dir="${classes.dir}\org" />
+    <delete dir="${classes.dir}\org" />	
 </target>
 
 <target name="compile-listing-plugin" depends="compile" description="Compile listing plug-in with Java 6">
@@ -266,6 +266,13 @@
 	description="Run unit tests, create report">
 	<delete dir="${test.report.dir}"/>
 	<mkdir  dir="${test.report.dir}" />
+	
+	<!--
+	<exec executable="cmd.exe">
+	  <env key="PLATYPUS_HOME" value="${jar.dir}"/>	
+	  <arg line="/c set" />
+	</exec>
+	-->
 
 	<junit fork="yes" printsummary="no" haltonfailure="no" showoutput="yes" >
 		<formatter type="xml"/>
@@ -276,7 +283,7 @@
 			</fileset>
 		</batchtest>
 	</junit>
-
+	
 	<junitreport todir="${test.report.dir}">
 		<fileset dir="${test.report.dir}">
 			<include name="TEST-*.xml" />
