@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -11,6 +11,7 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
 import org.pz.platypus.DefaultValues;
+import org.pz.platypus.plugin.DocData;
 import org.pz.platypus.interfaces.OutputContextable;
 
 import javax.script.ScriptEngine;
@@ -22,114 +23,19 @@ import javax.script.ScriptEngineManager;
  * @author alb
  */
 
-public class PdfData implements OutputContextable
+public class PdfData extends DocData implements OutputContextable
 {
-    /**
-     * Inner class containing the value of the data item, plus
-     * the line at which it was las changed. Made static for
-     * performance reasons (per FindBugs).
-     */
-    static class Value
-    {
-        boolean bval;
-        float fval;
-        int ival;
-        String sval;
-
-        Source source;
-
-        public Value( final boolean bool )
-        {
-            bval = bool;
-            source = new Source( 0, 0 );
-        }
-
-        public Value( final float val )
-        {
-            fval = val;
-            source = new Source( 0, 0 );
-        }
-
-        public Value( final int integer )
-        {
-            ival = integer;
-            source = new Source( 0, 0 );
-        }
-
-        public Value( final float val, final Source fileAndLine )
-        {
-            fval = val;
-            try {
-                source = fileAndLine.clone();
-            }
-            catch( CloneNotSupportedException clnse ){
-                source = new Source();
-            }
-        }
-
-        public Value( final String val, final Source fileAndLine )
-        {
-            sval = val;
-            try {
-                source = fileAndLine.clone();
-            }
-            catch( CloneNotSupportedException clnse ){
-                source = new Source();
-            }
-        }
-
-        public Value( final boolean yn, final Source fileAndLine )
-        {
-            bval = yn;
-            try {
-                source = fileAndLine.clone();
-            }
-            catch( CloneNotSupportedException clnse ){
-                source = new Source();
-            }
-        }
-
-
-    }
-
-    private GDD gdd;
     private PdfOutfile pdfOutfile;
 
-    private Value alignment;
-    private Value codeSection;
-    private Value columnCount;
-    private Value userSpecifiedColumnWidth;
-    private Columns columns;
-    private int currColumn;
+    private GDD gdd;
     private boolean eolPending;
     private Value eolTreatment;
-    private Value firstLineIndent;
     private PdfFont font;
     private Footer footer;
     private FormatStack formatStack;
-    private Value leading;
-    private Value lineHeight;   // not the same as leading
-    private Value lineNumberSkip;
-    private Value lineNumberLast;
-    private Value marginBottom;
-    private Value marginLeft;
-    private Value marginRight;
-    private Value marginTop;
-    private Value marginsMirrored;
-    private Value noIndent;
-    private Value pageHeight;
-    private int   pageNumber;
-    private Value pageWidth;
-    private Value paragraphIndent;
-    private Value paragraphIndentRight;
-    private Value paragraphSkip;
     private Value pixelsPerInch;
-//    private ScriptEngine scriptEngine;
-    private Value strikethru;
     private TypefaceMap typefaceMap;
-    private Underline underline;
 
-    private FormatStack formats;
 
     /**
      * Initializes the state of the PDF document.
@@ -138,48 +44,18 @@ public class PdfData implements OutputContextable
      */
     public PdfData( final GDD gddIn )
     {
+        super( gddIn );
         gdd = gddIn;
-
-        alignment       = new Value( DefaultValues.ALIGNMENT );
-
-        codeSection     = new Value( false );
-        columnCount     = new Value( DefaultValues.COLUMN_COUNT );
-        currColumn      = 0;
 
         eolPending      = false;
         eolTreatment    = new Value( DefaultValues.EOL_TREATMENT );
 
-        firstLineIndent = new Value( DefaultValues.FIRST_LINE_INDENT );
         font            = new PdfFont( this );
         footer          = new Footer( this );
 
-        leading         = new Value( DefaultValues.LEADING );
-        lineHeight      = new Value( DefaultValues.LEADING );
-        lineNumberLast  = new Value( DefaultValues.LINE_NUMBER_LAST );
-        lineNumberSkip  = new Value( DefaultValues.LINE_NUMBER_SKIP );
-
-        marginBottom    = new Value( DefaultValues.MARGIN );
-        marginLeft      = new Value( DefaultValues.MARGIN );
-        marginRight     = new Value( DefaultValues.MARGIN );
-        marginTop       = new Value( DefaultValues.MARGIN );
-        marginsMirrored = new Value( DefaultValues.MARGINS_MIRRORED );
-
-        noIndent        = new Value( DefaultValues.NO_INDENT );
-
-        pageHeight      = new Value( DefaultValues.PAGE_HEIGHT );
-        pageNumber      = 0;
-        pageWidth       = new Value( DefaultValues.PAGE_WIDTH );
-        paragraphIndent = new Value( DefaultValues.PARA_INDENT );
-        paragraphIndentRight
-                        = new Value( DefaultValues.PARA_INDENT_RIGHT );
-        paragraphSkip   = new Value( DefaultValues.PARA_SKIP_LINES );
         pixelsPerInch   = new Value( DefaultValues.PIXELS_PER_INCH );
 
-//        scriptEngine    = createNewScriptEngine();
-        strikethru      = new Value( false );
-        typefaceMap     = new TypefaceMap( gdd );
-        underline       = new Underline();
-        userSpecifiedColumnWidth = new Value( DefaultValues.COLUMN_WIDTH );
+        typefaceMap     = new TypefaceMap( getGdd() );
     }
 
     /**
@@ -294,71 +170,6 @@ public class PdfData implements OutputContextable
 
     //=== getters and setters in alpha order by field  ===
 
-    public int getAlignment()
-    {
-        return( alignment.ival );
-    }
-
-    public Source getAlignmentLine()
-    {
-        return( alignment.source );
-    }
-
-    public void setAlignment( final int newAlignment, final Source fileAndLine )
-    {
-        setValue( alignment, newAlignment, fileAndLine, "_alignment" );
-    }
-
-    public boolean inCodeSection()
-    {
-        return( codeSection.bval );
-    }
-
-    public Source getCodeSectionLine()
-    {
-        return( codeSection.source );
-    }
-
-    public void setInCodeSection( final boolean inCode, final Source fileAndLine )
-    {
-        setValue( codeSection, inCode, fileAndLine, "_inCodeSection" );
-    }
-
-    public int getColumnCount()
-    {
-        return columnCount.ival;
-    }
-
-    public Source getColumnCountLine()
-    {
-        return columnCount.source;
-    }
-
-    public void setColumnCount( final int newCount, final Source fileAndLine )
-    {
-        setValue( columnCount, newCount, fileAndLine, "_columnCount" );
-    }
-
-    public Columns getColumns()
-    {
-        return( columns );
-    }
-
-    public void setColumns( final Columns newColumnsList )
-    {
-        columns = newColumnsList;
-        columnCount = new Value( newColumnsList.size() );
-    }
-
-    public int getCurrColumn()
-    {
-        return( currColumn );
-    }
-
-    public void setCurrColumn( int newColNumber )
-    {
-        currColumn = newColNumber;
-    }
 
     public boolean getEolPending()
     {
@@ -370,13 +181,13 @@ public class PdfData implements OutputContextable
         // newEol = false only when resetting flag; there is
         // no user command to do this. It's only done as a
         // result of processing EOL.
-        if( newEol == false ) {
+        if( ! newEol ) {
             eolPending = false;
             return;
         }
 
         // [cr] has been encountered
-        if( eolPending == false ) {
+        if( ! eolPending ) {
             eolPending = true;
             return;
         }
@@ -406,20 +217,6 @@ public class PdfData implements OutputContextable
         setValue( eolTreatment, newEolTreatment, fileAndLine, "_EOL_handling" );
     }
 
-    public float getFirstLineIndent()
-    {
-        return( firstLineIndent.fval );
-    }
-
-    public Source getFirstLineIndentLine()
-    {
-        return( firstLineIndent.source );
-    }
-
-    public void setFirstLineIndent( final float newFirstLineIndent, final Source fileAndLine )
-    {
-        setValue( firstLineIndent, newFirstLineIndent, fileAndLine, "_firstLineIndent" );
-    }
 
     public PdfFont getFont()
     {
@@ -477,148 +274,6 @@ public class PdfData implements OutputContextable
         return( gdd );
     }
 
-    public float getLeading()
-    {
-        return( leading.fval );
-    }
-
-    public Source getLeadingLine()
-    {
-        return( leading.source );
-    }
-
-    public void setLeading( final float newLeading, final Source fileAndLine )
-    {
-        setValue( leading, newLeading, fileAndLine, "_leading" );
-    }
-
-    public float getLineHeight()
-    {
-        return( lineHeight.fval );
-    }
-
-    public Source getLineHeightLine()
-    {
-        return( lineHeight.source );
-    }
-
-    public void setLineHeight( final float newLineHeight, final Source fileAndLine )
-    {
-        setValue( lineHeight, newLineHeight, fileAndLine, "_lineHeight" );
-    }
-
-    public int getLineNumberLast()
-    {
-        return lineNumberLast.ival;
-    }
-
-    public Source getLineNumberLastLine()
-    {
-        return lineNumberLast.source;
-    }
-
-    public void setLineNumberLast( final int newLastLineNumber, final Source fileAndLine )
-    {
-        setValue( lineNumberLast, newLastLineNumber, fileAndLine, "_lastLineNumber" );
-    }
-
-    public int getLineNumberSkip()
-    {
-        return lineNumberSkip.ival;
-    }
-
-    public Source getLineNumberSkipLine()
-    {
-        return lineNumberSkip.source;
-    }
-
-    public void setLineNumberSkip( final int newLineNumberSkip, final Source fileAndLine )
-    {
-        setValue( lineNumberSkip, newLineNumberSkip, fileAndLine, "_lineNumberSkip" );
-    }
-
-    public float getMarginBottom() {
-        return marginBottom.fval;
-    }
-
-    public Source getMarginBottomLine() {
-        return marginBottom.source;
-    }
-
-    public void setMarginBottom( final float val, final Source fileAndLine )
-    {
-        setValue( marginBottom, val, fileAndLine, "_marginBottom" );
-    }
-
-    public float getMarginLeft() {
-        return marginLeft.fval;
-    }
-
-    public Source getMarginLeftLine() {
-        return marginLeft.source;
-    }
-
-    public void setMarginLeft( final float val, final Source fileAndLine )
-    {
-        setValue( marginLeft, val, fileAndLine, "_marginLeft" );
-    }
-
-    public float getMarginRight()
-    {
-        return marginRight.fval;
-    }
-
-    public Source getMarginRightLine() {
-        return marginRight.source;
-    }
-
-    public void setMarginRight( final float val, final Source fileAndLine )
-    {
-        setValue( marginRight, val, fileAndLine, "_marginRight" );
-    }
-
-    public float getMarginTop()
-    {
-        return marginTop.fval;
-    }
-
-    public Source getMarginTopLine()
-    {
-        return marginTop.source;
-    }
-
-    public void setMarginTop( final float val, final Source fileAndLine )
-    {
-        setValue( marginTop, val, fileAndLine, "_marginTop" );
-    }
-
-    public boolean getMarginsMirrored() {
-        return( marginsMirrored.bval );
-    }
-
-    public Source getMarginsMirroredLine() {
-        return( marginsMirrored.source );
-    }
-
-    public void setMarginsMirrored( final boolean trueFalse, final Source fileAndLine )
-    {
-        setValue( marginsMirrored, trueFalse, fileAndLine, "_marginsMirrored" );
-    }
-
-    public boolean getNoIndent()
-    {
-        return( noIndent.bval );
-    }
-
-    public Source getNoIndentLine()
-    {
-        return( noIndent.source );
-    }
-
-    public void setNoIndent( final boolean trueFalse, final Source fileAndLine )
-    {
-        setValue( noIndent, trueFalse, fileAndLine, "_noIndent" );
-    }
 
     public PdfOutfile getOutfile()
     {
@@ -628,93 +283,6 @@ public class PdfData implements OutputContextable
     public void setOutfile( final PdfOutfile newOutfile)
     {
         pdfOutfile = newOutfile;
-    }
-
-    public float getPageHeight()
-    {
-        return pageHeight.fval;
-    }
-
-    public Source getPageHeightLine()
-    {
-        return pageHeight.source;
-    }
-
-    public void setPageHeight( final float val, final Source fileAndLine )
-    {
-        setValue( pageHeight, val, fileAndLine, "_pageHeight" );
-    }
-
-    public int getPageNumber()
-    {
-        return( pageNumber );
-    }
-
-    public void setPageNumber( final int newPageNumber )
-    {
-        pageNumber = newPageNumber;
-    }
-
-    public float getPageWidth()
-    {
-        return pageWidth.fval;
-    }
-
-    public Source getPageWidthLine()
-    {
-        return pageWidth.source;
-    }
-
-    public void setPageWidth( final float val, final Source fileAndLine )
-    {
-        setValue( pageWidth, val, fileAndLine, "_pageWidth" );
-    }
-
-    public float getParagraphIndent()
-    {
-        return( paragraphIndent.fval );
-    }
-
-    public Source getParagraphIndentLine()
-    {
-        return( paragraphIndent.source );
-    }
-
-    public void setParagraphIndent( final float newParagraphIndent, final Source fileAndLine )
-    {
-        setValue( paragraphIndent, newParagraphIndent, fileAndLine, "_paragraphIndent" );
-    }
-
-    public float getParagraphIndentRight()
-    {
-        return( paragraphIndentRight.fval );
-    }
-
-    public Source getParagraphIndentRightLine()
-    {
-        return( paragraphIndentRight.source );
-    }
-
-    public void setParagraphIndentRight( final float newParagraphIndentRight,
-                                         final Source fileAndLine )
-    {
-        setValue( paragraphIndentRight, newParagraphIndentRight, fileAndLine,
-                  "_paragraphIndentRight" );
-    }
-
-    public float getParagraphSkip()
-    {
-        return( paragraphSkip.fval );
-    }
-
-    public int getParagraphSkipLine()
-    {
-        return( paragraphSkip.source.getLineNumber() );
-    }
-
-    public void setParagraphSkip( final float val, final Source fileAndLine )
-    {
-        setValue( paragraphSkip, val, fileAndLine, "_paragraphSkip" );
     }
 
     public float getPixelsPerInch()
@@ -727,25 +295,6 @@ public class PdfData implements OutputContextable
         return( pixelsPerInch.source );
     }
 
-//    public ScriptEngine getScriptEngine()
-//    {
-//        return( scriptEngine );
-//    }
-
-    public boolean getStrikethru()
-    {
-        return( strikethru.bval );
-    }
-
-    public int getStrikethruLine()
-    {
-        return( strikethru.source.getLineNumber() );
-    }
-    public void setStrikethru( boolean newStrikethru, final Source fileAndLine )
-    {
-        setValue( strikethru, newStrikethru, fileAndLine, "_strikethru" );
-    }
-
     public TypefaceMap getTypefaceMap()
     {
         return( typefaceMap );
@@ -754,25 +303,5 @@ public class PdfData implements OutputContextable
     public void setTypefaceMap( final TypefaceMap tfMap )
     {
         typefaceMap = tfMap;
-    }
-
-    public Underline getUnderline()
-    {
-        return( underline );
-    }
-
-    public float getUserSpecifiedColumnWidth()
-    {
-        return( userSpecifiedColumnWidth.fval );
-    }
-
-    public Source getUserSpecifiedColumnWidthLine()
-    {
-        return( userSpecifiedColumnWidth.source );
-    }
-
-    public void setUserSpecifiedColumnWidth( final float newWidth, final Source fileAndLine )
-    {
-        setValue( userSpecifiedColumnWidth, newWidth, fileAndLine, "_userSpecifiedColumnWidth" );
     }
 }
