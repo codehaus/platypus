@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -18,19 +18,20 @@ import java.util.logging.Level;
  *
  * @author alb
  */
-public class PropertyFileTest {
+public class PropertyFileTest
+{
 
-    private Literals lits;
+//    private Literals lits;
     private GDD gdd;
     private PropertyFile pf;
 
     @Before
     public void setUp() {
-        lits = new Literals( "Platypus" );
-        gdd = new GDD();
-        gdd.setLits( lits );
-        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
-        gdd.getLogger().setLevel( Level.OFF );
+//        lits = new MockLiterals();
+//        gdd = new GDD();
+//        gdd.setLits( lits );
+//        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+//        gdd.getLogger().setLevel( Level.OFF );
     }
     
     @Test
