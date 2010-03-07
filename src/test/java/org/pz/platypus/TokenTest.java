@@ -35,10 +35,6 @@ public class TokenTest
         lits.loadLine( "COMMAND_UNRECOGNIZED=unrecognized command" );
         gdd.setLits( lits );
         gdd.setupHomeDirectory();
-
-        CommandTable ct = new CommandTable( gdd );
-        ct.loadCommands( gdd.getCommandPropertyFilename() );
-        gdd.setCommandTable( ct );
     }
 
     @Test
@@ -122,7 +118,7 @@ public class TokenTest
     public void testValidNotEquals2()
     {
         Token t = new Token( new Source( 12 ), TokenType.MACRO, "[$macro]" );
-        assertFalse( t.equals( new String( "[$macro]" )));
+        assertFalse( t.equals( "[$macro]" ));
     }
 
     @Test

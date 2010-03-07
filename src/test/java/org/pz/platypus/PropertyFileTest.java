@@ -10,9 +10,6 @@ package org.pz.platypus;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.pz.platypus.test.mocks.MockLiterals;
-
-import java.util.logging.Level;
 
 /**
  *
@@ -24,15 +21,6 @@ public class PropertyFileTest
 //    private Literals lits;
     private GDD gdd;
     private PropertyFile pf;
-
-    @Before
-    public void setUp() {
-//        lits = new MockLiterals();
-//        gdd = new GDD();
-//        gdd.setLits( lits );
-//        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
-//        gdd.getLogger().setLevel( Level.OFF );
-    }
     
     @Test
     public void testOpenOfInvalidFile()
