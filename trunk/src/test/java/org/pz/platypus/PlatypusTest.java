@@ -124,6 +124,9 @@ public class PlatypusTest
             // it will throw a MissingResourceException. So load, the values
             // into the command table manually.
             PropertyFile conff = gdd.getConfigFile();
+            if( conff == null ) {
+                gdd.setConfigFile( new PropertyFile() );
+            }
             conff.loadLine( "pi.out.pdf=pdf" );
         }
         assertTrue( gdd.getConfigFile().lookup( "pi.out.pdf" ) != " " );
