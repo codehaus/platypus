@@ -116,7 +116,16 @@ public class PlatypusTest
             fail( "Unexpected HelpMessagePrinted exception in PlatypusTest" );
         }
 
-        Platypus.processConfigFile( clArgs, gdd );
+        try {
+            Platypus.processConfigFile( clArgs, gdd );
+        }
+        catch( MissingResourceException mre ) {
+            // if this is run on a system where PLATYPUS_HOME is not defined,
+            // it will throw a MissingResourceException. So load, the values
+            // into the command table manually.
+            PropertyFile conff = gdd.getConfigFile();
+            conff.loadLine( "pi.out.pdf=pdf" );
+        }
         assertTrue( gdd.getConfigFile().lookup( "pi.out.pdf" ) != " " );
         assertNotNull( gdd.getConfigFile().lookup( "pi.out.pdf" ));
     }
