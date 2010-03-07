@@ -41,7 +41,7 @@ public class AlignmentTest
     public void testToStringWithValidAlignment()
     {
         MockLiterals mockLits = new MockLiterals( );
-        mockLits.setGetLitShouldFindLookupString( true );
+        mockLits.setGetLitShouldReturnKey( true );
         gdd.setLits( mockLits );
 
         assertEquals( "CENTER", al.toString( 'c', gdd ));
@@ -54,7 +54,7 @@ public class AlignmentTest
     public void testToStringWithInvalidAlignment()
     {
         MockLiterals mockLits = new MockLiterals( );
-        mockLits.setGetLitShouldFindLookupString( true );
+        mockLits.setGetLitShouldReturnKey( true );
         gdd.setLits( mockLits );
 
         assertEquals( "INVALID", al.toString( 'C', gdd ));

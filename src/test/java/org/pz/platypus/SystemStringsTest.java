@@ -135,7 +135,7 @@ public class SystemStringsTest
         assertEquals( 1, ss.getSize() );
 
         MockLiterals mockLits = new MockLiterals();
-        mockLits.setGetLitShouldFindLookupString( true );
+        mockLits.setGetLitShouldReturnKey( true );
         String dumpResults = ss.dump( mockLits );
         assertTrue( dumpResults.contains( "PLATYPUS_STRINGS: \n\t_abc: Value for _abc\n" ));
     }

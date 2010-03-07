@@ -61,7 +61,7 @@ public class MacroParserTest
     public void testParseValid()
     {
         lits.setVersionNumberToReturn( "0.2.0" );
-        lits.setGetLitShouldFindLookupString( false );
+        lits.setGetLitShouldReturnKey( false );
         gdd.setLits( lits );
         Platypus.storeVersionNumber( gdd );
 

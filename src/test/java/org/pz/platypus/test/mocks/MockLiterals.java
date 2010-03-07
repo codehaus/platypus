@@ -25,8 +25,11 @@ public class MockLiterals extends Literals
     /** should calling getLit() throw an exception? */
     private boolean throwExceptionOnGetLit = false;
 
-    /** should getLit() find the looked-up string or not? */
-    private boolean getLitShouldFindLookupString = true;
+    /** should getLit() find the lookup key? */
+    private boolean getLitShouldReturnKey = true;
+
+    /** should getLit() return the value for the lookup key? Use only if previously a k-v pair was loaded. */
+    private boolean getLitShouldReturnValue = false;
 
     /** what getting VERSION should return */
     private String getLitVersionShouldReturn = null;
@@ -59,17 +62,31 @@ public class MockLiterals extends Literals
         else if( key.equals( "VERSION" ) && getLitVersionShouldReturn != null ) {
             return( getLitVersionShouldReturn );
         }
-        else if( getLitShouldFindLookupString ) {
+        else if( getLitShouldReturnKey ) {
             return( key );
+        }
+        else if( getLitShouldReturnValue ) {
+            return( super.getLit( key ));
         }
         else {
             return( " " );
         }
     }
 
-    public void setGetLitShouldFindLookupString( final boolean yesOrNo )
+    public void setGetLitShouldReturnKey( final boolean yesOrNo )
     {
-        getLitShouldFindLookupString = yesOrNo;
+        getLitShouldReturnKey = yesOrNo;
+        if( yesOrNo ) {
+            getLitShouldReturnValue = false;
+        }
+    }
+
+    public void setGetLitShouldReturnValue( final boolean yesOrNo )
+    {
+        getLitShouldReturnValue = yesOrNo;
+        if( yesOrNo ) {
+            getLitShouldReturnKey = false;
+        }
     }
 
     public void setThrowExceptionOnConstructor( final boolean yesOrNo )

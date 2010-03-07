@@ -37,7 +37,7 @@ public class PdfOutfileTest
         gdd.getLogger().setLevel( Level.OFF );
 
         MockLiterals mockLits = new MockLiterals();
-        mockLits.setGetLitShouldFindLookupString( true );
+        mockLits.setGetLitShouldReturnKey( true );
         gdd.setLits( mockLits );
 
         pout = new PdfOutfile();

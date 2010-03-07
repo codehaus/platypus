@@ -165,7 +165,7 @@ public class UserStringsTest
         assertEquals( 1, us.getSize() );
 
         MockLiterals mockLits = new MockLiterals();
-        mockLits.setGetLitShouldFindLookupString( true );
+        mockLits.setGetLitShouldReturnKey( true );
         String dumpResults = us.dump( mockLits );
         assertTrue( dumpResults.contains( "USER_DEFINED_STRINGS: \n\t$abc: Value for $abc\n" ));
     }

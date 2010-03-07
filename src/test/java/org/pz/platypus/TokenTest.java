@@ -10,6 +10,8 @@ package org.pz.platypus;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.pz.platypus.test.mocks.MockLiterals;
+import org.pz.platypus.plugin.pdf.commands.PdfFsize;
 
 /**
  * Tests for the Token class
@@ -27,7 +29,9 @@ public class TokenTest
     {
         gdd = new GDD();
         gdd.initialize();
-        lits = new Literals();
+        MockLiterals mockLits = new MockLiterals();
+        mockLits.setGetLitShouldReturnValue( true );
+        lits = mockLits;
         lits.loadLine( "[fsize:=font size" );
         lits.loadLine( "COMMAND.FFACE=font face" );
         lits.loadLine( "COMMAND.FSIZE=font size" );
@@ -35,6 +39,7 @@ public class TokenTest
         lits.loadLine( "COMMAND_UNRECOGNIZED=unrecognized command" );
         gdd.setLits( lits );
         gdd.setupHomeDirectory();
+        gdd.setCommandTable( new CommandTable( gdd ));
     }
 
     @Test
@@ -54,6 +59,9 @@ public class TokenTest
     @Test
     public void testToStringValidCommand1()
     {
+        CommandTable ct = gdd.getCommandTable();
+        ct.loadCommand( "[fsize:", "vn" );
+
         CommandParameter cp = new CommandParameter();
         cp.setUnit( UnitType.POINT );
         cp.setAmount( 12.0f );

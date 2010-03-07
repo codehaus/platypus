@@ -30,6 +30,7 @@ public class LogFormatterTest
         catch ( MissingResourceException mre ) {
             fail( "Could not load Literals file ");
         }
+        
     }
     
     @Test
@@ -37,7 +38,7 @@ public class LogFormatterTest
     {
         final LogRecord logRecSevere = new LogRecord( Level.SEVERE, "Test of Severe" );
         final String str = logFormatter.format( logRecSevere );
-        assertEquals( str, "Error: Test of Severe\n");
+        assertEquals( str, "ERROR_COLON Test of Severe\n");
     }
 
     @Test
@@ -45,7 +46,7 @@ public class LogFormatterTest
     {
         final LogRecord logRecWarning = new LogRecord( Level.WARNING, "Test of Warning" );
         final String str = logFormatter.format( logRecWarning );
-        assertEquals( str, "Warning: Test of Warning\n");
+        assertEquals( str, "WARNING_COLON Test of Warning\n");
     }
 
     @Test
