@@ -374,7 +374,7 @@ public class Platypus
      */
      public static void showUsage( GDD Gdd )
      {
-        if ( lits == null ) {
+        if ( lits == null && Gdd.getLits() == null ) {
             setupLiterals( "Platypus" );
             Gdd.setLits( lits );
         }

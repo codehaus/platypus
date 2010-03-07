@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -176,7 +176,6 @@ public class CommandLineArgsTest {
     public void testZeroArgsGivingNPE() throws Exception {
         Platypus.processCommandLine( new String[0], gdd );
     }
-
 
     @Test(expected = StopExecutionException.class)
     public void testUnsupportedOption() throws Exception {
