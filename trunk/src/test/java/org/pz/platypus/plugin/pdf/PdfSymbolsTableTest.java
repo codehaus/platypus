@@ -31,7 +31,7 @@ public class PdfSymbolsTableTest
         gdd.initialize();
         gdd.setLogger( new MockLogger() );
         MockLiterals mockL = new MockLiterals();
-        mockL.setGetLitShouldFindLookupString( true );
+        mockL.setGetLitShouldReturnKey( true );
         gdd.setLits( mockL );
         gdd.getLogger().setLevel( Level.OFF );
 
