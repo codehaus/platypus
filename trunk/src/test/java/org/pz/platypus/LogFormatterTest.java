@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -10,6 +10,7 @@ package org.pz.platypus;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.pz.platypus.test.mocks.MockLiterals;
 
 import java.util.MissingResourceException;
 import java.util.logging.LogRecord;
@@ -24,7 +25,7 @@ public class LogFormatterTest
     public void setUp() 
     {
         try {
-            logFormatter = new LogFormatter( new Literals( "Platypus"  ));
+            logFormatter = new LogFormatter( new MockLiterals() );
         }
         catch ( MissingResourceException mre ) {
             fail( "Could not load Literals file ");
