@@ -115,7 +115,7 @@ public class PluginLoader
             urlForPlugin = new URL( "file:" + pluginLocation );
 //            gdd.logFinest( gdd.getLit( "PLUGIN_URL" ) + " " + urlForPlugin.toString() );
         }
-        catch ( MalformedURLException e){
+        catch ( MalformedURLException e ){
             gdd.logSevere( gdd.getLit( "ERROR.INVALID_PLUGIN_URL" ) + ": " +
                     pluginLocation + "\n" + e );
             urlForPlugin = null;
