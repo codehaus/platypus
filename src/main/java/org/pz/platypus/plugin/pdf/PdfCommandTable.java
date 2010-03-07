@@ -72,7 +72,7 @@ public class PdfCommandTable
         add( new PdfItalicsOn() );
         add( new PdfHardCR() );
         add( new PdfLeading() );
-        add( new PdfLink() );
+//        add( new PdfLink() );
         add( new PdfMarginBottom() );
         add( new PdfMarginLeft() );
         add( new PdfMarginRight() );
