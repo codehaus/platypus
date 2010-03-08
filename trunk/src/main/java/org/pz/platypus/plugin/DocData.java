@@ -186,7 +186,7 @@ public abstract class DocData implements OutputContextable
      * @param fileAndLine the file and line number where the change occurred
      * @param name the key to look up the string in systemStrings
      */
-    void setValue( final Value field, final float val, final Source fileAndLine,
+    public void setValue( final Value field, final float val, final Source fileAndLine,
                         final String name )
     {
         if( val != field.fval ) {
@@ -208,7 +208,7 @@ public abstract class DocData implements OutputContextable
      * @param fileAndLine the file and line number where the change occurred
      * @param name the key to look up the string in systemStrings
      */
-    void setValue( final Value field, final int val, final Source fileAndLine,
+    public void setValue( final Value field, final int val, final Source fileAndLine,
                         final String name )
     {
         if( val != field.fval ) {
@@ -230,7 +230,7 @@ public abstract class DocData implements OutputContextable
      * @param fileAndLine the file and line number where the change occurred
      * @param name the key to look up the string in systemStrings
      */
-    void setValue( final Value field, final boolean val, final Source fileAndLine,
+    public void setValue( final Value field, final boolean val, final Source fileAndLine,
                         final String name )
     {
         if( val != field.bval ) {

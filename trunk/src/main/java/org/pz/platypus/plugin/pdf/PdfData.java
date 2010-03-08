@@ -36,7 +36,6 @@ public class PdfData extends DocData implements OutputContextable
     private Value pixelsPerInch;
     private TypefaceMap typefaceMap;
 
-
     /**
      * Initializes the state of the PDF document.
      *
@@ -78,76 +77,6 @@ public class PdfData extends DocData implements OutputContextable
         typefaceMap.loadMapFromFile();
     }
 
-    /* Note: the following setters only update Value fields if the new value is different
-     * from the existing one. If they're not different, no update occurs, which means no
-     * modification to the Source field in the Value object occurs either.
-     */
-
-    /**
-     * Sets the new float value, updates line number, and table in systemStrings
-     * @param field the Value field to be updated
-     * @param val the new floating-point value
-     * @param fileAndLine the file and line number where the change occurred
-     * @param name the key to look up the string in systemStrings
-     */
-    void setValue( final Value field, final float val, final Source fileAndLine,
-                        final String name )
-    {
-        if( val != field.fval ) {
-            field.fval = val;
-            try {
-                field.source = fileAndLine.clone();
-            }
-            catch( CloneNotSupportedException clnse ){
-                field.source = new Source();
-            }
-            gdd.getSysStrings().add( name, Float.toString( val ));
-        }
-    }
-
-    /**
-     * Sets the new int value, updates line number, and table in systemStrings
-     * @param field the Value field to be updated
-     * @param val the new integer value
-     * @param fileAndLine the file and line number where the change occurred
-     * @param name the key to look up the string in systemStrings
-     */
-    void setValue( final Value field, final int val, final Source fileAndLine,
-                        final String name )
-    {
-        if( val != field.fval ) {
-            field.ival = val;
-            try {
-                field.source = fileAndLine.clone();
-            }
-            catch( CloneNotSupportedException clnse ){
-                field.source = new Source();
-            }
-            gdd.getSysStrings().add( name, Integer.toString( val ));
-        }
-    }
-
-    /**
-     * Sets the new boolean value, updates line number, and table in systemStrings
-     * @param field the Value field to be updated
-     * @param val the new floating-point value
-     * @param fileAndLine the file and line number where the change occurred
-     * @param name the key to look up the string in systemStrings
-     */
-    void setValue( final Value field, final boolean val, final Source fileAndLine,
-                        final String name )
-    {
-        if( val != field.bval ) {
-            field.bval = val;
-            try {
-                field.source = fileAndLine.clone();
-            }
-            catch( CloneNotSupportedException clnse ){
-                field.source = new Source();
-            }
-            gdd.getSysStrings().add( name, Boolean.toString( val ));
-        }
-    }
 
     public ScriptEngine createNewScriptEngine()
     {
@@ -268,12 +197,6 @@ public class PdfData extends DocData implements OutputContextable
     {
         return( formatStack );
     }
-
-    public GDD getGdd()
-    {
-        return( gdd );
-    }
-
 
     public PdfOutfile getOutfile()
     {
