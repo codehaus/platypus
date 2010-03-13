@@ -10,7 +10,7 @@ package org.pz.platypus.interfaces;
 import org.pz.platypus.*;
 
 /**
- * Interface for individual commands as used in the output plugin.
+ * Interface for commands that consume multiple tokens in the token stream.
  */
 public interface OutputSkippingCommandable
 {
@@ -26,6 +26,7 @@ public interface OutputSkippingCommandable
      * @param context the context/state of the output document
      * @param tok the command token as found in the token stream
      * @param tokNum the number of the token in the token list
+     * @return the number of tokens to skip
      */
 
     int processSkippingCommand( final OutputContextable context, final Token tok, final int tokNum );
