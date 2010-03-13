@@ -105,10 +105,9 @@ public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingComm
 
         return( i - tokNum - 1 );     // return the number of tokens we skipped
     }
-
-    //>>> need to be able to have token parser that called this routine skip to the [-code] token, or end of file.
+    //>>> compute width of line number (how many digits should it have?)
     //>>> print - marks for non-numbered lines
-    //>>> make sure empty lines get line numbers
+    //>>> make sure blank lines get line numbers
 
     /**
      *  At the [-code] token? (So, at end of code?)
