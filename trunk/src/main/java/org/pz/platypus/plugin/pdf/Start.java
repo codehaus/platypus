@@ -12,6 +12,7 @@ import org.pz.platypus.exceptions.FileCloseException;
 import org.pz.platypus.exceptions.InvalidConfigFileException;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.Pluggable;
+import org.pz.platypus.interfaces.OutputSkippingCommandable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -149,11 +150,16 @@ public class Start implements Pluggable
                     i += j;
                     break;
                 case COMMAND:
-                    processCommand( tok, pdfData, i );
+                    if( tok.getRoot().equals( "[code|" )) {
+                        i += processSkippingCommand( tok, pdfData, i );
+                    }
+                    else {
+                        processCommand( tok, pdfData, i );
 
-                    // if the current command is [] and it's followed by EOL, don't process the EOL.
-                    if( tok.getRoot().equals( "[]" ) && isNextTokenCr( i, tokenList )) {
-                        ++i;
+                        // if the current command is [] and it's followed by EOL, don't process the EOL.
+                        if( tok.getRoot().equals( "[]" ) && isNextTokenCr( i, tokenList )) {
+                            ++i;
+                        }
                     }
                     break;
                 case TEXT:
@@ -223,6 +229,30 @@ public class Start implements Pluggable
         }
         else {
             errMsgUnrecognizedCommand( tok, pdfData.getGdd() );
+        }
+    }
+
+    /**
+     * Method for implementing command tokens that return the number of tokens to skip
+     * @param tok command token to process
+     * @param pdfData document state data
+     * @param tokNum the number of the token in the token list
+     * @return number of tokens to skip
+     */
+    int processSkippingCommand( final Token tok, final PdfData pdfData, final int tokNum )
+    {
+        assert( tok != null && pdfData != null );
+        assert( commandTable!= null && commandTable.getSize() > 0 );
+
+        // lookup the command in the PDF command table
+        OutputCommandable oc = commandTable.getCommand( tok.getRoot() );
+        OutputSkippingCommandable osc = (OutputSkippingCommandable) oc;
+        if( oc != null ) {
+             return( osc.processSkippingCommand( pdfData, tok, tokNum ));
+        }
+        else {
+            errMsgUnrecognizedCommand( tok, pdfData.getGdd() );
+            return( 0 );
         }
     }
 
