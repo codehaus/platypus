@@ -9,6 +9,7 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.OutputSkippingCommandable;
 import org.pz.platypus.*;
 import org.pz.platypus.plugin.pdf.*;
 import com.lowagie.text.Chunk;
@@ -21,11 +22,13 @@ import com.lowagie.text.Paragraph;
  *
  * @author alb
  */
-public class PdfCodeWithOptions implements OutputCommandable
+public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingCommandable
 {
     private String root = "[code|";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public void process( final OutputContextable context, final Token tok, final int tokNum ){}
+
+    public int processSkippingCommand( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -33,7 +36,7 @@ public class PdfCodeWithOptions implements OutputCommandable
 
         PdfData pdd = (PdfData) context;
         if( pdd.inCodeSection() ) {
-            return; //already in a code section
+            return( 0 ); //already in a code section
         }
 
         // switch to monospace, etc.
@@ -42,7 +45,7 @@ public class PdfCodeWithOptions implements OutputCommandable
         String param = tok.getParameter().getString();
         if( param == null || ! param.startsWith( "lines:" )) {
             invalidParameterErrMessage( pdd.getGdd(), tok.getSource() );
-            return;
+            return( 0 );
         }
 
         // process the line count options: starting line number, how often to print the line numbers
@@ -52,7 +55,7 @@ public class PdfCodeWithOptions implements OutputCommandable
         String[] params = counts.split( "," );
         if( params.length != 2 ) {
             invalidParameterErrMessage( pdd.getGdd(), tok.getSource() );
-            return;
+            return( 0 ) ;
         }
 
         int startingLineNumber = Integer.parseInt( params[0] );
@@ -99,6 +102,8 @@ public class PdfCodeWithOptions implements OutputCommandable
             GDD gdd = pdd.getGdd();
             gdd.logWarning( gdd.getLit( "WARNING.FILE_ENDS_WITHOUT_CODE_END" ));
         }
+
+        return( i - tokNum - 1 );     // return the number of tokens we skipped
     }
 
     //>>> need to be able to have token parser that called this routine skip to the [-code] token, or end of file.
