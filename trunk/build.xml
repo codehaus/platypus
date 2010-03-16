@@ -29,9 +29,10 @@
 	
     <!-- input directories and files -->
 	<property name="src.dir" 				location="${top.dir}\src\main\java"/>
+    <property name="src.html.plugin.dir"    location="\${src.dir}\org\pz\platypus\plugin\html"/>
     <property name="src.listing.plugin.dir" location="\${src.dir}\org\pz\platypus\plugin\listing"/>
     <property name="src.pdf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\pdf"/>
-    <property name="src.rtf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\rtf"/>	
+    <property name="src.rtf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\rtf"/>
 	<property name="src.test.dir"   		location="\${top.dir}\src\test\java" />	
 	<!--<property name="config.dir"				location="${top.dir}\src\main\resources\" /> -->
 	<property name="config.dir"				location="${top.dir}\config\" />
@@ -67,11 +68,13 @@
                  compile-listing-plugin,
                  compile-pdf-plugin,
 				 compile-rtf-plugin,
+				 compile-html-plugin,
                  jar-dir-prep,
                  main-jar,
                  plugin-listing-jar,
                  plugin-pdf-jar,
-				 plugin-rtf-jar,
+		         plugin-html-jar,
+		         plugin-rtf-jar,
                  setup-config-files,
                  setup-docs,
 				 setup-licenses,
@@ -111,6 +114,13 @@
 
 <target name="compile-rtf-plugin" depends="compile" description="Compile PDF plug-in with Java 6">
 	<javac srcdir="${src.rtf.plugin.dir}"
+		   destdir="${classes.dir}">
+		   <classpath refid="project.classpath" />
+	</javac>
+</target>
+
+<target name="compile-html-plugin" depends="compile" description="Compile HTML plug-in with Java 6">
+	<javac srcdir="${src.html.plugin.dir}"
 		   destdir="${classes.dir}">
 		   <classpath refid="project.classpath" />
 	</javac>
@@ -197,6 +207,26 @@
 		</manifest>
     </jar>
 	<delete dir="${jar.dir}\plugins\rtf\" />
+</target>
+
+
+<target name="plugin-html-jar" description="Create JAR for html plugins">
+    <delete dir="${jar.dir}\plugins\html\" />
+    <mkdir dir="${jar.dir}\plugins\html\org\pz\platypus\plugin\html" />
+	<copy todir="${jar.dir}\plugins\html\org\pz\platypus\plugin\html">
+		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\html" />
+	</copy>
+
+	<jar destfile="${jar.dir}\plugins\html.jar"
+		 basedir="${jar.dir}\plugins\html\" >
+        <manifest>
+		<attribute name="Implementation-Title" value="Platypus HTML output plugin" />
+		<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
+		<attribute name="Implementation-Version" value="Platypus ${version}" />
+	</manifest>
+    </jar>
+
+    <delete dir="${jar.dir}\plugins\html\" />
 </target>
 
 <target  name="setup-config-files" description="Set up config files">
