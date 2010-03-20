@@ -55,6 +55,8 @@ public class PdfData extends DocData implements OutputContextable
         pixelsPerInch   = new Value( DefaultValues.PIXELS_PER_INCH );
 
         typefaceMap     = new TypefaceMap( getGdd() );
+
+        underline       = new Underline();
     }
 
     /**
