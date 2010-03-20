@@ -115,7 +115,7 @@ public abstract class DocData implements OutputContextable
     private Value paragraphIndentRight;
     private Value paragraphSkip;
     private Value strikethru;
-    private Underline underline;
+    protected Underline underline;
 
     public DocData()
     {
