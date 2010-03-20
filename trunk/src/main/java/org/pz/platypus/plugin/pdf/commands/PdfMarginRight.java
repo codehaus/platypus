@@ -24,7 +24,7 @@ public class PdfMarginRight implements OutputCommandable
 {
     private String root = "[rmargin:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -39,15 +39,16 @@ public class PdfMarginRight implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_RIGHT_MARGIN" ) + ": " + rMargin + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currRMargin = pdf.getMarginRight();
 
         if ( rMargin != currRMargin ) {
             pdf.setMarginRight( rMargin, tok.getSource() );
-            return;
+            return 0;
         }
+        return 0;
     }
 
     public String getRoot()

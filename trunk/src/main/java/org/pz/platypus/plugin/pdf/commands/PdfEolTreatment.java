@@ -30,7 +30,7 @@ public class PdfEolTreatment implements OutputCommandable
      * @param tok the token carrying the new treatment
      * @param tokNum token number
      */
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();
@@ -53,6 +53,8 @@ public class PdfEolTreatment implements OutputCommandable
         } catch( EolTreatmentException eole ) {
             showError( tok, pdfData );
         }
+
+        return 0;
     }
 
     /**

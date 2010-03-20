@@ -26,7 +26,7 @@ public class PdfParagraphIndentRight implements OutputCommandable
 {
     private String root = "[paraindentR:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         float newIndent;
 
@@ -44,12 +44,13 @@ public class PdfParagraphIndentRight implements OutputCommandable
         }
         catch( InvalidCommandParameterException icpe ) {
             showErrorMsg( tok, pdf );
-            return;
+            return 0;
         }
 
         if ( newIndent != pdf.getParagraphIndentRight() ) {
             pdf.setParagraphIndentRight( newIndent, tok.getSource() );
         }
+        return 0;
     }
 
     /**

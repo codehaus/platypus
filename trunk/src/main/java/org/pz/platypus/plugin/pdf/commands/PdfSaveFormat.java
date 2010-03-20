@@ -21,7 +21,7 @@ public class PdfSaveFormat implements OutputCommandable
 {
     private String root = "[savefmt]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -29,6 +29,7 @@ public class PdfSaveFormat implements OutputCommandable
 
         PdfData pdd = (PdfData) context;
         save( pdd );
+        return 0;
     }
 
     /**

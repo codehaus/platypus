@@ -22,7 +22,7 @@ public class PdfRestoreFormat implements OutputCommandable
 {
     private String root = "[restorefmt]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -30,6 +30,7 @@ public class PdfRestoreFormat implements OutputCommandable
 
         PdfData pdd = (PdfData) context;
         restore( pdd, tok.getSource() );
+        return 0;
     }
 
     /**

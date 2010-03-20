@@ -26,7 +26,7 @@ public class HtmlEol implements OutputCommandable
 {
     private String root = "[cr]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null ) {
             throw new IllegalArgumentException();
@@ -39,7 +39,7 @@ public class HtmlEol implements OutputCommandable
 
         // if we're at the last input token, then do nothing
         if( nextTok == null ) {
-            return;
+            return 0;
         }
 
         // if the [cr] occurs at the end of a line that consisted entirely of commands,
@@ -47,7 +47,7 @@ public class HtmlEol implements OutputCommandable
         // so with a line consisting entirely of [fsize:12pt] simply changes font size, but
         // adds no character to the ouput stream
         if( ! tl.lineSoFarEmitsText( tokNum  )) {
-            return;
+            return 0;
         }
 
         // if EolTreatment = hard, issue CR/LF
@@ -56,10 +56,11 @@ public class HtmlEol implements OutputCommandable
             if( para != null ) {
                 para.add( new Chunk( Chunk.NEWLINE ));
             }
-            return;
+            return 0;
         }
 
         outfile.emitText( " " );
+        return 0;
     }
 
     public String getRoot()

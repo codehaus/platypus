@@ -24,7 +24,7 @@ public class PdfMarginTop implements OutputCommandable
 {
     private String root = "[tmargin:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -39,15 +39,16 @@ public class PdfMarginTop implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_TOP_MARGIN" ) + ": " + tMargin + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currTMargin = pdf.getMarginTop();
 
         if ( tMargin != currTMargin ) {
             pdf.setMarginTop( tMargin, tok.getSource() );
-            return;
+            return 0;
         }
+        return 0;
     }
 
     public String getRoot()

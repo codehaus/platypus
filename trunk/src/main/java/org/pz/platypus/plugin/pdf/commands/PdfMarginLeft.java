@@ -24,7 +24,7 @@ public class PdfMarginLeft implements OutputCommandable
 {
     private String root = "[lmargin:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -39,15 +39,16 @@ public class PdfMarginLeft implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_LEFT_MARGIN" ) + ": " + lMargin + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currLMargin = pdf.getMarginLeft();
 
         if ( lMargin != currLMargin ) {
             pdf.setMarginLeft( lMargin, tok.getSource() );
-            return;
+            return 0;
         }
+        return 0;
     }
 
     public String getRoot()

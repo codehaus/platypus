@@ -28,7 +28,7 @@ public class DefUserString implements OutputCommandable
 
     private boolean validInCode = false;
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -59,6 +59,8 @@ public class DefUserString implements OutputCommandable
         if( gdd.getUserStrings().add( macroName, macroValue ) != Status.OK ) {
             issueErrorMessage( gdd, tok.getSource(), macroName + ":" + macroValue );
         }
+
+        return 0;
     }
 
     /**

@@ -22,7 +22,7 @@ public class PdfCodeOn implements OutputCommandable
 {
     private String root = "[code]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -30,7 +30,7 @@ public class PdfCodeOn implements OutputCommandable
 
         PdfData pdd = (PdfData) context;
         if( pdd.inCodeSection() ) {
-            return; //already in a code section
+            return 0; //already in a code section
         }
 
         // save the current format
@@ -49,6 +49,8 @@ public class PdfCodeOn implements OutputCommandable
         setEolTreatmentToHard( pdd, tok );
 
         pdd.setInCodeSection( true, tok.getSource() );
+
+        return 0;
     }
 
     private void setEolTreatmentToHard( final PdfData pdd, Token token )

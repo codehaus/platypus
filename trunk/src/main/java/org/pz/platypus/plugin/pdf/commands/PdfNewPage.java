@@ -23,7 +23,7 @@ public class PdfNewPage implements OutputCommandable
 {
     private String root = "[pg]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -33,6 +33,8 @@ public class PdfNewPage implements OutputCommandable
 
         PdfOutfile outfile = pdf.getOutfile();
         outfile.newPage();
+
+        return 0;
     }
 
     public String getRoot()

@@ -26,7 +26,7 @@ public class PdfColumnWidth implements OutputCommandable
 {
     private String root = "[columnwidth:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -38,15 +38,16 @@ public class PdfColumnWidth implements OutputCommandable
         float writableAreaWidth =  pdd.getPageWidth() - pdd.getMarginLeft() - pdd.getMarginRight();
         if ( colWidth < 0 || colWidth * pdd.getColumnCount() > writableAreaWidth ) {
             showErrorMsg( tok, pdd, colWidth );
-            return;
+            return 0;
         }
 
         float pddColumnWidth = pdd.getUserSpecifiedColumnWidth();
 
         if ( colWidth != pddColumnWidth ) {
             pdd.setUserSpecifiedColumnWidth( colWidth, tok.getSource() );
-            return;
+            return 0;
         }
+        return 0;
     }
 
     /**

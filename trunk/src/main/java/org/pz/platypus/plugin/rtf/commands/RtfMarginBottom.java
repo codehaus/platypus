@@ -21,7 +21,7 @@ public class RtfMarginBottom implements OutputCommandable
 {
     private String root = "[bmargin:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -36,7 +36,7 @@ public class RtfMarginBottom implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_BOTTOM_MARGIN" ) + ": " + bMargin + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currtMargin = rtd.getMarginBottom();
@@ -54,6 +54,7 @@ public class RtfMarginBottom implements OutputCommandable
                                 gdd.getLit( "IGNORED" ));
             }
         }
+        return 0;
     }
 
     public String getRoot()

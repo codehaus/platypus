@@ -22,7 +22,7 @@ public class RtfMarginLeft implements OutputCommandable
 {
     private String root = "[lmargin:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -37,7 +37,7 @@ public class RtfMarginLeft implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_LEFT_MARGIN" ) + ": " + lMargin + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currLMargin = rtd.getMarginLeft();
@@ -55,6 +55,7 @@ public class RtfMarginLeft implements OutputCommandable
                                 gdd.getLit( "IGNORED" ));
             }
         }
+        return 0;
     }
 
     public String getRoot()

@@ -21,7 +21,7 @@ public class PdfStrikethruOn implements OutputCommandable
 {
     private String root = "[+st]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -29,6 +29,7 @@ public class PdfStrikethruOn implements OutputCommandable
 
         PdfData pdf = (PdfData) context;
         pdf.setStrikethru( true, tok.getSource() );
+        return 0;
     }
 
     public String getRoot()
