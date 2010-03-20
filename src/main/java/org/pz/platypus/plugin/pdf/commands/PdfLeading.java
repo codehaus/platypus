@@ -23,7 +23,7 @@ public class PdfLeading implements OutputCommandable
 {
     private String root = "[leading:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -46,7 +46,7 @@ public class PdfLeading implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_LEADING" ) + ": " + leading + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currLeading = pdf.getLeading();
@@ -62,6 +62,7 @@ public class PdfLeading implements OutputCommandable
                 pdf.setLineHeight( leading, tok.getSource() );
             }
         }
+        return 0;
     }
 
     public String getRoot()

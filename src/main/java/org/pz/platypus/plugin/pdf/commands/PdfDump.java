@@ -24,7 +24,7 @@ public class PdfDump implements OutputCommandable
 {
     private String root = "[dump:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -40,7 +40,7 @@ public class PdfDump implements OutputCommandable
                     gdd.getLit( "LINE#" ) + " " + tok.getSource().getLineNumber() + " " +
                     gdd.getLit( "ERROR.ITEM_TO_DUMP_IS_NULL" ) + " " +
                     gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
         item = item.toUpperCase();
 
@@ -65,8 +65,9 @@ public class PdfDump implements OutputCommandable
                     gdd.getLit( "LINE#" ) + " " + tok.getSource().getLineNumber() + " " +
                     gdd.getLit( "ERROR.ITEM_TO_DUMP_IS_INVALID" ) + ": " + item + " " +
                     gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
+        return 0;
     }
 
     /**

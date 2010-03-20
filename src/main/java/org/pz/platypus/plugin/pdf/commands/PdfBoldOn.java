@@ -22,7 +22,7 @@ public class PdfBoldOn implements OutputCommandable
 {
     private String root = "[+b]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -32,6 +32,8 @@ public class PdfBoldOn implements OutputCommandable
 
         PdfFont font = pdf.getFont();
         font.setBold( true, tok.getSource() );
+
+        return 0;
     }
 
     public String getRoot()

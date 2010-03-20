@@ -28,5 +28,5 @@ public interface OutputCommandable
      * @param tokNum the number of the token in the token list
      */
 
-    void process( final OutputContextable context, final Token tok, final int tokNum );
+    int process( final OutputContextable context, final Token tok, final int tokNum );
 }

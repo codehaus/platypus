@@ -34,7 +34,7 @@ public class PdfSymbol implements OutputCommandable
         passedValue = stringToEmit;
     }
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null ) {
             throw new IllegalArgumentException();
@@ -48,7 +48,7 @@ public class PdfSymbol implements OutputCommandable
         {
             specifiedFontName = extractFontName( passedValue, pdf.getGdd(), tok );
             if( specifiedFontName.isEmpty() ) {
-                return;
+                return 0;
             }
 
             passedValue = passedValue.substring( passedValue.indexOf( '}' ) + 1 );
@@ -64,6 +64,7 @@ public class PdfSymbol implements OutputCommandable
         else {
             pdf.getOutfile().emitText( passedValue );
         }
+        return 0;
     }
 
     /**

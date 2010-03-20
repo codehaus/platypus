@@ -28,7 +28,7 @@ public class HtmlMarginLeft implements OutputCommandable
 
     private boolean validInCode = false;
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -41,9 +41,9 @@ public class HtmlMarginLeft implements OutputCommandable
 
         if ( lMargin != currLMargin ) {
             htmlData.setMarginLeft( lMargin, tok.getSource() );
-            return;
+            return 0;
         }
-
+        return 0;
     }
 
     public String getRoot()

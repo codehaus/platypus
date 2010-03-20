@@ -21,7 +21,7 @@ public class PdfMarginsMirrored implements OutputCommandable
 {
     private String root = "[marginsmirrored]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -30,6 +30,7 @@ public class PdfMarginsMirrored implements OutputCommandable
         PdfData pdf = (PdfData) context;
         pdf.setMarginsMirrored( true, tok.getSource() );
         pdf.getOutfile().setMarginsMirrored();
+        return 0;
     }
 
     public String getRoot()

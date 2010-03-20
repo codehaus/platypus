@@ -24,7 +24,7 @@ public class PdfPageWidth implements OutputCommandable
 {
     private String root = "[pagewidth:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -40,7 +40,7 @@ public class PdfPageWidth implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_PAGE_HEIGHT" ) + ": " +  pageWidth + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float docPageWidth = pdf.getPageWidth();
@@ -48,6 +48,8 @@ public class PdfPageWidth implements OutputCommandable
         if ( pageWidth != docPageWidth ) {
             pdf.setPageWidth( pageWidth, tok.getSource() );
         }
+
+        return 0;
     }
 
     public String getRoot()

@@ -27,7 +27,7 @@ public class PdfPageSize implements OutputCommandable
 {
     private String root = "[pagesize:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -43,7 +43,7 @@ public class PdfPageSize implements OutputCommandable
                     gdd.getLit( "LINE#" ) + " " + tok.getSource().getLineNumber() + " " +
                     gdd.getLit( "ERROR.PAGE_SIZE_IS_NULL" ) + " " +
                     gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
         pageSize = pageSize.toUpperCase();
 
@@ -66,6 +66,7 @@ public class PdfPageSize implements OutputCommandable
             // triggered in PdfOutfile.addColumnsContentToDocument()
             pdf.setCurrColumn( Limits.COLUMN_COUNT_MAX );
         }
+        return 0;
     }
 
     /**

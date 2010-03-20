@@ -26,7 +26,10 @@ public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingComm
 {
     private String root = "[code|";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum ){}
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    {
+        return 0;
+    }
 
     public int processSkippingCommand( final OutputContextable context, final Token tok, final int tokNum )
     {

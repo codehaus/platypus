@@ -24,7 +24,7 @@ public class PdfFirstLineIndent implements OutputCommandable
 {
     private String root = "[indent:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         float newIndent;
 
@@ -41,12 +41,13 @@ public class PdfFirstLineIndent implements OutputCommandable
         }
         catch( InvalidCommandParameterException icpe ) {
             showErrorMsg( tok, pdf );
-            return;
+            return 0;
         }
 
         if ( newIndent != pdf.getFirstLineIndent() ) {
             pdf.setFirstLineIndent( newIndent, tok.getSource() );
         }
+        return 0;
     }
 
     /**

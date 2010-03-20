@@ -23,7 +23,7 @@ public class PdfParagraphSkip implements OutputCommandable
 {
     private String root = "[paraskip:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -40,7 +40,8 @@ public class PdfParagraphSkip implements OutputCommandable
             gdd.logWarning( gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_PARAGRAPH_SKIP" ) + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+
+            return 0;
         }
 
         float currParaSkip = pdf.getParagraphSkip();
@@ -48,6 +49,8 @@ public class PdfParagraphSkip implements OutputCommandable
         if ( newSkip != currParaSkip ) {
             pdf.setParagraphSkip( newSkip, tok.getSource() );
         }
+
+        return 0;
     }
 
     public String getRoot()

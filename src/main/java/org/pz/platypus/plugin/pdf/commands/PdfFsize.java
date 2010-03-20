@@ -22,7 +22,7 @@ public class PdfFsize implements OutputCommandable
 {
     private String root = "[font|size:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -34,7 +34,7 @@ public class PdfFsize implements OutputCommandable
         float newFontSize = tok.getParameter().getAmount();
 
         if( currFontSize == newFontSize ) {
-            return;
+            return 0;
         }
 
         pdf.setFontSize( newFontSize, tok.getSource() );
@@ -59,7 +59,7 @@ public class PdfFsize implements OutputCommandable
                 pdf.getOutfile().getItPara().setLeading(
                                       newFontSize * DefaultValues.LEADING_TO_FONT_SIZE_RATIO );
             }
-            return;
+            return 0;
         }
 
         // in an existing paragraph
@@ -67,7 +67,7 @@ public class PdfFsize implements OutputCommandable
         if( newFontSize < currFontSize ) {  // change leading for next paragraph
             pdf.setLeading( newFontSize * DefaultValues.LEADING_TO_FONT_SIZE_RATIO,
                             tok.getSource() );
-            return;
+            return 0;
         }
 
         // in an existing paragraph and new font size is more than a little bigger
@@ -82,6 +82,7 @@ public class PdfFsize implements OutputCommandable
         }
 
         // if in an existing paragraph with a minor font size change, we don't change leading
+        return 0;
     }
 
     /**

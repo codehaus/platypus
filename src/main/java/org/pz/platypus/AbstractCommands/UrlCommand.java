@@ -16,7 +16,7 @@ public abstract class UrlCommand implements OutputCommandable {
 
     protected abstract void outputUrl(final OutputContextable context, String url, String coverText);
 
-    public void process(OutputContextable context, Token tok, int tokNum) {
+    public int process(OutputContextable context, Token tok, int tokNum) {
         if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();
         }
@@ -39,10 +39,12 @@ public abstract class UrlCommand implements OutputCommandable {
 
         if( url == null ) {
             showErrorMsg( tok, context );
-            return;
+            return 0;
         }
 
         outputUrl(context, url, coverText);
+
+        return 0;
     }
 
     public String getRoot()

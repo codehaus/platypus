@@ -22,7 +22,7 @@ public class PdfFooterOff implements OutputCommandable
 {
     private String root = "[-footer]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -32,6 +32,7 @@ public class PdfFooterOff implements OutputCommandable
 
         Footer footer = pdf.getFooter();
         footer.setShouldWrite( false );
+        return 0;
     }
 
     public String getRoot()

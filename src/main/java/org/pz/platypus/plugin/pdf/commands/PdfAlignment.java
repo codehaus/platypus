@@ -23,7 +23,7 @@ public class PdfAlignment implements OutputCommandable
 {
     private String root = "[align:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();
@@ -56,9 +56,9 @@ public class PdfAlignment implements OutputCommandable
                             tok.getParameter().getString() + " " +
                             gdd.getLit( "IGNORED" ));
         }
+        return 0;
     }
 
-    @Override
     public String getRoot()
     {
         return( root );

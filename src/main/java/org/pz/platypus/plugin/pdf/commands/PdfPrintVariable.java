@@ -20,7 +20,7 @@ public class PdfPrintVariable implements OutputCommandable
 {
     private String root = "[*";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -51,11 +51,12 @@ public class PdfPrintVariable implements OutputCommandable
                 issueErrorMessage( gdd, tok.getSource(), varName );
                 injectTextToken( gdd, tokNum,  root + varName + "]" , tok.getSource() );
             }
-            return;
+            return 0;
         }
 
         // in theory cannot happen, as the token would be malformed and the parser would know this.
         issueErrorMessage( gdd, tok.getSource(), "[null]" );
+        return 0;
     }
 
     /**

@@ -22,7 +22,7 @@ public class PdfUnderlineOn implements OutputCommandable
 {
     private String root = "[+u]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -32,6 +32,7 @@ public class PdfUnderlineOn implements OutputCommandable
 
         Underline underline = pdf.getUnderline();
         underline.setInEffect( true, tok.getSource() );
+        return 0;
     }
 
     public String getRoot()

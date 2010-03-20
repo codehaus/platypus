@@ -24,7 +24,7 @@ public class PdfColumnCount implements OutputCommandable
 {
     private String root = "[columns:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -38,7 +38,7 @@ public class PdfColumnCount implements OutputCommandable
             gdd.logWarning( gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_COLUMN_COUNT" ) + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         int pddColumnCount = pdd.getColumnCount();
@@ -49,8 +49,9 @@ public class PdfColumnCount implements OutputCommandable
                 setupNewColumns( newColumnCount, pdd );
             }
             pdd.setColumnCount( newColumnCount, tok.getSource() );
-            return;
+            return 0;
         }
+        return 0;
     }
 
     /**

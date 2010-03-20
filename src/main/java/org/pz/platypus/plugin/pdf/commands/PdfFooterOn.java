@@ -22,7 +22,7 @@ public class PdfFooterOn implements OutputCommandable
 {
     private String root = "[+footer]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -38,6 +38,7 @@ public class PdfFooterOn implements OutputCommandable
         if( pdf.getPageNumber() <= footer.getPagesToSkip() ) {
             footer.setPagesToSkip( pdf.getPageNumber() - 1 );
         }
+        return 0;
     }
 
     public String getRoot()

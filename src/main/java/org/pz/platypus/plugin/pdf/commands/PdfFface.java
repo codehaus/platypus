@@ -21,7 +21,7 @@ public class PdfFface implements OutputCommandable
 {
     private String root = "[font|face:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -30,7 +30,9 @@ public class PdfFface implements OutputCommandable
         PdfData pdf = (PdfData) context;
 
         String newFontFace = tok.getParameter().getString();
-        pdf.setFontFace( newFontFace, tok.getSource() );  
+        pdf.setFontFace( newFontFace, tok.getSource() );
+
+        return 0;
     }
 
     public String getRoot()

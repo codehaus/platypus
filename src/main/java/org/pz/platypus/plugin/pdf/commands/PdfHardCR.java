@@ -27,7 +27,7 @@ public class PdfHardCR implements OutputCommandable
 {
     private String root = "[]";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -45,6 +45,7 @@ public class PdfHardCR implements OutputCommandable
         if( isFirstTokenInLine( context, tok, tokNum ) && currPar != null ) {
             currPar.add( new Chunk( Chunk.NEWLINE ));   
         }
+        return 0;
     }
 
     /**

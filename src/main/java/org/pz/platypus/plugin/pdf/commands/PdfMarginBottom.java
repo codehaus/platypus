@@ -24,7 +24,7 @@ public class PdfMarginBottom implements OutputCommandable
 {
     private String root = "[bmargin:";
 
-    public void process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -39,15 +39,16 @@ public class PdfMarginBottom implements OutputCommandable
                             gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
                             gdd.getLit( "ERROR.INVALID_BOTTOM_MARGIN" ) + ": " + bMargin + " " +
                             gdd.getLit( "IGNORED" ));
-            return;
+            return 0;
         }
 
         float currBMargin = pdf.getMarginBottom();
 
         if ( bMargin != currBMargin ) {
             pdf.setMarginBottom( bMargin, tok.getSource() );
-            return;
+            return 0;
         }
+        return 0;
     }
 
     public String getRoot()
