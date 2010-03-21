@@ -10,12 +10,8 @@ package org.pz.platypus.plugin.html;
 import org.pz.platypus.GDD;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.plugin.html.commands.*;
-import org.pz.platypus.plugin.pdf.PdfSymbolsTable;
-import org.pz.platypus.plugin.pdf.commands.PdfSymbol;
 
 import java.util.HashMap;
-import java.util.MissingResourceException;
-import java.util.Set;
 
 /**
  * Contains all the commands used in the PDF plugins,
@@ -71,18 +67,6 @@ public class HtmlCommandTable
      */
     void loadSymbols( final GDD gdd )
     {
-        try {
-            PdfSymbolsTable pst = new PdfSymbolsTable( gdd );
-            Set<String> symbols = pst.keySet();
-            for( String symbol : symbols ) {
-                add( new PdfSymbol( symbol, pst.getPropertyFile().lookup( symbol )));
-            }
-        }
-        catch( MissingResourceException mre ) {
-            // Do nothing. Error message has already been displayed.
-            // by exiting method now, any symbols will generate a warning
-            // that the symbol is not recognized
-        }
     }
 
     /**

@@ -13,10 +13,6 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
 import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.plugin.pdf.Underline;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 /**
  * Container class for all the state of the PDF document
@@ -130,7 +126,6 @@ public class HtmlData implements OutputContextable
 //    private ScriptEngine scriptEngine;
     private Value strikethru;
     private TypefaceMap typefaceMap;
-    private Underline underline;
 
     /**
      * Initializes the state of the PDF document.
@@ -176,7 +171,6 @@ public class HtmlData implements OutputContextable
 //        scriptEngine    = createNewScriptEngine();
         strikethru      = new Value( false );
         typefaceMap     = new TypefaceMap( gdd );
-        underline       = new Underline();
         userSpecifiedColumnWidth = new Value( DefaultValues.COLUMN_WIDTH );
     }
 
@@ -262,60 +256,11 @@ public class HtmlData implements OutputContextable
         }
     }
 
-    public ScriptEngine createNewScriptEngine()
-    {
-        ScriptEngineManager sem = new ScriptEngineManager();
-    //    ScriptEngine se = sem.getEngineByName( "Groovy Scripting Engine" );
-        ScriptEngine se = sem.getEngineByName( "groovy" );
-        if( se == null ) {
-            gdd.logWarning( gdd.getLit( "ERROR.SCRIPT_ENGINE_NOT_FOUND" ));
-            return( null );
-        }
-
-//      For debugging: lists the names of the available script engines
-//        System.out.println( "Available factories" );
-//        for( ScriptEngineFactory f : sem.getEngineFactories()) {
-//            System.out.println( f.getEngineName() );
-//        }
-
-        return( se );
-    }
-
     //=== getters and setters in alpha order by field  ===
-
-    public int getAlignment()
-    {
-        return( alignment.ival );
-    }
-
-    public Source getAlignmentLine()
-    {
-        return( alignment.source );
-    }
-
-    public void setAlignment( final int newAlignment, final Source fileAndLine )
-    {
-        setValue( alignment, newAlignment, fileAndLine, "_alignment" );
-    }
-
-    public int getColumnCount()
-    {
-        return columnCount.ival;
-    }
-
-    public Source getColumnCountLine()
-    {
-        return columnCount.source;
-    }
 
     public void setColumnCount( final int newCount, final Source fileAndLine )
     {
         setValue( columnCount, newCount, fileAndLine, "_columnCount" );
-    }
-
-    public HtmlColumns getColumns()
-    {
-        return( columns );
     }
 
     public void setColumns( final HtmlColumns newColumnsList )
@@ -324,45 +269,9 @@ public class HtmlData implements OutputContextable
         columnCount = new Value( newColumnsList.size() );
     }
 
-    public int getCurrColumn()
-    {
-        return( currColumn );
-    }
-
     public void setCurrColumn( int newColNumber )
     {
         currColumn = newColNumber;
-    }
-
-    public boolean getEolPending()
-    {
-        return( eolPending );
-    }
-
-    public void setEolPending( final boolean newEol )
-    {
-        // newEol = false only when resetting flag; there is
-        // no user command to do this. It's only done as a
-        // result of processing EOL.
-        if( newEol == false ) {
-            eolPending = false;
-            return;
-        }
-
-        // [cr] has been encountered
-        if( eolPending == false ) {
-            eolPending = true;
-            return;
-        }
-
-        // If there's an EOL already pending, then the second one means a new paragraph.
-        // However, if paragraph == null, iText needs a single blank space before skipping the line.
-        if( pdfOutfile.getItPara() == null ) {
-            pdfOutfile.emitText( " " );
-        }
-
-        pdfOutfile.startNewParagraph();
-        eolPending = false;
     }
 
     public int getEolTreatment()
@@ -370,24 +279,9 @@ public class HtmlData implements OutputContextable
         return( eolTreatment.ival );
     }
 
-    public Source getEolTreatmentLine()
-    {
-        return( eolTreatment.source );
-    }
-
-    public void setEolTreatment( final int newEolTreatment, final Source fileAndLine )
-    {
-        setValue( eolTreatment, newEolTreatment, fileAndLine, "_EOL_handling" );
-    }
-
     public float getFirstLineIndent()
     {
         return( firstLineIndent.fval );
-    }
-
-    public Source getFirstLineIndentLine()
-    {
-        return( firstLineIndent.source );
     }
 
     public void setFirstLineIndent( final float newFirstLineIndent, final Source fileAndLine )
@@ -400,29 +294,14 @@ public class HtmlData implements OutputContextable
         return( font );
     }
 
-    public void setFont( final HtmlFont newFont )
-    {
-        font = newFont;
-    }
-
     public String getFontFace()
     {
         return( font.getFace() );
     }
 
-    public void setFontFace( final String newFace, final Source newSource )
-    {
-        font.setFace( newFace, newSource );
-    }
-
     public float getFontSize()
     {
         return( font.getSize() );
-    }
-
-    public void setFontSize( final float newSize, final Source newSource )
-    {
-        font.setSize( newSize, newSource );
     }
 
     public HtmlFooter getFooter()
@@ -535,24 +414,6 @@ public class HtmlData implements OutputContextable
         setValue( marginTop, val, fileAndLine, "_marginTop" );
     }
 
-    public boolean getMarginsMirrored() {
-        return( marginsMirrored.bval );
-    }
-
-    public Source getMarginsMirroredLine() {
-        return( marginsMirrored.source );
-    }
-
-    public void setMarginsMirrored( final boolean trueFalse, final Source fileAndLine )
-    {
-        setValue( marginsMirrored, trueFalse, fileAndLine, "_marginsMirrored" );
-    }
-
-    public boolean getNoIndent()
-    {
-        return( noIndent.bval );
-    }
-
     public Source getNoIndentLine()
     {
         return( noIndent.source );
@@ -593,19 +454,9 @@ public class HtmlData implements OutputContextable
         return( pageNumber );
     }
 
-    public void setPageNumber( final int newPageNumber )
-    {
-        pageNumber = newPageNumber;
-    }
-
     public float getPageWidth()
     {
         return pageWidth.fval;
-    }
-
-    public Source getPageWidthLine()
-    {
-        return pageWidth.source;
     }
 
     public void setPageWidth( final float val, final Source fileAndLine )
@@ -613,80 +464,9 @@ public class HtmlData implements OutputContextable
         setValue( pageWidth, val, fileAndLine, "_pageWidth" );
     }
 
-    public float getParagraphIndent()
-    {
-        return( paragraphIndent.fval );
-    }
-
-    public Source getParagraphIndentLine()
-    {
-        return( paragraphIndent.source );
-    }
-
-    public void setParagraphIndent( final float newParagraphIndent, final Source fileAndLine )
-    {
-        setValue( paragraphIndent, newParagraphIndent, fileAndLine, "_paragraphIndent" );
-    }
-
-    public float getParagraphIndentRight()
-    {
-        return( paragraphIndentRight.fval );
-    }
-
-    public Source getParagraphIndentRightLine()
-    {
-        return( paragraphIndentRight.source );
-    }
-
-    public void setParagraphIndentRight( final float newParagraphIndentRight,
-                                         final Source fileAndLine )
-    {
-        setValue( paragraphIndentRight, newParagraphIndentRight, fileAndLine,
-                  "_paragraphIndentRight" );
-    }
-
-    public float getParagraphSkip()
-    {
-        return( paragraphSkip.fval );
-    }
-
-    public int getParagraphSkipLine()
-    {
-        return( paragraphSkip.source.getLineNumber() );
-    }
-
-    public void setParagraphSkip( final float val, final Source fileAndLine )
-    {
-        setValue( paragraphSkip, val, fileAndLine, "_paragraphSkip" );
-    }
-
     public float getPixelsPerInch()
     {
         return( pixelsPerInch.fval );
-    }
-
-    public Source getPixelsPerInchLine()
-    {
-        return( pixelsPerInch.source );
-    }
-
-//    public ScriptEngine getScriptEngine()
-//    {
-//        return( scriptEngine );
-//    }
-
-    public boolean getStrikethru()
-    {
-        return( strikethru.bval );
-    }
-
-    public int getStrikethruLine()
-    {
-        return( strikethru.source.getLineNumber() );
-    }
-    public void setStrikethru( boolean newStrikethru, final Source fileAndLine )
-    {
-        setValue( strikethru, newStrikethru, fileAndLine, "_strikethru" );
     }
 
     public TypefaceMap getTypefaceMap()
@@ -694,24 +474,9 @@ public class HtmlData implements OutputContextable
         return( typefaceMap );
     }
 
-    public void setTypefaceMap( final TypefaceMap tfMap )
-    {
-        typefaceMap = tfMap;
-    }
-
-    public Underline getUnderline()
-    {
-        return( underline );
-    }
-
     public float getUserSpecifiedColumnWidth()
     {
         return( userSpecifiedColumnWidth.fval );
-    }
-
-    public Source getUserSpecifiedColumnWidthLine()
-    {
-        return( userSpecifiedColumnWidth.source );
     }
 
     public void setUserSpecifiedColumnWidth( final float newWidth, final Source fileAndLine )
