@@ -12,7 +12,6 @@ import org.pz.platypus.plugin.rtf.commands.*;
 import org.pz.platypus.GDD;
 
 import java.util.HashMap;
-import java.util.Set;
 import java.util.MissingResourceException;
 
 /**
