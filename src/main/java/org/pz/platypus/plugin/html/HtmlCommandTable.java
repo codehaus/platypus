@@ -58,6 +58,8 @@ public class HtmlCommandTable
         add( new HtmlUnderlineOn() );
         add( new HtmlUnderlineOff() );
         add( new HtmlUrl() );
+        add( new HtmlStrikethruOn() );
+        add( new HtmlStrikethruOff() );
     }
 
     /**
