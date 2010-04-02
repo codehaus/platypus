@@ -7,8 +7,8 @@
 
 package org.pz.platypus;
 
-import org.pz.platypus.command.Alignment;
-import org.pz.platypus.command.EolTreatment;
+import org.pz.platypus.commandTypes.Alignment;
+import org.pz.platypus.commandTypes.EolTreatment;
 
 /**
  * Default values for PDF plugin

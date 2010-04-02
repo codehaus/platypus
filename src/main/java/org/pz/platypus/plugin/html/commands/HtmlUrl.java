@@ -7,7 +7,7 @@
 
 package org.pz.platypus.plugin.html.commands;
 
-import org.pz.platypus.AbstractCommands.UrlCommand;
+import org.pz.platypus.commands.UrlCommand;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.html.HtmlOutfile;
