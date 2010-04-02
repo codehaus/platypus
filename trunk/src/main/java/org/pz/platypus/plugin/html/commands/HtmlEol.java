@@ -11,7 +11,7 @@ import com.lowagie.text.Chunk;
 import com.lowagie.text.Paragraph;
 import org.pz.platypus.Token;
 import org.pz.platypus.TokenList;
-import org.pz.platypus.command.EolTreatment;
+import org.pz.platypus.commandTypes.EolTreatment;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;

@@ -13,9 +13,9 @@ import org.junit.Test;
 import org.pz.platypus.test.mocks.MockLiterals;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.test.mocks.MockPropertyFile;
-import org.pz.platypus.command.CommandV;
-import org.pz.platypus.command.CommandS;
-import org.pz.platypus.command.CommandR;
+import org.pz.platypus.commandTypes.CommandV;
+import org.pz.platypus.commandTypes.CommandS;
+import org.pz.platypus.commandTypes.CommandR;
 
 //import static org.hamcrest.CoreMatchers.*;
 //import static org.junit.matchers.JUnitMatchers.*;

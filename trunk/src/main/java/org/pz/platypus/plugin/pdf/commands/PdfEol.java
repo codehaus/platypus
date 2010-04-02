@@ -8,7 +8,7 @@
 package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.*;
-import org.pz.platypus.command.EolTreatment;
+import org.pz.platypus.commandTypes.EolTreatment;
 import org.pz.platypus.interfaces.*;
 import org.pz.platypus.plugin.pdf.*;
 import com.lowagie.text.*;

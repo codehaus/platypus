@@ -9,7 +9,7 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.command.Alignment;
+import org.pz.platypus.commandTypes.Alignment;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;

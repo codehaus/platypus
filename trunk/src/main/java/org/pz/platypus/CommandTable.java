@@ -7,7 +7,7 @@
 
 package org.pz.platypus;
 
-import org.pz.platypus.command.*;
+import org.pz.platypus.commandTypes.*;
 import org.pz.platypus.interfaces.Commandable;
 import org.pz.platypus.plugin.pdf.commands.DefUserString;
 

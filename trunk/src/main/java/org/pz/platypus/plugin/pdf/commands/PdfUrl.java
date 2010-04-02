@@ -7,8 +7,7 @@
 
 package org.pz.platypus.plugin.pdf.commands;
 
-import org.pz.platypus.AbstractCommands.UrlCommand;
-import org.pz.platypus.Token;
+import org.pz.platypus.commands.UrlCommand;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
