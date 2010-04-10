@@ -11,7 +11,8 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
 import org.pz.platypus.DefaultValues;
-import org.pz.platypus.plugin.DocData;
+import org.pz.platypus.plugin.common.DocData;
+import org.pz.platypus.plugin.common.Underline;
 import org.pz.platypus.interfaces.OutputContextable;
 
 import javax.script.ScriptEngine;
@@ -28,6 +29,8 @@ public class PdfData extends DocData implements OutputContextable
     private PdfOutfile pdfOutfile;
 
     private GDD gdd;
+
+    public  Columns columns;
     private boolean eolPending;
     private Value eolTreatment;
     private PdfFont font;
@@ -96,8 +99,19 @@ public class PdfData extends DocData implements OutputContextable
         return( se );
     }
 
-    //=== getters and setters in alpha order by field  ===
+    //=== getters and setters in alpha order by field name  ===
 
+
+    public Columns getColumns()
+    {
+        return( columns );
+    }
+
+    public void setColumns( final Columns newColumnsList )
+    {
+        columns = newColumnsList;
+        columnCount = new Value( newColumnsList.size() );
+    }
 
     public boolean getEolPending()
     {

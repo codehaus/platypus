@@ -12,7 +12,7 @@ import org.pz.platypus.DefaultValues;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
-import org.pz.platypus.plugin.DocData;
+import org.pz.platypus.plugin.common.DocData;
 import org.pz.platypus.interfaces.OutputContextable;
 
 /**

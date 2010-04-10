@@ -8,6 +8,7 @@
 package org.pz.platypus.plugin.pdf;
 
 import org.pz.platypus.DefaultValues;
+import org.pz.platypus.plugin.common.Underline;
 
 import java.util.Stack;
 

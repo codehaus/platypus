@@ -5,7 +5,7 @@
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus.plugin.pdf;
+package org.pz.platypus.plugin.common;
 
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;

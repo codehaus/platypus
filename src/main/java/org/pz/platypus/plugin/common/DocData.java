@@ -5,12 +5,11 @@
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus.plugin;
+package org.pz.platypus.plugin.common;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;
-import org.pz.platypus.plugin.pdf.*;
 import org.pz.platypus.interfaces.OutputContextable;
 
 /**
@@ -92,9 +91,9 @@ public abstract class DocData implements OutputContextable
 
     private Value alignment;
     private Value codeSection;
-    private Value columnCount;
+    protected Value columnCount;
     private Value userSpecifiedColumnWidth;
-    public  Columns columns;
+
     private int currColumn;
     private Value firstLineIndent;
     private Value leading;
@@ -293,16 +292,6 @@ public abstract class DocData implements OutputContextable
         setValue( columnCount, newCount, fileAndLine, "_columnCount" );
     }
 
-    public Columns getColumns()
-    {
-        return( columns );
-    }
-
-    public void setColumns( final Columns newColumnsList )
-    {
-        columns = newColumnsList;
-        columnCount = new Value( newColumnsList.size() );
-    }
 
     public int getCurrColumn()
     {
