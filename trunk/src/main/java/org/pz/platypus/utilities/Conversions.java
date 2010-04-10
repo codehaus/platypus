@@ -9,8 +9,7 @@ package org.pz.platypus.utilities;
 
 import org.pz.platypus.CommandParameter;
 import org.pz.platypus.GDD;
-import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.DocData;
+import org.pz.platypus.plugin.common.DocData;
 
 /**
  * Performs various conversions of units of measure.
@@ -58,39 +57,6 @@ public class Conversions
         }
         return( points );
     }
-//
-//    public static float convertParameterToPoints( final CommandParameter cp, final HtmlData pdfData )
-//    {
-//        final float POINTS_PER_INCH = 72f;
-//        final float CMS_PER_INCH = 2.54f;
-//
-//        final float points;
-//        final float value = cp.getAmount();
-//
-//        switch( cp.getUnit() )
-//        {
-//            case CM:
-//                points = ( value / CMS_PER_INCH  ) * POINTS_PER_INCH;   // CM->IN->PT
-//                break;
-//            case INCH:
-//                points = value * POINTS_PER_INCH;                       // IN->PT
-//                break;
-//            case LINE:
-//                points = value * pdfData.getLeading();
-//                break;
-//            case PIXEL:
-//                points = ( value / pdfData.getPixelsPerInch() ) * POINTS_PER_INCH;
-//                break;
-//            case POINT:
-//                points =  value;
-//                break;
-//            default:    // if we don't know the units (should not occur)
-//                        // then return the value as it is
-//                points =  value;
-//                break;
-//        }
-//        return( points );
-//    }
 
     /**
      * Converts a parameter unit type to a descriptive string (for error messages)

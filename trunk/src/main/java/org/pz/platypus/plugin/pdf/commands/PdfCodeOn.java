@@ -12,6 +12,7 @@ import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.Token;
 import org.pz.platypus.commandTypes.EolTreatment;
 import org.pz.platypus.plugin.pdf.*;
+import org.pz.platypus.plugin.common.Underline;
 
 /**
  * Begin a code section or code listing

@@ -21,6 +21,9 @@
 	2010-03-05	alb	added RTF plugin processing
 				alb	migrated unit test runs to this build file
 	2010-03-06	alb	added platypus.home file as an attempt to solve CI's inability to set environment variables
+	2010-03-xx	ask	added HTML plugin commands.
+	2010-04-09  alb removed dependency on PDF plugin from HTML plugin. Changed
+	                the way that main-jar inlcudes packages in the plugin directory
 -->
 
 <project name="platypus-build" default="all" basedir=".">
@@ -140,7 +143,10 @@
 <target name="main-jar" depends="compile" description="Build main JAR file">
 	<jar destfile="${jar.dir}\platypus.jar">
 		<fileset dir="${build.dir}\classes\">
-			<exclude name="**\plugin\**" />
+			<exclude name="**\plugin\html\**" />
+			<exclude name="**\plugin\listing\**" />	
+			<exclude name="**\plugin\pdf\**" />
+			<exclude name="**\plugin\rtf\**" />	
 		</fileset>
 		<manifest>
 			<attribute name="Implementation-Title" value="Platypus Page Layout And Typesetting System" />
@@ -222,14 +228,20 @@
 	<copy todir="${jar.dir}\plugins\html\org\pz\platypus\plugin\html">
 		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\html" />
 	</copy>
-
+	<!--
+    <copy todir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin">
+        <fileset dir="${build.dir}\classes\org\pz\platypus\plugin">
+            <include name="*.class"/>
+        </fileset>
+    </copy>	
+    -->
 	<jar destfile="${jar.dir}\plugins\html.jar"
 		 basedir="${jar.dir}\plugins\html\" >
         <manifest>
 		    <attribute name="Implementation-Title" value="Platypus HTML output plugin" />
 		    <attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
 		    <attribute name="Implementation-Version" value="Platypus ${version}" />
-            <attribute name="Class-Path" value="..\lib\commons-cli-1.2.jar ..\lib\ecs-1.4.2.jar .\pdf.jar" />
+            <attribute name="Class-Path" value="..\lib\commons-cli-1.2.jar ..\lib\ecs-1.4.2.jar" />
 	    </manifest>
     </jar>
 

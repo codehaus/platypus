@@ -7,6 +7,8 @@
 
 package org.pz.platypus.plugin.pdf;
 
+import org.pz.platypus.plugin.common.Underline;
+
 /**
  * Container for the format data at a given point in the document. Used in FormatStack.
  *

@@ -12,6 +12,7 @@ import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.Token;
 import org.pz.platypus.Source;
 import org.pz.platypus.plugin.pdf.*;
+import org.pz.platypus.plugin.common.Underline;
 
 /**
  * Restore the previous format from the format stack (thereby, popping it)
