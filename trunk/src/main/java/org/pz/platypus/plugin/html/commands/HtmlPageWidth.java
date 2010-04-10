@@ -9,10 +9,10 @@ package org.pz.platypus.plugin.html.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
+import org.pz.platypus.utilities.Conversions;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.pdf.Conversions;
 import org.pz.platypus.plugin.pdf.Limits;
 
 /**
