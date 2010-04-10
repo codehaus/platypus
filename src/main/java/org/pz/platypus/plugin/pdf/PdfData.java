@@ -33,7 +33,6 @@ public class PdfData extends DocData implements OutputContextable
     private PdfFont font;
     private Footer footer;
     private FormatStack formatStack;
-    private Value pixelsPerInch;
     private TypefaceMap typefaceMap;
 
     /**
@@ -51,8 +50,6 @@ public class PdfData extends DocData implements OutputContextable
 
         font            = new PdfFont( this );
         footer          = new Footer( this );
-
-        pixelsPerInch   = new Value( DefaultValues.PIXELS_PER_INCH );
 
         typefaceMap     = new TypefaceMap( getGdd() );
 
@@ -208,16 +205,6 @@ public class PdfData extends DocData implements OutputContextable
     public void setOutfile( final PdfOutfile newOutfile)
     {
         pdfOutfile = newOutfile;
-    }
-
-    public float getPixelsPerInch()
-    {
-        return( pixelsPerInch.fval );
-    }
-
-    public Source getPixelsPerInchLine()
-    {
-        return( pixelsPerInch.source );
     }
 
     public TypefaceMap getTypefaceMap()

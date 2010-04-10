@@ -89,7 +89,6 @@ public abstract class DocData implements OutputContextable
     }
 
     private GDD gdd;
-    private PdfOutfile pdfOutfile;
 
     private Value alignment;
     private Value codeSection;
@@ -114,6 +113,7 @@ public abstract class DocData implements OutputContextable
     private Value paragraphIndent;
     private Value paragraphIndentRight;
     private Value paragraphSkip;
+    private Value pixelsPerInch;
     private Value strikethru;
     protected Underline underline;
 
@@ -157,7 +157,8 @@ public abstract class DocData implements OutputContextable
         paragraphIndent = new Value( DefaultValues.PARA_INDENT );
         paragraphIndentRight
                         = new Value( DefaultValues.PARA_INDENT_RIGHT );
-        paragraphSkip   = new Value( DefaultValues.PARA_SKIP_LINES );
+        paragraphSkip   = new Value( DefaultValues.PARA_SKIP_LINES );        
+        pixelsPerInch   = new Value( DefaultValues.PIXELS_PER_INCH );
 
         strikethru      = new Value( false );
         underline       = new Underline();
@@ -561,6 +562,16 @@ public abstract class DocData implements OutputContextable
     public void setParagraphSkip( final float val, final Source fileAndLine )
     {
         setValue( paragraphSkip, val, fileAndLine, "_paragraphSkip" );
+    }
+
+    public float getPixelsPerInch()
+    {
+        return( pixelsPerInch.fval );
+    }
+
+    public Source getPixelsPerInchLine()
+    {
+        return( pixelsPerInch.source );
     }
 
     public boolean getStrikethru()

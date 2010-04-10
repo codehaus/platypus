@@ -8,6 +8,7 @@
 package org.pz.platypus.plugin.pdf;
 
 import org.pz.platypus.Token;
+import org.pz.platypus.utilities.Conversions;
 import org.pz.platypus.exceptions.InvalidCommandParameterException;
 
 /**

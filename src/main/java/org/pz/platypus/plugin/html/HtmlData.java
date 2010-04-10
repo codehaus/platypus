@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -12,15 +12,16 @@ import org.pz.platypus.DefaultValues;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
+import org.pz.platypus.plugin.DocData;
 import org.pz.platypus.interfaces.OutputContextable;
 
 /**
- * Container class for all the state of the PDF document
+ * Container class for all the state of the HTML document
  *
- * @author alb
+ * @author ask
  */
 
-public class HtmlData implements OutputContextable
+public class HtmlData extends DocData implements OutputContextable
 {
     public void configureBody(Body body) {
         int lmargin = (int) getMarginLeft();

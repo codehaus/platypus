@@ -14,10 +14,10 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.CommandParameter;
 import org.pz.platypus.UnitType;
 import org.pz.platypus.Source;
+import org.pz.platypus.utilities.Conversions;
 import org.pz.platypus.test.mocks.MockLiterals;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.plugin.pdf.PdfData;
-import org.pz.platypus.plugin.pdf.Conversions;
 
 
 public class ConversionsTest
