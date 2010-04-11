@@ -22,8 +22,9 @@
 				alb	migrated unit test runs to this build file
 	2010-03-06	alb	added platypus.home file as an attempt to solve CI's inability to set environment variables
 	2010-03-xx	ask	added HTML plugin commands.
-	2010-04-09  alb removed dependency on PDF plugin from HTML plugin. Changed
+	2010-04-09   	alb removed dependency on PDF plugin from HTML plugin. Changed
 	                the way that main-jar inlcudes packages in the plugin directory
+	2010-04-11  	alb  added build-only target (does not run tests) entitled 'build'. To run: ant build
 -->
 
 <project name="platypus-build" default="all" basedir=".">
@@ -57,6 +58,7 @@
 	<!-- miscellaneous properties -->
 	<property name="version"				value="0.2.1" />
 	<property name="message" 				value="Build Platypus for Test and Release" />
+	<property name="build-message"			value="Build Platypus, Do not run tests" />
 
     <path id="project.classpath">
         <pathelement location="${classes.dir}"/>
@@ -87,6 +89,29 @@
                  zip-all"
         description="Run all major targets">
 	<echo> ${message} </echo>
+</target>
+
+<target name="build"
+		depends ="compile-prep,
+                 compile,
+                 compile-listing-plugin,
+                 compile-pdf-plugin,
+				 compile-rtf-plugin,
+				 compile-html-plugin,
+                 jar-dir-prep,
+                 main-jar,
+                 plugin-listing-jar,
+                 plugin-pdf-jar,
+		         plugin-html-jar,
+		         plugin-rtf-jar,
+                 setup-config-files,
+                 setup-docs,
+				 setup-licenses,
+                 setup-vendor-libs,
+                 setup-fonts,
+                 zip-all"
+        description="Build (but don't test)">
+	<echo> ${build-message} </echo>
 </target>
 
 <target name="compile" description="Compile with Java 6">
@@ -228,13 +253,7 @@
 	<copy todir="${jar.dir}\plugins\html\org\pz\platypus\plugin\html">
 		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\html" />
 	</copy>
-	<!--
-    <copy todir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin">
-        <fileset dir="${build.dir}\classes\org\pz\platypus\plugin">
-            <include name="*.class"/>
-        </fileset>
-    </copy>	
-    -->
+
 	<jar destfile="${jar.dir}\plugins\html.jar"
 		 basedir="${jar.dir}\plugins\html\" >
         <manifest>
