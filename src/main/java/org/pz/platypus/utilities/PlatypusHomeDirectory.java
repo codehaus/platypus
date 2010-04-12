@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -28,6 +28,8 @@ public class PlatypusHomeDirectory
     /**
      * Creates a string of the home directory from the user environment and
      * makes sure it ends with a file separator.
+     *
+     * @param gddClass used in the commented-out code
      */
     public PlatypusHomeDirectory( final Class gddClass )
     {
