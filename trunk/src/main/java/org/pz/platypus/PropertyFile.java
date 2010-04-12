@@ -34,7 +34,7 @@ public class PropertyFile
     /** input reader for file */
     private BufferedReader inReader;
 
-    private final GDD gdd;
+    protected final GDD gdd;
 
     public PropertyFile( final String propertyFilename, final GDD Gdd )
     {
