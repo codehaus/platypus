@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -277,7 +277,7 @@ public class Platypus
         // go to the default: Config.properties in PLATYPUS_HOME directory.
 
         if ( filename == null || filename.isEmpty() ) {
-            filename = Gdd.getHomeDirectory() + "config\\" + "Config.properties";
+            filename = Gdd.getHomeDirectory() + "config" + Gdd.getFileSeparator() + "Config.properties";
         }
 
         return filename;
@@ -405,7 +405,7 @@ public class Platypus
      *
      * @param args command-line args
      */
-    public static void main( String[] args ) throws ParseException {
+    public static void main( final String[] args ) throws ParseException {
         GDD gdd = null;
         CommandLineArgs clArgs = null;
 
@@ -437,6 +437,9 @@ public class Platypus
         }
         catch ( StopExecutionException see ) {
             System.exit( Status.OK );
+        }
+        catch( org.apache.commons.cli.ParseException pe ) {
+            System.exit( Status.ERR );
         }
 
         try {

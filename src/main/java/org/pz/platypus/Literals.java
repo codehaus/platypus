@@ -46,7 +46,8 @@ public class Literals extends PropertyFile
             throw new MissingResourceException( null, null, null );
         }
 
-        String litsFilename =  homeDir + "config" + '\\' + resourceName + ".properties";
+        String litsFilename =  homeDir + "config" + System.getProperty( "file.separator" ) +
+                               resourceName + ".properties";
         setFilename( litsFilename );
 
         // Because Literals is created and loaded before a logger has been set up,

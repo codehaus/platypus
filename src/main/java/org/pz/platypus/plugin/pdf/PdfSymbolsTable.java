@@ -44,7 +44,7 @@ public class PdfSymbolsTable
         String filename = gdd.getConfigFile().lookup(
                     "pi.out." + gdd.getOutputPluginPrefix() + ".symbollist" );
         if( filename != null ) {
-            filename = gdd.getHomeDirectory() + "config\\" + filename;
+            filename = gdd.getHomeDirectory() + "config" + gdd.getFileSeparator() + filename;
         }
         else {
             filename = "";

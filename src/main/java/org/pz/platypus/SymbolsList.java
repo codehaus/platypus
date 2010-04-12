@@ -36,7 +36,8 @@ public class SymbolsList
     public void load()
     {
         BufferedReader inReader = null;
-        String filename = gdd.getHomeDirectory() + "config\\" + gdd.getSymbolsListFilename();
+        String filename = gdd.getHomeDirectory() + "config" + gdd.getFileSeparator() +
+                          gdd.getSymbolsListFilename();
 
         File symbolFile = new File( filename );
         if( ! symbolFile.exists() || symbolFile.isDirectory() ){
