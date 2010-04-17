@@ -38,8 +38,6 @@ public class Start implements Pluggable
     /** the command table indexed by command root */
     private PdfCommandTable commandTable = null;
 
-    /** the symbols table indexed by root */
-    private PdfSymbolsTable symbolsTable = null;
 
     /**
      * Start() is always called first by Platypus, followed by a call to process()
@@ -154,7 +152,7 @@ public class Start implements Pluggable
                         i += processSkippingCommand( tok, pdfData, i );
                     }
                     else {
-                        processCommand( tok, pdfData, i );
+                        i += processCommand( tok, pdfData, i );
 
                         // if the current command is [] and it's followed by EOL, don't process the EOL.
                         if( tok.getRoot().equals( "[]" ) && isNextTokenCr( i, tokenList )) {
@@ -216,8 +214,10 @@ public class Start implements Pluggable
      * @param tok command token to process
      * @param pdfData document state data
      * @param tokNum the number of the token in the token list
+     *
+     * @return returns the number of tokens to skip.
      */
-    void processCommand( final Token tok, final PdfData pdfData, final int tokNum )
+    int processCommand( final Token tok, final PdfData pdfData, final int tokNum )
     {
         assert( tok != null && pdfData != null );
         assert( commandTable!= null && commandTable.getSize() > 0 );
@@ -225,10 +225,11 @@ public class Start implements Pluggable
         // lookup the command in the PDF command table
         OutputCommandable oc = commandTable.getCommand( tok.getRoot() );
         if( oc != null ) {
-             oc.process( pdfData, tok, tokNum );
+             return( oc.process( pdfData, tok, tokNum ));
         }
         else {
             errMsgUnrecognizedCommand( tok, pdfData.getGdd() );
+            return( 0 );
         }
     }
 
