@@ -153,9 +153,9 @@ public class PdfFont implements Cloneable
         // need to explore the problem further in iText. It's recorded as PLATYPUS-32 in JIRA at Codehaus.
         // returning null forces the calling routine to open the font with CP1252 encoding, which is
         // fine for .otf fonts
-        if( isFileOtf( fontName ) && ( ! fontName.toLowerCase().equals( "symbola" ))) {
-            return( null );
-        }
+//        if( isFileOtf( fontName ) && ( ! fontName.toLowerCase().equals( "symbola" ))) {
+//            return( null );
+//        }
 
         Font font;
         try {
@@ -173,7 +173,7 @@ public class PdfFont implements Cloneable
      * @param fontName name of font to verify
      * @return true if it's an .otf font, otherwise false.
      */
-    private boolean isFileOtf(String fontName)
+    private boolean isFileOtf( String fontName )
     {
         String[] fontFilenames = lookupFontFilenames( fontName );
         if( fontFilenames.length > 0 ) {
