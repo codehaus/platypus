@@ -9,7 +9,6 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.interfaces.OutputSkippingCommandable;
 import org.pz.platypus.*;
 import org.pz.platypus.plugin.pdf.*;
 import com.lowagie.text.Chunk;
@@ -20,18 +19,17 @@ import com.lowagie.text.Paragraph;
  * To be added: - the language for use in syntax highlighting
  *              - file location to extract from a source file
  *
+ * Status of implementation:
+ *      TO DO: Currently, line number is hard-coded to a max of three digits.
+ *             Need error routines (and defaults) in case parameters are in error.
+ *
  * @author alb
  */
-public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingCommandable
+public class PdfCodeWithOptions implements OutputCommandable
 {
     private String root = "[code|";
 
     public int process( final OutputContextable context, final Token tok, final int tokNum )
-    {
-        return 0;
-    }
-
-    public int processSkippingCommand( final OutputContextable context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -41,9 +39,6 @@ public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingComm
         if( pdd.inCodeSection() ) {
             return( 0 ); //already in a code section
         }
-
-        // switch to monospace, etc.
-        switchToCodeMode( pdd, tok, tokNum );
 
         String param = tok.getParameter().getString();
         if( param == null || ! param.startsWith( "lines:" )) {
@@ -71,28 +66,39 @@ public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingComm
             pdd.setLineNumberSkip( lineNumberSkip, tok.getSource() );
         }
 
+        // switch to monospace, etc.
+        switchToCodeMode( pdd, tok, tokNum );
+
         int i;
+        boolean firstLine = true;
         float initialFontSize = pdd.getFontSize();
         TokenList tokens = pdd.getGdd().getInputTokens();
+        
         for( i = tokNum+1; i < tokens.size(); i++ ) {
             Token t = tokens.get( i );
-            if( t.getType() == TokenType.TEXT ) {
-                pdd.setFontSize( 7.0f, tok.getSource() ); //TODO: make a fraction of existing font size?
+            if( isText( t ) || isBlankLine( t )) {
+                pdd.setFontSize( 7.0f, tok.getSource() ); //Should it be a fraction of existing font size?
                 pdd.setLineNumberLast( pdd.getLineNumberLast() + 1, t.getSource() );
-                pdd.getOutfile().emitText( String.format( "%3d. ", pdd.getLineNumberLast() ));
-                pdd.setFontSize( initialFontSize, t.getSource() );
-                pdd.getOutfile().emitText( t.getContent() );
+                if((( firstLine ) || ( pdd.getLineNumberLast() % lineNumberSkip ) == 0 )) {
+                    emitLineNumber( pdd );
+                    firstLine = false;
+                }
+                else {
+                    emitLineMarker( pdd.getOutfile() );
+                }
+                
+                if( isText( t )) {
+                    pdd.setFontSize( initialFontSize, t.getSource() );
+                    pdd.getOutfile().emitText( t.getContent() );
+                }
+
+                if( isBlankLine( t )) {
+                    emitNewLine( pdd.getOutfile() );
+                };
             }
             else
-            if( t.getType() == TokenType.COMMAND && t.getRoot().equals( "[cr]" )) {
-                Paragraph para = pdd.getOutfile().getItPara();
-                para.add( new Chunk( Chunk.NEWLINE ));
-            }
-            else
-            if( t.getType() == TokenType.COMMAND && t.getRoot().equals( "[CR]" )) {
-                Paragraph para = pdd.getOutfile().getItPara();
-                para.add( new Chunk( Chunk.NEWLINE ));
-                para.add( new Chunk( Chunk.NEWLINE ));
+            if( t.getType() == TokenType.COMMAND &&  t.getRoot().equals( "[cr]" )) {
+                emitNewLine( pdd.getOutfile() );
             }
             else
             if( endOfCode( t )) {
@@ -108,9 +114,59 @@ public class PdfCodeWithOptions implements OutputCommandable, OutputSkippingComm
 
         return( i - tokNum - 1 );     // return the number of tokens we skipped
     }
+
+    /**
+     * Emits a CR or CR/LF to the PDF outfile.
+     * @param outfile to which newLine is written
+     */
+    private void emitNewLine( final PdfOutfile outfile )
+    {
+        Paragraph para = outfile.getItPara();
+        para.add( new Chunk( Chunk.NEWLINE ));
+    }
+
+    /**
+     * Is the token text?
+     * @param t the token
+     *
+     * @return true if text, false otherwise
+     */
+    private boolean isText( final Token t )
+    {
+        return( t.getType() == TokenType.TEXT );
+    }
+
+    /**
+     * Is the token a blank line (so, [CR]) ?
+     * @param t Token
+     *
+     * @return true if blank line, false otherwise
+     */
+    private boolean isBlankLine( final Token t )
+    {
+        return( t.getType() == TokenType.COMMAND && t.getRoot().equals( "[CR]" ));
+    }
+
+    /**
+     * Emit the line number for a listing line
+     *
+     * @param pdd PDF data block
+     */
+    private void emitLineNumber( PdfData pdd )
+    {
+        pdd.getOutfile().emitText( String.format( "%3d. ", pdd.getLineNumberLast() ));
+    }
+
+    /**
+     * Emit the marker for a line with no number
+     *
+     * @param outfile the name of the PDF outfile
+     */
+    private void emitLineMarker( PdfOutfile outfile ) {
+        outfile.emitText( "   . " );
+    }
     //>>> compute width of line number (how many digits should it have?)
-    //>>> print - marks for non-numbered lines
-    //>>> make sure blank lines get line numbers
+
 
     /**
      *  At the [-code] token? (So, at end of code?)
