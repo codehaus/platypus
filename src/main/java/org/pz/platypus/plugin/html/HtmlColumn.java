@@ -11,9 +11,8 @@ import org.pz.platypus.plugin.pdf.PdfData;
 
 /**
  * Handles the low-level implementation details of columns.
- * Implemented in iText via ColumnText()
  *
- * @author alb
+ * @author atul
  */
 public class HtmlColumn
 {
