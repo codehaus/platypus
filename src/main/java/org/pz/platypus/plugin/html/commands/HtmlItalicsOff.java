@@ -28,8 +28,11 @@ public class HtmlItalicsOff implements OutputCommandable
             throw new IllegalArgumentException();
         }
         HtmlData html = (HtmlData) context;
-        HtmlOutfile outfile = html.getOutfile();
-        outfile.emitText( "</I>" );
+        html.push(getRoot());
+        html.outputTags();
+//
+//        HtmlOutfile outfile = html.getOutfile();
+//        outfile.emitText( "</I>" );
 
         return 0;
     }

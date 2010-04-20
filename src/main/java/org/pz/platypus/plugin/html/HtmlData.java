@@ -12,8 +12,11 @@ import org.pz.platypus.DefaultValues;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
-import org.pz.platypus.plugin.common.DocData;
+import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.plugin.common.DocData;
+
+import java.util.*;
 
 /**
  * Container class for all the state of the HTML document
@@ -23,10 +26,115 @@ import org.pz.platypus.interfaces.OutputContextable;
 
 public class HtmlData extends DocData implements OutputContextable
 {
+    LinkedList<String> listAsStack = new LinkedList<String>();
+    LinkedList<String> nestTagsList = new LinkedList<String>();
+
     public void configureBody(Body body) {
         int lmargin = (int) getMarginLeft();
         body.addAttribute( "leftmargin", String.valueOf(lmargin) + "px" );
     }
+
+    public void push(String tok) {
+        if (itIsAnOffCommand(tok)) {
+            justPushIt(tok);
+        } else if(isIsAnOnCommand(tok)) {
+            popTillItMatches(tok);
+        } else {
+            /* do nothing - no nested tags handling */
+        }
+    }
+
+    private void popTillItMatches(String tok) {
+        LinkedList<String> nested = new LinkedList<String>();
+        Iterator<String> iter = listAsStack.descendingIterator();
+        while (iter.hasNext()) { 
+            String curr = iter.next();
+            if (matches(curr, tok)) {
+                iter.remove();
+                break;
+            } else {
+                nested.add(curr);
+            }
+        }
+        generateNestedTags(nested, tok);
+    }
+
+    private void generateNestedTags(LinkedList<String> nested, String tok) {
+        nestTagsList = new LinkedList();
+        nestTagsList.add(tok);
+        Iterator<String> iter = nested.descendingIterator();
+        while(iter.hasNext()) {
+            String elem = iter.next();
+            String matching = substitutePlusWithMinus(elem);
+            nestTagsList.addFirst(matching);
+            nestTagsList.add(elem);
+        }
+    }
+
+    private String substitutePlusWithMinus(String tag) {
+        return tag.replaceAll("[+]", "-");
+    }
+
+    private boolean matches(String curr, String tok) {
+        if (curr.length() < 4 || tok.length() < 4) {
+            return false;
+        }
+        String subCurr = curr.substring(2);
+        String subTok = tok.substring(2);
+        return subCurr.equals(subTok);
+    }
+
+    private void justPushIt(String tok) {
+        listAsStack.add(tok);
+    }
+
+    private boolean isIsAnOnCommand(String tok) {
+        return tok.charAt(1) == '-';  
+    }
+    
+    private boolean itIsAnOffCommand(String tok) {
+        return tok.charAt(1) == '+';  
+    }
+
+    public String nestedTags() {
+        String nestedTags = "";
+        for(String elem : nestTagsList) {
+            nestedTags += elem;
+        }
+        return nestedTags;
+    }
+
+    public List<OutputCommandable> getNestedTagCmds() {
+        List<OutputCommandable> listOfCmds = new ArrayList<OutputCommandable>();
+        for (String cmdName: nestTagsList) {
+            // ??? lookup
+        }
+        return listOfCmds;
+    }
+
+    public void outputTags() {
+        HtmlOutfile outfile = getOutfile();
+        for (String cmdName: nestTagsList) {
+            if (cmdName.equals( "[+b]" )) {
+                outfile.emitText( "<b>" );
+            } else if (cmdName.equals( "[-b]" )) {
+                outfile.emitText( "</b>" );
+            } else if (cmdName.equals( "[+i]" )) {
+                outfile.emitText( "<I>" );
+            } else if (cmdName.equals( "[-i]" )) {
+                outfile.emitText( "</I>" );
+            } else if (cmdName.equals( "[+st]" )) {
+                outfile.emitText( "<s>" );
+            } else if (cmdName.equals( "[-st]" )) {
+                outfile.emitText( "</s>" );
+            } else if (cmdName.equals( "[+u]" )) {
+                outfile.emitText( "<u>" );
+            } else if (cmdName.equals( "[-u]" )) {
+                outfile.emitText( "</u>" );
+            }
+        }            
+    }
+
 
     /**
      * Inner class containing the value of the data item, plus
@@ -132,8 +240,9 @@ public class HtmlData extends DocData implements OutputContextable
      * Initializes the state of the PDF document.
      *
      * @param gddIn the GDD
+     * @param commandTable
      */
-    public HtmlData( final GDD gddIn )
+    public HtmlData(final GDD gddIn, HtmlCommandTable commandTable)
     {
         gdd = gddIn;
 

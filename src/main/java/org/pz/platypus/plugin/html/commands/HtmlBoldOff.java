@@ -29,8 +29,10 @@ public class HtmlBoldOff implements OutputCommandable
         }
 
         HtmlData html = (HtmlData) context;
-        HtmlOutfile outfile = html.getOutfile();
-        outfile.emitText( "</b>" );
+        html.push(getRoot());
+        html.outputTags();
+//        HtmlOutfile outfile = html.getOutfile();
+//        outfile.emitText( "</b>" );
         return 0;
     }
 
