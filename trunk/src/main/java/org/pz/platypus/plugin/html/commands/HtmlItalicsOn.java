@@ -28,6 +28,7 @@ public class HtmlItalicsOn implements OutputCommandable
             throw new IllegalArgumentException();
         }
         HtmlData html = (HtmlData) context;
+        html.push(getRoot());        
         HtmlOutfile outfile = html.getOutfile();
         outfile.emitText( "<I>" );
         return 0;

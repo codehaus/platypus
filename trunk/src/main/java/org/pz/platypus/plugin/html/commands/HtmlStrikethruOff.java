@@ -29,8 +29,11 @@ public class HtmlStrikethruOff implements OutputCommandable
         }
 
         HtmlData htmlData = (HtmlData) context;
-        HtmlOutfile outfile = htmlData.getOutfile();
-        outfile.emitText( "</s>" );
+        htmlData.push(getRoot());
+        htmlData.outputTags();
+
+//        HtmlOutfile outfile = htmlData.getOutfile();
+//        outfile.emitText( "</s>" );
         return 0;
     }
 

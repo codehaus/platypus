@@ -106,7 +106,7 @@ public class Start implements Pluggable
      */
     void setUpDataItems( final GDD gdd )
     {
-        htmlData = new HtmlData( gdd );
+        htmlData = new HtmlData( gdd, commandTable );
         try {
             htmlData.init();
         }

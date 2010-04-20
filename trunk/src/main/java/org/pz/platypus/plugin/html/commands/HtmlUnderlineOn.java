@@ -29,6 +29,7 @@ public class HtmlUnderlineOn implements OutputCommandable
         }
 
         HtmlData html = (HtmlData) context;
+        html.push(getRoot());
         HtmlOutfile outfile = html.getOutfile();
         outfile.emitText( "<u>" );
 
