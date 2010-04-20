@@ -11,8 +11,9 @@ import org.pz.platypus.interfaces.OutputContextable;
  * Date: Mar 18, 2010
  * Time: 8:10:11 AM
  */
-public abstract class UrlCommand implements OutputCommandable {
-    private final String root = "[url:"; // final is good ;-)
+public abstract class UrlCommand implements OutputCommandable
+{
+    private final String root = "[url:";
 
     protected abstract void outputUrl(final OutputContextable context, String url, String coverText);
 

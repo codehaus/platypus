@@ -10,6 +10,7 @@ package org.pz.platypus.plugin.pdf.commands;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.*;
+import org.pz.platypus.commands.CodeWithOptions;
 import org.pz.platypus.plugin.pdf.*;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Paragraph;
@@ -25,46 +26,20 @@ import com.lowagie.text.Paragraph;
  *
  * @author alb
  */
-public class PdfCodeWithOptions implements OutputCommandable
+public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommandable
 {
-    private String root = "[code|";
-
     public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
-        if( context == null || tok == null ) {
-            throw new IllegalArgumentException();
-        }
-
-        PdfData pdd = (PdfData) context;
-        if( pdd.inCodeSection() ) {
-            return( 0 ); //already in a code section
-        }
-
-        String param = tok.getParameter().getString();
-        if( param == null || ! param.startsWith( "lines:" )) {
-            invalidParameterErrMessage( pdd.getGdd(), tok.getSource() );
+        if( super.preProcess( context, tok, tokNum ) == 0 ) {
             return( 0 );
         }
 
-        // process the line count options: starting line number, how often to print the line numbers
-        // where 1 = every line, 2 = every even line, x = every line mod x, etc.
+        PdfData pdd = (PdfData) context;
 
-        String counts = org.pz.platypus.utilities.TextTransforms.lop( param, "lines:".length() );
-        String[] params = counts.split( "," );
-        if( params.length != 2 ) {
-            invalidParameterErrMessage( pdd.getGdd(), tok.getSource() );
-            return( 0 ) ;
-        }
-
-        int startingLineNumber = Integer.parseInt( params[0] );
-        if( startingLineNumber > 0 ) {
-            pdd.setLineNumberLast( startingLineNumber - 1, tok.getSource() );
-        }
-
-        int lineNumberSkip = Integer.parseInt( params[1] );
-        if( lineNumberSkip > 0 ) {
-            pdd.setLineNumberSkip( lineNumberSkip, tok.getSource() );
-        }
+//        int lineNumberSkip = Integer.parseInt( params[1] );
+//        if( lineNumberSkip > 0 ) {
+//            pdd.setLineNumberSkip( lineNumberSkip, tok.getSource() );
+//        }
 
         // switch to monospace, etc.
         switchToCodeMode( pdd, tok, tokNum );
@@ -79,7 +54,7 @@ public class PdfCodeWithOptions implements OutputCommandable
             if( isText( t ) || isBlankLine( t )) {
                 pdd.setFontSize( 7.0f, tok.getSource() ); //Should it be a fraction of existing font size?
                 pdd.setLineNumberLast( pdd.getLineNumberLast() + 1, t.getSource() );
-                if((( firstLine ) || ( pdd.getLineNumberLast() % lineNumberSkip ) == 0 )) {
+                if((( firstLine ) || ( pdd.getLineNumberLast() % pdd.getLineNumberSkip() ) == 0 )) {
                     emitLineNumber( pdd );
                     firstLine = false;
                 }
@@ -162,11 +137,10 @@ public class PdfCodeWithOptions implements OutputCommandable
      *
      * @param outfile the name of the PDF outfile
      */
-    private void emitLineMarker( PdfOutfile outfile ) {
+    private void emitLineMarker( PdfOutfile outfile )
+    {
         outfile.emitText( "   . " );
     }
-    //>>> compute width of line number (how many digits should it have?)
-
 
     /**
      *  At the [-code] token? (So, at end of code?)
@@ -191,20 +165,5 @@ public class PdfCodeWithOptions implements OutputCommandable
 
         PdfCodeOn turnCodeOn = new PdfCodeOn();
         turnCodeOn.process( pdd, tok, tokNum );
-    }
-
-    private void invalidParameterErrMessage( GDD gdd, final Source source )
-    {
-        gdd.logWarning( gdd.getLit( "FILE#" ) + source.getFileNumber() + " " +
-                gdd.getLit( "LINE#" ) + source.getLineNumber() + " " +
-                gdd.getLit( "ERROR.INVALID_PARAMETER_FOR_CODE_COMMAND" ) +  ". "  +
-                gdd.getLit( "SWITCHING_TO_PLAIN_CODE_FORMAT" ));
-    }
-
-    //=== getters and setters ===//
-
-    public String getRoot()
-    {
-        return( root );
     }
 }
