@@ -115,6 +115,7 @@ public abstract class CodeWithOptions
     protected int parseStartingLineNumber( final String num, final GDD gdd, final Source source )
     {
         int startingLineNumber;
+
         try {
             startingLineNumber = Integer.parseInt( num );
         }
@@ -123,7 +124,7 @@ public abstract class CodeWithOptions
             return( 1 );
         }
 
-        if( startingLineNumber < 0 || startingLineNumber > 1000000 ) {
+        if( startingLineNumber < 0 || startingLineNumber > 999999 ) {
             invalidStartingLineNumberErrMessage( gdd, source);
             return( 1 );
         }
@@ -156,7 +157,7 @@ public abstract class CodeWithOptions
     }
 
 
-    protected void invalidParameterErrMessage( GDD gdd, final Source source )
+    private void invalidParameterErrMessage( GDD gdd, final Source source )
     {
         gdd.logWarning( gdd.getLit( "FILE#" ) + source.getFileNumber() + " " +
                 gdd.getLit( "LINE#" ) + source.getLineNumber() + " " +
