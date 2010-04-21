@@ -12,9 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.common.DocData;
-import org.pz.platypus.Token;
-import org.pz.platypus.Source;
-import org.pz.platypus.TokenType;
+import org.pz.platypus.*;
+import org.pz.platypus.test.mocks.MockLiterals;
+
+import java.util.logging.Level;
 
 
 /**
@@ -53,11 +54,206 @@ public class CodeWithOptionsTest
     public void testPreprocessWithNullArg2()
     {
         class DocummentData extends DocData {};
-        DocummentData docData = new DocummentData();
 
         listing.preProcess( null, new Token( new Source(), TokenType.TEXT, " "), 1 );
     }
 
-    
+    @Test
+    public void testPreprocessWithNullTokenParam()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
 
+        class DocumentData extends DocData
+        {
+            public DocumentData() { super( gdd ); }
+        };
+
+        DocumentData docData = new DocumentData();
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( null );
+
+        assertEquals( 0, listing.preProcess( docData, new Token( new Source(), TokenType.TEXT, "", "", cp ), 1 ));
+    }
+
+    @Test
+    public void testPreprocessWhenTokenParamNotLines()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lanes:1,1" );
+
+        class DocumentData extends DocData
+        {
+            public DocumentData() { super( gdd ); }
+        };
+
+        DocumentData docData = new DocumentData();
+
+        assertEquals( 0, listing.preProcess( docData, new Token( new Source(), TokenType.TEXT, "", "", cp ), 1 ));
+    }
+
+    @Test
+    public void testPreprocessWhenInCodeSection()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lines:1,1" );
+
+        class DocumentData extends DocData
+        {
+            public DocumentData() { super( gdd ); }
+        };
+
+        DocumentData docData = new DocumentData();
+        docData.setInCodeSection( true, new Source() );
+
+        assertEquals( 0, listing.preProcess( docData, new Token( new Source(), TokenType.TEXT, "", "", cp ), 1 ));
+    }
+
+    @Test
+    public void testPreprocessInvalidLineParam()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lines:1" );
+
+        class DocumentData extends DocData
+        {
+            public DocumentData() { super( gdd ); }
+        };
+
+        DocumentData docData = new DocumentData();
+
+        assertEquals( 0, listing.preProcess( docData, new Token( new Source(), TokenType.TEXT, "", "", cp ), 1 ));
+    }
+
+    @Test
+    public void testPreprocessValid1_1()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lines:1,1" );
+
+        class DocumentData extends DocData
+        {
+            public DocumentData() { super( gdd ); }
+        };
+
+        DocumentData docData = new DocumentData();
+
+        assertEquals( 1, listing.preProcess( docData, new Token( new Source(), TokenType.TEXT, "", "", cp ), 1 ));
+        assertEquals( 0, docData.getLineNumberLast() );
+        assertEquals( 1, docData.getLineNumberSkip() );
+    }
+
+   @Test
+    public void testPreprocessValid0_5()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lines:0,5" );
+
+        class DocumentData extends DocData
+        {
+            public DocumentData() { super( gdd ); }
+        };
+
+        DocumentData docData = new DocumentData();
+        docData.setLineNumberLast( 24, new Source() );
+
+        assertEquals( 1, listing.preProcess( docData, new Token( new Source(), TokenType.TEXT, "", "", cp ), 1 ));
+        assertEquals( 24, docData.getLineNumberLast() );
+        assertEquals( 5, docData.getLineNumberSkip() );
+    }
+
+    @Test
+    public void testInvalidStartingLineNumbers()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        Source src = new Source();
+
+        assertEquals( 1, listing.parseStartingLineNumber( "-26", gdd, src ));
+        assertEquals( 1, listing.parseStartingLineNumber( "1111111", gdd, src ));
+        assertEquals( 1, listing.parseStartingLineNumber( "xx", gdd, src ));
+    }
+
+    @Test
+    public void testValidStartingLineNumbers()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        Source src = new Source();
+
+        assertEquals( 0, listing.parseStartingLineNumber( "0", gdd, src ));
+        assertEquals( 1, listing.parseStartingLineNumber( "1", gdd, src ));
+        assertEquals( 23, listing.parseStartingLineNumber( "23", gdd, src ));
+    }
+
+    @Test
+    public void testInvalidSkipLineNumbers()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        Source src = new Source();
+
+        assertEquals( 1, listing.parseSkipLineNumber( "-26", gdd, src ));
+        assertEquals( 1, listing.parseSkipLineNumber( "0", gdd, src ));
+        assertEquals( 1, listing.parseSkipLineNumber( "111", gdd, src ));
+        assertEquals( 1, listing.parseSkipLineNumber( "xx", gdd, src ));
+    }
+
+    @Test
+    public void testValidSkipLineNumbers()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        gdd.setLits( new MockLiterals() );
+        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        Source src = new Source();
+
+        assertEquals( 1, listing.parseSkipLineNumber( "1", gdd, src ));
+        assertEquals( 23, listing.parseSkipLineNumber( "23", gdd, src ));
+    }
 }
