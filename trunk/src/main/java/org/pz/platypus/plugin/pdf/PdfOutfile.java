@@ -526,7 +526,7 @@ public class PdfOutfile
      */
     public void emitText( String s )
     {
-        assert( s != null ) : "s parameter null in PdfOutfile.emitChar()";
+        assert( s != null ) : "s parameter null in PdfOutfile.emitText()";
 
         // check if we are in an existing paragraph. If not, create a new one.
         if ( iTPara == null ) {
