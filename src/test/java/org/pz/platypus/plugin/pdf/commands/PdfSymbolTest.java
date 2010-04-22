@@ -69,7 +69,7 @@ public class PdfSymbolTest
 
         pds.process( pdd, tok, 7  );
 
-        assertEquals( "\u2013", mo.getItPara().getContent() );
+        assertEquals( "\u2013", mo.getContent() );
     }
 
     @Test
@@ -110,7 +110,7 @@ public class PdfSymbolTest
 
         pds.process( pdd, tok, 7  );
 
-        assertEquals( "\u00E4", mo.getItPara().getContent() );
+        assertEquals( "\u00E4", mo.getContent() );
     }
 
     @Test (expected=IllegalArgumentException.class)

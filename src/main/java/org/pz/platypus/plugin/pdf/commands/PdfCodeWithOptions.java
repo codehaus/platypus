@@ -49,7 +49,7 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
             if( isText( t ) || isBlankLine( t )) {
                 pdd.setFontSize( 7.0f, tok.getSource() ); //Should it be a fraction of existing font size?
                 pdd.setLineNumberLast( pdd.getLineNumberLast() + 1, t.getSource() );
-                if((( firstLine ) || ( pdd.getLineNumberLast() % pdd.getLineNumberSkip() ) == 0 )) {
+                if(( firstLine ) || ( pdd.getLineNumberLast() % pdd.getLineNumberSkip() ) == 0 ) {
                     emitLineNumber( pdd );
                     firstLine = false;
                 }

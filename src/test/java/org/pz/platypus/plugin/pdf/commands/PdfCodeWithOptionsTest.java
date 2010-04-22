@@ -5,7 +5,6 @@
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-
 package org.pz.platypus.plugin.pdf.commands;
 
 import static org.junit.Assert.*;
@@ -13,12 +12,11 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.plugin.common.DocData;
-import org.pz.platypus.plugin.pdf.PdfData;
-import org.pz.platypus.plugin.pdf.PdfFont;
-import org.pz.platypus.plugin.pdf.FormatStack;
+import org.pz.platypus.plugin.pdf.*;
 import org.pz.platypus.*;
 import org.pz.platypus.test.mocks.MockLiterals;
 import org.pz.platypus.test.mocks.MockPdfOutfile;
+import org.pz.platypus.test.mocks.MockLogger;
 
 import java.util.logging.Level;
 
@@ -47,11 +45,7 @@ public class PdfCodeWithOptionsTest
     @Test
     public void testSuperClassErrorReturns0()
     {
-        final GDD gdd = new GDD();
-        gdd.initialize();
-        gdd.setLits( new MockLiterals() );
-        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
-        gdd.getLogger().setLevel( Level.OFF );
+        final GDD gdd = setupGdd();
 
         class DocumentData extends DocData
         {
@@ -85,12 +79,80 @@ public class PdfCodeWithOptionsTest
         assertTrue( pdd.inCodeSection() );
     }
 
+    @Test
+    public void testProcessValid()
+    {
+        final GDD gdd = setupGdd();
+
+        MockPdfOutfile outfile = new MockPdfOutfile();
+
+        PdfData pdd = setupPdd( gdd, outfile );
+        pdd.setInCodeSection( false, new Source() );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lines:1,5" );
+
+        Token tokToProcess = new Token( new Source(), TokenType.COMMAND,
+                                        "[code|","[code|lines:1,5]", cp );
+
+        Token nextTok1 = new Token( new Source(), TokenType.TEXT, "this is code" );
+        Token nextTok2 = new Token( new Source(), TokenType.COMMAND, "[cr]", "[cr]", null );
+        Token endCodeTok = new Token( new Source(), TokenType.COMMAND, "[-code]", "[-code]", null );
+
+        TokenList tl = new TokenList();
+        tl.add( tokToProcess );
+        tl.add( nextTok1 );
+        tl.add( nextTok2 );
+        tl.add( endCodeTok );
+        gdd.setInputTokens( tl );
+
+        int tokToSkip = pdfListing.process( pdd, tokToProcess, 0 );
+
+        assertEquals( 2, tokToSkip);
+        assertTrue( outfile.getContent().contains( "this is code" ));
+        assertEquals( 5, pdd.getLineNumberSkip() );
+    }
+
+    @Test
+    public void testProcessValidWithNoEndCodeCommand()
+    {
+        final GDD gdd = setupGdd();
+
+        MockPdfOutfile outfile = new MockPdfOutfile();
+
+        PdfData pdd = setupPdd( gdd, outfile );
+        pdd.setInCodeSection( false, new Source() );
+
+        CommandParameter cp = new CommandParameter();
+        cp.setString( "lines:1,5" );
+
+        Token tokToProcess = new Token( new Source(), TokenType.COMMAND,
+                                        "[code|","[code|lines:1,5]", cp );
+
+        Token nextTok1 = new Token( new Source(), TokenType.TEXT, "this is code" );
+        Token nextTok2 = new Token( new Source(), TokenType.COMMAND, "[cr]", "[cr]", null );
+
+        TokenList tl = new TokenList();
+        tl.add( tokToProcess );
+        tl.add( nextTok1 );
+        tl.add( nextTok2 );
+        gdd.setInputTokens( tl );
+
+        int tokToSkip = pdfListing.process( pdd, tokToProcess, 0 );
+
+        assertEquals( 2, tokToSkip);
+        assertTrue( outfile.getContent().contains( "this is code" ));
+        assertEquals( 5, pdd.getLineNumberSkip() );
+        MockLogger ml = (MockLogger) gdd.getLogger();
+        assertEquals( "WARNING.FILE_ENDS_WITHOUT_CODE_END", ml.getMessage() );
+    }
+
     private GDD setupGdd()
     {
         final GDD gdd = new GDD();
         gdd.initialize();
         gdd.setLits( new MockLiterals() );
-        gdd.setupLogger( ( "org.pz.platypus.Platypus" ));
+        gdd.setLogger( new MockLogger() );
         gdd.getLogger().setLevel( Level.OFF );
         return( gdd );
     }
