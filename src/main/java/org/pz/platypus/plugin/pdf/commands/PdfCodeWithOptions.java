@@ -36,11 +36,6 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
 
         PdfData pdd = (PdfData) context;
 
-//        int lineNumberSkip = Integer.parseInt( params[1] );
-//        if( lineNumberSkip > 0 ) {
-//            pdd.setLineNumberSkip( lineNumberSkip, tok.getSource() );
-//        }
-
         // switch to monospace, etc.
         switchToCodeMode( pdd, tok, tokNum );
 
@@ -159,7 +154,7 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
      * @param tok token
      * @param tokNum token number of token in the token list.
      */
-    private void switchToCodeMode( final PdfData pdd, final Token tok, final int tokNum)
+    protected void switchToCodeMode( final PdfData pdd, final Token tok, final int tokNum)
     {
         pdd.getOutfile().startNewParagraph();
 

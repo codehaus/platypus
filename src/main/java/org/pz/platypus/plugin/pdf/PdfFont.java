@@ -46,10 +46,10 @@ public class PdfFont implements Cloneable
     private GDD gdd;
     private PdfData pdfData;
 
-    public PdfFont( PdfData pdfData )
+    public PdfFont( PdfData pdd )
     {
-        this.pdfData = pdfData;
-        gdd = pdfData.getGdd();
+        pdfData = pdd;
+        gdd = pdd.getGdd();
         setToDefault();
     }
 
