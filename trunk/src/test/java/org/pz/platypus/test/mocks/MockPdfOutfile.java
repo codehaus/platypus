@@ -30,4 +30,8 @@ public class MockPdfOutfile extends PdfOutfile
     public String getContent() {
         return( content );
     }
+
+    @Override
+    public void startNewParagraph() {
+    }
 }
