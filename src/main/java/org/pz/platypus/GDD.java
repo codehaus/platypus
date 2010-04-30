@@ -136,7 +136,8 @@ public class GDD
     public void logFinest( final String msg ) { logger.finest( msg ); }
     public void logInfo( final String msg ) { logger.info( msg ); }
     public void logSevere( final String msg ) { logger.severe( msg ); }
-    public void logWarning( final String msg ) { logger.warning( msg ); }
+    public void logWarning( final String msg )
+        { logger.warning( msg ); }
 
     //=== getters and setters ===//
 

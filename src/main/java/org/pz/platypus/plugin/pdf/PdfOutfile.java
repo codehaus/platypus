@@ -197,6 +197,8 @@ public class PdfOutfile
             iTDocument.close();
         }
         catch( Exception ex ) {
+            // throwing
+            // com.lowagie.text.exceptions.IllegalPdfSyntaxException: Unbalanced save/restore state operators.
             throw new FileCloseException( pdfFilename );
         }
     }
@@ -736,6 +738,7 @@ public class PdfOutfile
                 cb.setTextMatrix( iTDocument.right() - footerTextLength, footerBaseline );
                 cb.showText( footerText );
                 cb.endText();
+                cb.restoreState();
             }
         }
 

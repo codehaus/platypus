@@ -15,6 +15,9 @@ import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
 import org.pz.platypus.DefaultValues;
 
+import java.io.IOException;
+import java.io.File;
+
 /**
  * Handles fonts for the PDF plugin
  *
@@ -300,7 +303,7 @@ public class PdfFont implements Cloneable
         // a TIMES_ROMAN and note the error.
         {
             if( ! FontFactory.isRegistered( typefaceName )) {
-                if ( ! findAndRegisterFont(typefaceName)) {
+                if ( ! findAndRegisterFont( typefaceName )) {
                     return (null);
                 }
             }
@@ -329,16 +332,42 @@ public class PdfFont implements Cloneable
     {
         String[] fontFiles = lookupFontFilenames( typefaceName );
         if( fontFiles.length == 0 ) {
-            gdd.logWarning( gdd.getLit( "COULD_NOT_FIND") + " " + typefaceName + " " +
+            gdd.logWarning( gdd.getLit( "COULD_NOT_FIND" ) + " " + typefaceName + " " +
                             gdd.getLit( "IN_FONT_LIST" ) + ". " +  gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
             return( false );
         }
         else {
+
             for( String fontFile : fontFiles ) {
-                FontFactory.register( fontFile, typefaceName );
+                registerOneFont( fontFile, typefaceName );
             }
-            gdd.log( "Registered fonts for " + typefaceName + " in iText" );
+
             return( true );
+        }
+    }
+
+    /**
+     * Unfortunately, iText does not pass along the exception if the file cannot be found.
+     * Rather, iText rethrows the exception internally and prints the stack trace. So, the
+     * only way to avoid this is to check for each file first before doing the registration.
+     *
+     * @param fontFile the file location and name
+     * @param typeface the name of the typeface to register the font for
+     */
+    void registerOneFont( final String fontFile, final String typeface )
+    {
+        if( fontFile == null ) {
+            return;
+        }
+        
+        File ff = new File( fontFile );
+        if( ff.exists() ) {
+            FontFactory.register( fontFile, typeface );
+            gdd.log( "Registered fonts for " + typeface + " in iText" );
+        }
+        else {
+            gdd.logWarning( gdd.getLit( "COULD_NOT_FIND_FONT" ) + " " + fontFile + " " +
+            gdd.getLit ( "FROM_FONT_LIST" ) + ". " );
         }
     }
 
