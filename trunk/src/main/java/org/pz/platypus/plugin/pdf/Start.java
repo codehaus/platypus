@@ -91,8 +91,8 @@ public class Start implements Pluggable
             return;  //todo: log some kind of error
         }
         catch( FileCloseException fce ) {
-            gdd.logWarning( gdd.getLit( "ERROR.CLOSING_OUTPUT_FILE" ) + ": " +
-                           fce.getMessage() );
+            gdd.logWarning( gdd.getLit( "ERROR.CLOSING_OUTPUT_FILE" ) +
+                    ( fce.getMessage() != null ? ( ": "  +   fce.getMessage() ) : "." ));
         }
         catch( Throwable anyException ) {
             anyException.printStackTrace();
