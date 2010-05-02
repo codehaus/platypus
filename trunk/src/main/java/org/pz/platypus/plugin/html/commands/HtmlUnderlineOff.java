@@ -11,7 +11,6 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
  * Implementation of turning on underline in the PDF plugin
@@ -31,9 +30,6 @@ public class HtmlUnderlineOff implements OutputCommandable
         HtmlData html = (HtmlData) context;
         html.push(getRoot());
         html.outputTags();
-        
-//        HtmlOutfile outfile = html.getOutfile();
-//        outfile.emitText( "</u>" );
         return 0;
     }
 
