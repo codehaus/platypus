@@ -1,3 +1,10 @@
+/***
+ *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
+ *
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
+ *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
+ */
+
 package org.pz.platypus.commands;
 
 import org.pz.platypus.GDD;
@@ -6,44 +13,44 @@ import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 
 /**
- * Created by IntelliJ IDEA.
- * User: atul
- * Date: Mar 18, 2010
- * Time: 8:10:11 AM
+ * Abstract portion of bare URL command
+ *
+ * @author ask
  */
 public abstract class UrlCommand implements OutputCommandable
 {
     private final String root = "[url:";
 
-    protected abstract void outputUrl(final OutputContextable context, String url, String coverText);
+    protected abstract void outputUrl( final OutputContextable context, String url );
 
-    public int process(OutputContextable context, Token tok, int tokNum) {
+    public int process(OutputContextable context, Token tok, int tokNum)
+    {
         if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();
         }
 
         String urlParameter = tok.getParameter().getString();
-        String url;
-        String coverText = null;
+//
+//        String coverText = null;
+//
+//        // test for "|text: after URL, which would signal presence of cover text. If found,
+//        // set url and coverText to the respective strings in urlParameter; else, it's all
+//        // URL, so set url and leave coverText = null
+//        int textFlag = urlParameter.indexOf( "|text:" );
+//        if( textFlag > 0 ) {
+//            coverText = urlParameter.substring( textFlag + "|text:".length() );
+//            url = urlParameter.substring( 0, textFlag - 1);
+//        }
+//        else {
+//            url = urlParameter;
+//        }
 
-        // test for "|text: after URL, which would signal presence of cover text. If found,
-        // set url and coverText to the respective strings in urlParameter; else, it's all
-        // URL, so set url and leave coverText = null
-        int textFlag = urlParameter.indexOf( "|text:" );
-        if( textFlag > 0 ) {
-            coverText = urlParameter.substring( textFlag + "|text:".length() );
-            url = urlParameter.substring( 0, textFlag - 1);
-        }
-        else {
-            url = urlParameter;
-        }
-
-        if( url == null ) {
+        if( urlParameter == null ) {
             showErrorMsg( tok, context );
             return 0;
         }
 
-        outputUrl(context, url, coverText);
+        outputUrl( context, urlParameter );
 
         return 0;
     }

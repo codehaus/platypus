@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -17,14 +17,14 @@ import org.pz.platypus.plugin.pdf.PdfOutfile;
  *
  * @author alb
  */
-// public class PdfUrl implements OutputCommandable
+
 public class PdfUrl extends UrlCommand
 {
-
     @Override
-    protected void outputUrl(final OutputContextable context, String url, String coverText) {
+    protected void outputUrl(final OutputContextable context, String url)
+    {
         PdfData pdf = (PdfData) context;
         PdfOutfile outfile = pdf.getOutfile();
-        outfile.addUrl( url, coverText );        
+        outfile.addUrl( url, null );        
     }
 }
