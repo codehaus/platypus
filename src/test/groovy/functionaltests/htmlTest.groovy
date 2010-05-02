@@ -25,6 +25,7 @@ def String javaRun = "java -jar " + jarUnderTest
 
 // run the test(s)
 testItalics( javaRun )
+testUrl( javaRun )
  
 return
 
@@ -42,6 +43,14 @@ def void testItalics( String javaRun )
   test( javaRun, "Atul [+i]rocks[-i]!\n", "Atul <I>rocks</I>!" )
 }
 
+def void testUrl( String javaRun )
+{
+  setDescription( "Test: URL without prefix." )
+  test( javaRun, "Platypus at [url:platypus.pz.org]\n", "<a href=\"http://platypus.pz.org\">");
+  setDescription( "Test: URL with http prefix." )  
+  test( javaRun, "Platypus at [url:http://platypus.pz.org]\n", "<a href=\"http://platypus.pz.org\">");
+}
+
 def void test( String javaRun, inputStr, expectedStr )
 {
     def String testFileName = "testItalics.plat"
@@ -57,10 +66,10 @@ def void test( String javaRun, inputStr, expectedStr )
       return
     }
 
-  // read contents of output file into a string	  
+    // read contents of output file into a string
     String html = htmlFile.getText()
   
-  testExpectedContent(htmlFile, expectedStr) 
+    testExpectedContent(htmlFile, expectedStr)
 
 	// delete the test Platypus file and the generated HTML file.
     cleanUp(testFile, htmlFile)
@@ -77,8 +86,11 @@ def void testExpectedContent(File file, String expectedStr) {
       println( "Success in " + description )
   }
   else {
+      println( "\n***")
       println( "***FAILURE in " + description + ": Generated HTML not as expected." )
-      println( "        -> " + html )
+      println( "Expected -> " + "\"" + expectedStr + "\"")
+      println( "Actual   -> " + "\"" + html + "\"" )
+      println( "***\n")
   }	
 }
 

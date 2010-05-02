@@ -26,7 +26,27 @@ public class HtmlUrl extends UrlCommand
         //TODO: Even with that I'm not sure adding http:// is right. Let's discuss. ALB
         HtmlData htmlData = (HtmlData) context;
         HtmlOutfile outfile = htmlData.getOutfile();
-        outfile.emitText("<a href=" + "\"" + "http://" + url + "\"" + ">" + url + "</a>" );
+        boolean addPrefix = addHttpPrefixIfNecessary(url);
+        String text = "<a href=";
+        if (addPrefix)
+        {
+            text += "\"" + "http://";
+        }
+        text += url;
+        if (addPrefix)
+        {
+            text += "\"";
+        }
+
+        text += ">" + url + "</a>";
+
+        outfile.emitText( text );
+    }
+
+    private boolean addHttpPrefixIfNecessary(String urlStr) {
+        if( urlStr.startsWith("http") || urlStr.startsWith("https"))
+            return false;
+        return true;
     }
 
 }
