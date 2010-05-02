@@ -40,33 +40,21 @@ def void testItalics( String javaRun )
   def String description =
       "Test: Simple italics."
 
-      // create a Platypus file containing italicized text.
-      def String testFileName = "testItalics.plat"
-      def File testFile = new File( testFileName )
-      PrintWriter pw = new PrintWriter( testFile )
-      pw.write(
-          "Atul [+i]rocks[-i]!\n" 
-      );
-      pw.close()
-	  
-	  // Make sure we have successfully created the input file
-      if ( ! testFile.exists() ) {
-          println( "***FAILURE in ${description}. Could not create test file" )
-          return
-      }
-
+    def String testFileName = "testItalics.plat"
+    // create a Platypus file containing italicized text.
+    testFile = createInputFile(testFileName, "Atul [+i]rocks[-i]!\n")
     // run Platypus and capture for error message as well as a generated HTML file
     String commandLine =  javaRun + " ${testFileName} ${testFileName}.html "
     def proc = commandLine.execute()
     def err = proc.err.text
 
-	// did we create an output file? If not, report error.
-    def File htmlFile = new File( "${testFileName}.html" )
-	if( ! htmlFile.exists() ) {
-		println( "***FAILURE in " + description + " No HTML file created." )
-		return;
-	}
-	
+    File htmlFile = openFile("${testFileName}.html");
+
+    if (theRunWasAnError(err)) {
+      cleanUp(testFile, htmlFile)
+      return
+    }
+
 	// did Platypus report any errors?
     if( err != null && err != "" ){
         println( "***FAILURE in " + description + "Platypus reported an error: " +  err )
@@ -74,9 +62,10 @@ def void testItalics( String javaRun )
 		htmlFile.delete()
     }
 
-	// read contents of output file into a string	
-	String html = htmlFile.getText()
-	
+  // read contents of output file into a string	  
+    String html = htmlFile.getText()
+
+
 	// test for the expected output. If it doesn't match, fail and show the invalid HTML
 	if( html.contains( "Atul <I>rocks</I>!" )) {
 		println( "Success in " + description )
@@ -89,4 +78,42 @@ def void testItalics( String javaRun )
 	// delete the test Platypus file and the generated HTML file.
     testFile.delete()
     htmlFile.delete()
+}
+
+def void cleanUp(File file1, File file2) {
+  file1.delete()
+  file2.delete()
+}
+
+def boolean theRunWasAnError(String err) {
+
+}
+
+def File openFile(String fileName)
+{
+  def File file = new File( fileName )
+  if( ! file.exists() ) {
+      throw new Exception( "***FAILURE in " + description + " No such file " + "${fileName}" )
+  }
+  file  
+}
+
+// creates a platypus input file with the specified content
+def File createInputFile(String fileName, String fileContents)
+{
+  def File testFile = new File( fileName )
+  PrintWriter pw = new PrintWriter( testFile )
+  pw.write( fileContents );
+  pw.close()
+
+  // Make sure we have successfully created the input file
+  if ( ! testFile.exists() ) {
+    throw new Exception("***FAILURE in ${description}. Could not create " + "${fileName}" + " file")
+  }
+  return testFile
+}
+
+def void testUrlWithPrefix( String javaRun )
+{
+  
 }
