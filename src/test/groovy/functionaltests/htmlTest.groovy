@@ -24,8 +24,7 @@ def String jarUnderTest = args[0]
 def String javaRun = "java -jar " + jarUnderTest
 
 // run the test(s)
-testItalics( javaRun ) 
-
+testItalics( javaRun )
  
 return
 
@@ -35,18 +34,21 @@ return
  * Test whether simple italics work correctly in the HTML plugin
  */
 
-def void testItalics( String javaRun )
-{
-  def String description =
-      "Test: Simple italics."
+def String description = "Test: Simple italics."
 
+def void testItalics( String javaRun ) 
+{
+  setDescription( "Test: Simple italics." )
+  test( javaRun, "Atul [+i]rocks[-i]!\n", "Atul <I>rocks</I>!" )
+}
+
+def void test( String javaRun, inputStr, expectedStr )
+{
     def String testFileName = "testItalics.plat"
     // create a Platypus file containing italicized text.
-    testFile = createInputFile(testFileName, "Atul [+i]rocks[-i]!\n")
+    testFile = createInputFile(testFileName, inputStr)
     // run Platypus and capture for error message as well as a generated HTML file
-    String commandLine =  javaRun + " ${testFileName} ${testFileName}.html "
-    def proc = commandLine.execute()
-    def err = proc.err.text
+    def err = runPlatypus(javaRun, testFileName)
 
     File htmlFile = openFile("${testFileName}.html");
 
@@ -55,29 +57,36 @@ def void testItalics( String javaRun )
       return
     }
 
-	// did Platypus report any errors?
-    if( err != null && err != "" ){
-        println( "***FAILURE in " + description + "Platypus reported an error: " +  err )
-		testFile.delete()
-		htmlFile.delete()
-    }
-
   // read contents of output file into a string	  
     String html = htmlFile.getText()
+  
+  testExpectedContent(htmlFile, expectedStr) 
 
-
-	// test for the expected output. If it doesn't match, fail and show the invalid HTML
-	if( html.contains( "Atul <I>rocks</I>!" )) {
-		println( "Success in " + description )
-	}
-	else {
-		println( "***FAILURE in " + description + ": Generated HTML not as expected." )
-		println( "        -> " + html )
-	}
-	
 	// delete the test Platypus file and the generated HTML file.
-    testFile.delete()
-    htmlFile.delete()
+    cleanUp(testFile, htmlFile)
+}
+
+def void setDescription(String desc) {
+  description = desc
+}
+
+def void testExpectedContent(File file, String expectedStr) {
+  String html = file.getText()
+  // test for the expected output. If it doesn't match, fail and show the invalid HTML
+  if( html.contains( expectedStr )) {
+      println( "Success in " + description )
+  }
+  else {
+      println( "***FAILURE in " + description + ": Generated HTML not as expected." )
+      println( "        -> " + html )
+  }	
+}
+
+def void runPlatypus(String javaRun, String inputFile) {
+  String commandLine =  javaRun + " ${inputFile} ${inputFile}.html "
+  def proc = commandLine.execute()
+  def err = proc.err.text
+  err  
 }
 
 def void cleanUp(File file1, File file2) {
@@ -86,7 +95,9 @@ def void cleanUp(File file1, File file2) {
 }
 
 def boolean theRunWasAnError(String err) {
-
+  if( err != null && err != "" ) {
+      println( "***FAILURE in run - Platypus reported an error: " +  err )
+  }
 }
 
 def File openFile(String fileName)
