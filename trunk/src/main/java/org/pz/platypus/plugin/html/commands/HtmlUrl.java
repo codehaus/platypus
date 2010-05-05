@@ -28,25 +28,31 @@ public class HtmlUrl extends UrlCommand
         HtmlOutfile outfile = htmlData.getOutfile();
         boolean addPrefix = addHttpPrefixIfNecessary(url);
         String text = "<a href=";
+
+        text += wrapInQuotes(url);
+
+        text += ">";
+        
         if (addPrefix)
         {
-            text += "\"" + "http://";
+            text += "http://";
         }
         text += url;
-        if (addPrefix)
-        {
-            text += "\"";
-        }
 
-        text += ">" + url + "</a>";
+        text += "</a>";
 
         outfile.emitText( text );
     }
 
+    private String wrapInQuotes(String url) {
+        return "\"" + url + "\"";
+    }
+
     private boolean addHttpPrefixIfNecessary(String urlStr) {
-        if( urlStr.startsWith("http") || urlStr.startsWith("https"))
+        if ( urlStr.startsWith("http") || urlStr.startsWith("https") ) {
             return false;
-        return true;
+        }
+        return true;    
     }
 
 }

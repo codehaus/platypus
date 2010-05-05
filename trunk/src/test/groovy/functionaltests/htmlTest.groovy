@@ -46,9 +46,9 @@ def void testItalics( String javaRun )
 def void testUrl( String javaRun )
 {
   setDescription( "Test: URL without prefix." )
-  test( javaRun, "Platypus at [url:platypus.pz.org]\n", "<a href=\"http://platypus.pz.org\">");
-  setDescription( "Test: URL with http prefix." )  
-  test( javaRun, "Platypus at [url:http://platypus.pz.org]\n", "<a href=\"http://platypus.pz.org\">");
+  test( javaRun, "Platypus at [url:platypus.pz.org]\n", "<a href=\"platypus.pz.org\">http://platypus.pz.org</a>");
+  setDescription( "Test: URL with http prefix." )
+  test( javaRun, "Platypus at [url:http://platypus.pz.org]\n", "<a href=\"http://platypus.pz.org\">http://platypus.pz.org</a>");
 }
 
 def void test( String javaRun, inputStr, expectedStr )
