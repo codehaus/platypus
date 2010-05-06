@@ -11,6 +11,8 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
 import org.pz.platypus.TokenList;
 import org.pz.platypus.TokenType;
+import org.pz.platypus.plugin.pdf.commands.PdfUrlWithCoverTextEnd;
+import org.pz.platypus.plugin.pdf.commands.PdfPrintVariable;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 
@@ -42,24 +44,30 @@ public abstract class UrlWithCoverTextCommand implements OutputCommandable
         }
 
         // get the cover text
-        String coverText = getCoverText( context.getGdd(), tokNum );
-
-        outputUrl(context, url, coverText);
+        String coverText = getCoverText( context, tokNum );
+        if( coverText == null || coverText.isEmpty() ) {
+            showNoCoverTextlErrorMsg( tok, context);
+            outputUrl( context, url, url );
+        }
+        else {
+            outputUrl(context, url, coverText);
+        }
 
         return( tokensToSkip );
     }
 
     /**
-     * Go down the list of tokens looking for text and an [-url] token pair. These
-     * are the cover text. If you find anything else, raise a fuss.
+     * Go down the list of tokens looking for text and a [-url] token pair. These
+     * are the cover text. If you find anything else, issue a warning and handle the error.
      *
-     * @param gdd containing the list of input tokens
+     * @param context the PDF document data
      * @param startingNum the number of the current token in the list
      *
      * @return a string containing the cover text
      */
-    String getCoverText( final GDD gdd, final int startingNum )
+    String getCoverText( final OutputContextable context, final int startingNum )
     {
+        GDD gdd = context.getGdd();
         TokenList tokens = gdd.getInputTokens();
         int currNum;
         Token tok = null;
@@ -69,21 +77,26 @@ public abstract class UrlWithCoverTextCommand implements OutputCommandable
             tok = tokens.get( currNum );
             if( tok.getType() == TokenType.TEXT ) {
                 coverText.append( tok.getContent() );
+                continue;
             }
-            else {
-                break;
+
+            // if it's a macro, process the macro and get the injected text token
+            if( tok.getType() == TokenType.COMMAND &&
+                tok.getRoot().startsWith( new PdfPrintVariable().getRoot() )) {
+                    new PdfPrintVariable().process( context, tok, currNum );
+                    continue;
             }
+
+            // if it's the [-url] (end of cover text) command, we're done.
+            if( tok.getType() == TokenType.COMMAND &&
+                tok.getRoot().equals( new PdfUrlWithCoverTextEnd().getRoot() )) {
+                    break;
+            }
+
+            // anything but the valid options above is an error.
+            showUnclosedUrlCoverTextErrorMsg( tokens.get( startingNum ), gdd );
         }
 
-        // this can only happen if a [+url: command is the last token in the input token list
-        if( tok == null ) {
-            showUnclosedUrlCoverText( tokens.get( startingNum ), gdd );
-            return( "" );
-        }
-
-//        if( tok.getRoot() != new UrlWithCoverTextEndCommand().getRoot() ) {
-//
-//        }
         return( coverText.toString() );
     }
 
@@ -97,7 +110,7 @@ public abstract class UrlWithCoverTextCommand implements OutputCommandable
      * @param tok contains the location data
      * @param context contains the location of the logger and literals file
      */
-    private void showNullUrlErrorMsg(Token tok, OutputContextable context)
+    private void showNullUrlErrorMsg( Token tok, OutputContextable context )
     {
         GDD gdd = context.getGdd();
         gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
@@ -106,12 +119,15 @@ public abstract class UrlWithCoverTextCommand implements OutputCommandable
                         gdd.getLit( "IGNORED" ));
     }
 
-    /**
-     * Show error message, giving location in Platypus input file
-     * @param tok contains the location data
-     * @param gdd contains the location of the logger and literals file
-     */
-    private void showUnclosedUrlCoverText(final Token tok, final GDD gdd )
+    private void showNoCoverTextlErrorMsg( Token tok, OutputContextable context )
+    {
+        GDD gdd = context.getGdd();
+        gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
+                        gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
+                        gdd.getLit( "ERROR.MISSING_COVER_TEXT_FOR_URL" ));
+    }
+
+    private void showUnclosedUrlCoverTextErrorMsg( final Token tok, final GDD gdd )
     {
         gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                         gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +

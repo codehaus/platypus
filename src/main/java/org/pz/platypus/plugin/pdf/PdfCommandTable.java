@@ -10,6 +10,7 @@ package org.pz.platypus.plugin.pdf;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.plugin.pdf.commands.*;
 import org.pz.platypus.GDD;
+import org.pz.platypus.commands.UrlWithCoverTextEnd;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -72,7 +73,6 @@ public class PdfCommandTable
         add( new PdfItalicsOn() );
         add( new PdfHardCR() );
         add( new PdfLeading() );
-//        add( new PdfLink() );
         add( new PdfMarginBottom() );
         add( new PdfMarginLeft() );
         add( new PdfMarginRight() );
@@ -95,6 +95,7 @@ public class PdfCommandTable
         add( new PdfUnderlineOff() );
         add( new PdfUnderlineOn() );
         add( new PdfUrl() );
+        add( new PdfUrlWithCoverTextEnd() );
     }
 
     /**
