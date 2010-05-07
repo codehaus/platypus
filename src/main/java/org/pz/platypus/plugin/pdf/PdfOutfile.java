@@ -588,16 +588,21 @@ public class PdfOutfile
      * (In other words, http://pz.org would print as is.)
      *
      * @param url the URL of the link
-     * @param coverText words to be printed and made linkable (in lieu of printing the URL)
+     * @param text words to be printed and made linkable (in lieu of printing the URL)
      */
-    public void addUrl( final String url, final String coverText )
+    public void addUrl( final String url, final String text )
     {
         if( url == null ) {
             return;
         }
 
-        Anchor anchor = new Anchor( url, pdfData.getFont().getItextFont() );
-        anchor.setReference( coverText == null ? url : coverText );
+        String coverText = text;
+        if( coverText == null ) {
+            coverText = url;
+        }
+
+        Anchor anchor = new Anchor( coverText, pdfData.getFont().getItextFont() );
+        anchor.setReference( url );
 
         try {
             makeSureOutfileIsOpen();

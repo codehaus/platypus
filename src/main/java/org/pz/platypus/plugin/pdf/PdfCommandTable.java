@@ -95,6 +95,7 @@ public class PdfCommandTable
         add( new PdfUnderlineOff() );
         add( new PdfUnderlineOn() );
         add( new PdfUrl() );
+        add( new PdfUrlWithCoverText() );
         add( new PdfUrlWithCoverTextEnd() );
     }
 

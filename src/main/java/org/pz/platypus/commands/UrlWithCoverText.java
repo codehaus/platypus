@@ -21,7 +21,7 @@ import org.pz.platypus.interfaces.OutputContextable;
  *
  * @author alb
  */
-public abstract class UrlWithCoverTextCommand implements OutputCommandable
+public abstract class UrlWithCoverText implements OutputCommandable
 {
     private final String root = "[+url:";
 
@@ -47,7 +47,7 @@ public abstract class UrlWithCoverTextCommand implements OutputCommandable
         String coverText = getCoverText( context, tokNum );
         if( coverText == null || coverText.isEmpty() ) {
             showNoCoverTextlErrorMsg( tok, context);
-            outputUrl( context, url, url );
+            outputUrl( context, url, null );
         }
         else {
             outputUrl(context, url, coverText);
@@ -97,6 +97,7 @@ public abstract class UrlWithCoverTextCommand implements OutputCommandable
             showUnclosedUrlCoverTextErrorMsg( tokens.get( startingNum ), gdd );
         }
 
+        tokensToSkip = currNum - startingNum;
         return( coverText.toString() );
     }
 
