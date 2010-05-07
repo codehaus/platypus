@@ -23,7 +23,7 @@ public abstract class UrlWithCoverTextEnd implements OutputCommandable
 
     public int process(OutputContextable context, Token tok, int tokNum)
     {
-        if( context == null || tok == null || tok.getParameter().getString() == null ) {
+        if( context == null || tok == null ) {
             throw new IllegalArgumentException();
         }
 
