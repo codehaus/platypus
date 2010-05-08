@@ -135,6 +135,9 @@ public class HtmlData extends DocData implements OutputContextable
         }            
     }
 
+    public boolean areWeInAParagraphAlready() {
+        return false;  //To change body of created methods use File | Settings | File Templates.
+    }
 
     /**
      * Inner class containing the value of the data item, plus
@@ -203,7 +206,7 @@ public class HtmlData extends DocData implements OutputContextable
     }
 
     private GDD gdd;
-    private HtmlOutfile pdfOutfile;
+    private HtmlOutfile htmlOutfile;
 
     private boolean inCode = false;
 
@@ -536,12 +539,12 @@ public class HtmlData extends DocData implements OutputContextable
 
     public HtmlOutfile getOutfile()
     {
-        return( pdfOutfile );
+        return(htmlOutfile);
     }
 
     public void setOutfile( final HtmlOutfile newOutfile)
     {
-        pdfOutfile = newOutfile;
+        htmlOutfile = newOutfile;
     }
 
     public float getPageHeight()

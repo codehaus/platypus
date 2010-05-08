@@ -11,26 +11,28 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
- * Implementation of turning on bold in the PDF plugin
+ * End of line command (auto-inserted by Platypus at end of input line) for PDF plugin
  *
- * @author alb
+ * @author ask
  */
-public class HtmlBoldOff implements OutputCommandable
+public class HtmlEoParagraph implements OutputCommandable
 {
-    private String root = "[-b]";
+    private String root = "[CR]";
 
     public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
-        if( context == null || tok == null ) {
+        if( context == null ) {
             throw new IllegalArgumentException();
         }
 
-        HtmlData html = (HtmlData) context;
-        html.push(getRoot());
-        html.outputTags();
+        HtmlData htmlData = (HtmlData) context;
+
+        // Close current paragraph, if any, and start a new one
+        htmlData.getOutfile().endCurrentParagraphIfAny();
+        htmlData.getOutfile().startNewParagraph();
+
         return 0;
     }
 

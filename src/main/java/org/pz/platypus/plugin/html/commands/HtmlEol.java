@@ -7,8 +7,6 @@
 
 package org.pz.platypus.plugin.html.commands;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Paragraph;
 import org.pz.platypus.Token;
 import org.pz.platypus.TokenList;
 import org.pz.platypus.commandTypes.EolTreatment;
@@ -32,13 +30,14 @@ public class HtmlEol implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        HtmlData html = (HtmlData) context;
-        HtmlOutfile outfile = html.getOutfile();
-        TokenList tl = html.getGdd().getInputTokens();
+        HtmlData htmlData = (HtmlData) context;
+        HtmlOutfile outfile = htmlData.getOutfile();
+        TokenList tl = htmlData.getGdd().getInputTokens();
         Token nextTok = tl.getNextToken( tokNum );
 
-        // if we're at the last input token, then do nothing
+        // if we're at the last input token...
         if( nextTok == null ) {
+            htmlData.getOutfile().endCurrentParagraphIfAny();
             return 0;
         }
 
@@ -51,11 +50,8 @@ public class HtmlEol implements OutputCommandable
         }
 
         // if EolTreatment = hard, issue CR/LF
-        if( ! new EolTreatment().isSoft( html.getEolTreatment() )) {
-            Paragraph para = outfile.getItPara();
-            if( para != null ) {
-                para.add( new Chunk( Chunk.NEWLINE ));
-            }
+        if( ! new EolTreatment().isSoft( htmlData.getEolTreatment() )) {
+            outfile.emitText( "<br>" );            
             return 0;
         }
 
