@@ -7,7 +7,6 @@
 
 package org.pz.platypus.plugin.html;
 
-import com.lowagie.text.Paragraph;
 import org.apache.ecs.html.Body;
 import org.apache.ecs.html.Html;
 import org.apache.ecs.wml.Head;
@@ -25,10 +24,7 @@ public class HtmlOutfile
 {
     private boolean openStatus = false;
 
-    /** the largest entity written to an iTDocument is a paragraph */
-    Paragraph iTPara = null;
-
-    /** the PDF data structure */
+    /** the HTML data structure */
     HtmlData htmlData;
 
     private String htmlFileName;
@@ -37,6 +33,8 @@ public class HtmlOutfile
     Html html = new Html();
     Head head = new Head();
     Body htmlBody = new Body();
+    
+    private boolean inParagraph = false;
 
     public HtmlOutfile()
     {
@@ -109,11 +107,27 @@ public class HtmlOutfile
     }
 
     /**
-     * Starts a new iText Paragraph. First writes out any content from the previous
-     * paragraph if there remains anything unwritten to the output file.
+     * Starts a new html Paragraph. 
      */
     public void startNewParagraph()
     {
+        emitText("<p>");
+        setInParagraph(true);
+    }
+
+    public void endCurrentParagraphIfAny() {
+        if (getInParagraph()) {
+            emitText("</p>");
+            setInParagraph(false);            
+        }
+    }
+
+    public boolean getInParagraph() {
+        return inParagraph;
+    }
+    
+    private void setInParagraph(boolean b) {
+        inParagraph = b;
     }
 
     /**
@@ -142,14 +156,14 @@ public class HtmlOutfile
         htmlData = newPdfData;
     }
 
-    public Paragraph getItPara()
-    {
-        return( iTPara );
+    // this method is only ever used for testing.
+
+    // this method is only ever used for testing.
+
+    // this method is only ever used for testing.
+
+    public void outputANewLine() {
+        emitText("<br>");
     }
 
-    // this method is only ever used for testing.
-
-    // this method is only ever used for testing.
-
-    // this method is only ever used for testing.
 }
