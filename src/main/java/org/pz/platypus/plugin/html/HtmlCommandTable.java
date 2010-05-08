@@ -61,6 +61,7 @@ public class HtmlCommandTable
         add( new HtmlStrikethruOn() );
         add( new HtmlStrikethruOff() );
         add( new HtmlEoParagraph() );
+        add( new HtmlHardCR() );
     }
 
     /**
