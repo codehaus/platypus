@@ -231,7 +231,7 @@ public class HtmlData extends DocData implements OutputContextable
     private Value pageHeight;
     private int   pageNumber;
     private Value pageWidth;
-    private Value paragraphIndent;
+    // private Value paragraphIndent;
     private Value paragraphIndentRight;
     private Value paragraphSkip;
     private Value pixelsPerInch;
@@ -247,6 +247,7 @@ public class HtmlData extends DocData implements OutputContextable
      */
     public HtmlData(final GDD gddIn, HtmlCommandTable commandTable)
     {
+        super(gddIn);
         gdd = gddIn;
 
         alignment       = new Value( DefaultValues.ALIGNMENT );
@@ -275,7 +276,6 @@ public class HtmlData extends DocData implements OutputContextable
         pageHeight      = new Value( DefaultValues.PAGE_HEIGHT );
         pageNumber      = 0;
         pageWidth       = new Value( DefaultValues.PAGE_WIDTH );
-        paragraphIndent = new Value( DefaultValues.PARA_INDENT );
         paragraphIndentRight
                         = new Value( DefaultValues.PARA_INDENT_RIGHT );
         paragraphSkip   = new Value( DefaultValues.PARA_SKIP_LINES );

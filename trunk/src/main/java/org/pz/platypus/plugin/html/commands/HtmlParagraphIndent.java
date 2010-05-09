@@ -9,12 +9,11 @@ package org.pz.platypus.plugin.html.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.exceptions.InvalidCommandParameterException;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.pdf.PdfData;
-import org.pz.platypus.plugin.pdf.TextIndenter;
+import org.pz.platypus.utilities.Conversions;
 
 /**
  * Implementation of indentation of a full paragraph for HTML plugin
@@ -27,27 +26,18 @@ public class HtmlParagraphIndent implements OutputCommandable
 
     public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
-        float newIndent;
-
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
         }
 
         HtmlData htmlData = (HtmlData) context;
 
-//        TextIndenter indenter = new TextIndenter( tok, htmlData );
-//
-//        try {
-//            newIndent = indenter.calculateIndent();
-//        }
-//        catch( InvalidCommandParameterException icpe ) {
-//            showErrorMsg( tok, htmlData );
-//            return 0;
-//        }
-//
-//        if ( newIndent != htmlData.getParagraphIndent() ) {
-//            htmlData.setParagraphIndent( newIndent, tok.getSource() );
-//        }
+        float newIndent = Conversions.convertParameterToPoints( tok.getParameter(), htmlData );
+        
+        htmlData.setParagraphIndent( newIndent, tok.getSource() );
+
+        htmlData.getOutfile().generateStyleClassDefinition();
+
         return 0;
     }
 
