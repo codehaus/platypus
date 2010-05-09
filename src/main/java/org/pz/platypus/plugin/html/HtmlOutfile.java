@@ -35,6 +35,9 @@ public class HtmlOutfile
     Body htmlBody = new Body();
     
     private boolean inParagraph = false;
+    private int styleNum = 0;
+    private int tab = 0;
+    private final String styleStem = "platypus";
 
     public HtmlOutfile()
     {
@@ -107,11 +110,14 @@ public class HtmlOutfile
     }
 
     /**
-     * Starts a new html Paragraph. 
+     * Starts a new html Paragraph.
+     * This does two things...
+     * Outputs the paragraph tag <p>.
+     * Records the fact that we have started a paragraph.  
      */
     public void startNewParagraph()
     {
-        emitText("<p>");
+        emitText("<p " + "CLASS=" + wrapInQuotes(getLatestStyleName()) + ">");
         setInParagraph(true);
     }
 
@@ -137,14 +143,20 @@ public class HtmlOutfile
      */
     public void emitText( String s )
     {
+        String tabSpace = getCurrentTabbedOutSpaces();
+        if (!tabSpace.isEmpty()) {
+            htmlBody.addElement(tabSpace);            
+        }
         htmlBody.addElement(s);
     }
 
-    // ===== endPage events =======
-
-    // inner class to handle the end of page events
-
-    // ==== getters and setters ====//
+    private String getCurrentTabbedOutSpaces() {
+        String spaces = "";
+        for (int i = 0; i < tab; ++i) {
+            spaces += " "; 
+        }
+        return spaces;
+    }
 
     public boolean isOpen()
     {
@@ -156,14 +168,124 @@ public class HtmlOutfile
         htmlData = newPdfData;
     }
 
-    // this method is only ever used for testing.
-
-    // this method is only ever used for testing.
-
-    // this method is only ever used for testing.
-
-    public void outputANewLine() {
+    public void outputHtmlNewLine() {
         emitText("<br>");
     }
 
+    public void generateStyleClassDefinition() {
+        outputStylePreamble();
+        outputStyleSpecs();
+        outputStylePostScript();
+    }
+
+    private void outputStylePostScript() {
+        outputClosingBrace();
+        tabin();
+        outputXmlCommentEnd();
+        closeStyleTag();
+        outputNewLine();
+    }
+
+    private void closeStyleTag() {
+        outputCloseTag("STYLE");
+    }
+
+    private void outputCloseTag(String tagElem) {
+        outputNewLine();
+        emitText("</");
+        emitText(tagElem);
+        emitText(">");                
+        outputNewLine();
+    }
+
+    private void outputXmlCommentEnd() {
+        outputNewLine();
+        emitText("-->");
+    }
+
+    private void outputClosingBrace() {
+        emitText("}");
+    }
+
+    private void tabin() {
+        --tab;
+    }
+
+    private void outputStyleSpecs() {
+        outputPaddingLeft();
+        outputPaddingRight();
+    }
+
+    private void outputPaddingRight() {
+        
+    }
+
+    private void outputPaddingLeft() {
+        float indent = htmlData.getParagraphIndent();
+        emitText("padding-left" + ":" + " " + indent + "pt" + ";");
+        outputNewLine();
+    }
+
+    private void outputStylePreamble() {
+        outputNewLine();
+        outputNewLine();
+        openStyleTag();
+        outputXmlCommentStart();
+        outputStyleName();
+        openStyleDefinition();
+    }
+
+    private void openStyleDefinition() {
+        tabout();
+        outputOpenBrace();
+    }
+
+    private void outputOpenBrace() {
+        emitText("{");
+        outputNewLine();
+    }
+
+    private void tabout() {
+        ++tab;
+    }
+
+    private void outputNewLine() {
+        emitText("\n");
+    }
+
+    private void outputStyleName() {
+        emitText(".");
+        emitText(generateNewStyleName());
+        outputNewLine();
+    }
+
+    private String generateNewStyleName() {
+        ++styleNum;
+        return getLatestStyleName();
+    }
+
+    private String getLatestStyleName() {
+        return styleStem + String.valueOf(styleNum);
+    }
+
+    private void outputXmlCommentStart() {
+        outputNewLine();
+        emitText("<!--");
+    }
+
+    private String wrapInQuotes(String s) {
+        return "\"" + s + "\"";
+    }
+
+    private void openStyleTag() {
+        outputOpenTag("STYLE ", "TYPE=", wrapInQuotes("text/css"));
+    }
+
+    private void outputOpenTag(String... tagElemSpec) {
+        emitText("<");
+        for (String s : tagElemSpec) {
+            emitText(s);
+        }
+        emitText(">");
+    }
 }
