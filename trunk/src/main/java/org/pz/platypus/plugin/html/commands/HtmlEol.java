@@ -16,9 +16,9 @@ import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
- * End of line command (auto-inserted by Platypus at end of input line) for PDF plugin
+ * End of line command (auto-inserted by Platypus at end of input line) for Html plugin
  *
- * @author alb
+ * @author ask
  */
 public class HtmlEol implements OutputCommandable
 {

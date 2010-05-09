@@ -14,9 +14,9 @@ import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
- * Implementation of turning on italics in the PDF plugin
+ * Implementation of turning on italics in the Html plugin
  *
- * @author alb
+ * @author ask
  */
 public class HtmlItalicsOn implements OutputCommandable
 {

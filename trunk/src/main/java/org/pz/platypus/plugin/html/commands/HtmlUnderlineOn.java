@@ -16,7 +16,7 @@ import org.pz.platypus.plugin.html.HtmlOutfile;
 /**
  * Implementation of turning on underline in the PDF plugin
  *
- * @author alb
+ * @author ask
  */
 public class HtmlUnderlineOn implements OutputCommandable
 {
