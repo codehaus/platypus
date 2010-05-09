@@ -19,7 +19,7 @@ import org.pz.platypus.plugin.html.HtmlData;
  * Note that the main token processor in Pdf.Start() will check the token after []. If it's a [cr],
  * that [cr] is ignored (so that the next line does not begin with a blank).
  *
- * @author alb
+ * @author ask
  */
 public class HtmlHardCR implements OutputCommandable
 {

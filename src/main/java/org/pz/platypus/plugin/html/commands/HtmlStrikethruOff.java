@@ -16,7 +16,7 @@ import org.pz.platypus.plugin.html.HtmlOutfile;
 /**
  * Implementation of turning on strikethrough in the PDF plugin
  *
- * @author alb
+ * @author ask
  */
 public class HtmlStrikethruOff implements OutputCommandable
 {

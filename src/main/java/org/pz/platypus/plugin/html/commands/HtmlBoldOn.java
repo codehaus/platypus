@@ -14,9 +14,9 @@ import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
- * Implementation of turning on bold in the PDF plugin
+ * Implementation of turning on bold in the Html plugin
  *
- * @author alb
+ * @author ask
  */
 public class HtmlBoldOn implements OutputCommandable
 {

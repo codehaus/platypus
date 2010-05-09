@@ -22,7 +22,6 @@ public class HtmlUrl extends UrlCommand
     @Override
     protected void outputUrl(OutputContextable context, String url )
     {
-        //TODO: Atul, you need to check that the URL does not already begin with http://
         //TODO: Even with that I'm not sure adding http:// is right. Let's discuss. ALB
         HtmlData htmlData = (HtmlData) context;
         HtmlOutfile outfile = htmlData.getOutfile();

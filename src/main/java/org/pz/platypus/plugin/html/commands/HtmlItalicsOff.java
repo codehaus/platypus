@@ -11,12 +11,11 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
- * Implementation of turning off italics in the PDF plugin
+ * Implementation of turning off italics in the Html plugin
  *
- * @author alb
+ * @author ask
  */
 public class HtmlItalicsOff implements OutputCommandable
 {
@@ -30,9 +29,6 @@ public class HtmlItalicsOff implements OutputCommandable
         HtmlData html = (HtmlData) context;
         html.push(getRoot());
         html.outputTags();
-//
-//        HtmlOutfile outfile = html.getOutfile();
-//        outfile.emitText( "</I>" );
 
         return 0;
     }

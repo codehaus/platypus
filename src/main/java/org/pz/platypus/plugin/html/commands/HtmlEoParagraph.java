@@ -13,7 +13,7 @@ import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
 
 /**
- * End of line command (auto-inserted by Platypus at end of input line) for PDF plugin
+ * End of line command (auto-inserted by Platypus at end of input line) for Html plugin
  *
  * @author ask
  */

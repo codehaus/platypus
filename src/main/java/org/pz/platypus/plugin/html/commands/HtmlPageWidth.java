@@ -16,9 +16,9 @@ import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.pdf.Limits;
 
 /**
- * Implementation of changing the width of the page in PDF
+ * Implementation of changing the width of the page in Html
  *
- * @author alb
+ * @author ask
  */
 public class HtmlPageWidth implements OutputCommandable
 {
