@@ -119,7 +119,7 @@ public abstract class DocData implements OutputContextable
     /** Default ctor
      * 
      */
-    DocData() {
+    public DocData() {
         
     }
 
