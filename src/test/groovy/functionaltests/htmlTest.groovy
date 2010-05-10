@@ -53,26 +53,32 @@ def void testUrl( String javaRun )
 
 def void test( String javaRun, inputStr, expectedStr )
 {
-    def String testFileName = "testItalics.plat"
-    // create a Platypus file containing italicized text.
-    testFile = createInputFile(testFileName, inputStr)
-    // run Platypus and capture for error message as well as a generated HTML file
-    def err = runPlatypus(javaRun, testFileName)
-
-    File htmlFile = openFile("${testFileName}.html");
-
-    if (theRunWasAnError(err)) {
-      cleanUp(testFile, htmlFile)
-      return
-    }
-
-    // read contents of output file into a string
-    String html = htmlFile.getText()
+    testfile = null
+    htmlFile = null
   
-    testExpectedContent(htmlFile, expectedStr)
+    try {
+      def String testFileName = "testItalics.plat"
+      // create a Platypus file containing italicized text.
+      testFile = createInputFile(testFileName, inputStr)
+      // run Platypus and capture for error message as well as a generated HTML file
+      def err = runPlatypus(javaRun, testFileName)
 
-	// delete the test Platypus file and the generated HTML file.
-    cleanUp(testFile, htmlFile)
+      File htmlFile = openFile("${testFileName}.html");
+
+      if (theRunWasAnError(err)) {
+        cleanUp(testFile, htmlFile)
+        return
+      }
+
+      // read contents of output file into a string
+      String html = htmlFile.getText()
+
+      testExpectedContent(htmlFile, expectedStr)      
+    }
+    finally {      
+      // delete the test Platypus file and the generated HTML file.
+      cleanUp(testFile, htmlFile)
+    }
 }
 
 def void setDescription(String desc) {
@@ -102,8 +108,12 @@ def void runPlatypus(String javaRun, String inputFile) {
 }
 
 def void cleanUp(File file1, File file2) {
-  file1.delete()
-  file2.delete()
+  if (file1 != null) {
+    file1.delete()
+  }
+  if (file2 != null) {
+    file2.delete()
+  }
 }
 
 def boolean theRunWasAnError(String err) {
