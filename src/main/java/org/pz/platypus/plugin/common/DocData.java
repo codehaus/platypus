@@ -116,6 +116,13 @@ public abstract class DocData implements OutputContextable
     private Value strikethru;
     protected Underline underline;
 
+    /** Default ctor
+     * 
+     */
+    DocData() {
+        
+    }
+
     /**
      * Initializes the state of the PDF document.
      *
