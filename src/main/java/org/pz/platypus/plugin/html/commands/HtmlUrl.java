@@ -7,7 +7,7 @@
 
 package org.pz.platypus.plugin.html.commands;
 
-import org.pz.platypus.commands.UrlCommand;
+import org.pz.platypus.commands.UrlRaw;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.html.HtmlOutfile;
@@ -17,7 +17,7 @@ import org.pz.platypus.plugin.html.HtmlOutfile;
  *
  * @author ask
  */
-public class HtmlUrl extends UrlCommand
+public class HtmlUrl extends UrlRaw
 {
     @Override
     protected void outputUrl(OutputContextable context, String url )

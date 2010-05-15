@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -34,6 +34,9 @@ public class MockLiterals extends Literals
     /** what getting VERSION should return */
     private String getLitVersionShouldReturn = null;
 
+    /** last literal returned */
+    private String lastLit = null;
+
     public MockLiterals()
     {
     }
@@ -60,17 +63,26 @@ public class MockLiterals extends Literals
             throw new MissingResourceException( null, null, null );
         }
         else if( key.equals( "VERSION" ) && getLitVersionShouldReturn != null ) {
+            lastLit = getLitVersionShouldReturn;
             return( getLitVersionShouldReturn );
         }
         else if( getLitShouldReturnKey ) {
+            lastLit = key;
             return( key );
         }
         else if( getLitShouldReturnValue ) {
+            lastLit = super.getLit( key );
             return( super.getLit( key ));
         }
         else {
+            lastLit = " ";
             return( " " );
         }
+    }
+
+    public String getLastLit()
+    {
+        return( lastLit );
     }
 
     public void setGetLitShouldReturnKey( final boolean yesOrNo )

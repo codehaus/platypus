@@ -7,7 +7,7 @@
 
 package org.pz.platypus.plugin.pdf.commands;
 
-import org.pz.platypus.commands.UrlCommand;
+import org.pz.platypus.commands.UrlRaw;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
@@ -18,7 +18,7 @@ import org.pz.platypus.plugin.pdf.PdfOutfile;
  * @author alb
  */
 
-public class PdfUrl extends UrlCommand
+public class PdfUrl extends UrlRaw
 {
     @Override
     protected void outputUrl(final OutputContextable context, String url)
