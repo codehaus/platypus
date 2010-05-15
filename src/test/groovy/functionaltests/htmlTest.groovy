@@ -26,7 +26,10 @@ def String javaRun = "java -jar " + jarUnderTest
 // run the test(s)
 testItalics( javaRun )
 testUrl( javaRun )
- 
+// TODO: this test does not work currently - will check it out tomorrow
+// testParaIndent( javaRun)
+testFontSize( javaRun )
+
 return
 
 //----------------------- end of main line -----------------------//
@@ -51,13 +54,41 @@ def void testUrl( String javaRun )
   test( javaRun, "Platypus at [url:http://platypus.pz.org]\n", '<a href="http://platypus.pz.org">http://platypus.pz.org</a>');
 }
 
+def void testParaIndent( String javaRun )
+{
+  setDescription( "Test: paragraph indent" )
+  def input =
+"""
+[paraindent:5]
+yet another groovy test
+
+many more are going to come.
+""";
+
+  def expectedOutput = "padding-left: 20.0pt; "
+
+  test( javaRun, input, expectedOutput )
+
+}
+
+def testFontSize( String javaRun )
+{
+  setDescription ("Test: Font Size")
+  def input = "[fsize:5] xxx [fsize:7] yyy"
+  def expectedOutput1 = '<font size="5.0">'
+  def expectedOutput2 = '<font size="7.0">'
+
+  test( javaRun, input, expectedOutput1 )
+  test( javaRun, input, expectedOutput2 )
+}
+
 def void test( String javaRun, inputStr, expectedStr )
 {
     testfile = null
     htmlFile = null
   
     try {
-      def String testFileName = "testItalics.plat"
+      def String testFileName = "testInput.html"
       // create a Platypus file containing italicized text.
       testFile = createInputFile(testFileName, inputStr)
       // run Platypus and capture for error message as well as a generated HTML file
