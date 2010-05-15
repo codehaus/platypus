@@ -64,6 +64,7 @@ public class HtmlCommandTable
         add( new HtmlParagraphIndent() );
         add( new HtmlParagraphIndentRight() );
         add( new HtmlHardCR() );
+        add( new HtmlFsize() );
     }
 
     /**

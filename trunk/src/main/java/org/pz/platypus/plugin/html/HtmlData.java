@@ -139,6 +139,10 @@ public class HtmlData extends DocData implements OutputContextable
         return false;  //To change body of created methods use File | Settings | File Templates.
     }
 
+    public void setFontSize(float newFontSize, Source newSource) {
+        font.setSize( newFontSize, newSource );        
+    }
+
     /**
      * Inner class containing the value of the data item, plus
      * the line at which it was las changed. Made static for
