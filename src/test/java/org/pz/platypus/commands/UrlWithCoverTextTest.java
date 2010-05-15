@@ -170,6 +170,36 @@ public class UrlWithCoverTextTest
         assertEquals( "www.cnn.com", urlCumText.getUrlOut() );
     }
 
+    @Test
+    public void testValidProcessWithMacroInLieuOfText()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        MockLiterals mockLits = new MockLiterals();
+        gdd.setLits( mockLits );
+        gdd.setupLogger(( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+
+        UserStrings us = gdd.getUserStrings();
+        us.add( "$Winston", "Churchill" );
+
+        TokenList tl = createValidTokenListWithMacro();
+        gdd.setInputTokens( tl );
+
+        class DocumentData extends DocData {
+            public DocumentData( GDD gdd ){
+                super( gdd );
+            }
+        };
+
+        OutputContextable oc = new DocumentData( gdd );
+        urlCumText.process( oc, tl.get( 0 ), 0 );
+        assertEquals( "Churchill", urlCumText.getTextOut() );
+        assertEquals( "www.cnn.com", urlCumText.getUrlOut() );
+    }
+
+    //=== support functions ===//
+    
     // creates a token list where the second token is [-url], which closes the URL
     // the first token is skipped by the token list processor (as it's assumed to be [+url:... )
     private TokenList createTokenListWithEndOfTextOnly()
@@ -226,4 +256,26 @@ public class UrlWithCoverTextTest
         return( tl );
     }
 
+    // creates a valid list with the skipped start of URL command, a valid text macro, and
+    // the close of URL command.
+    private TokenList createValidTokenListWithMacro()
+    {
+        TokenList tl = new TokenList();
+        Source src = new Source();
+        String URL = "www.cnn.com";
+        String command = "[url:" + URL + "]";
+        CommandParameter param = new CommandParameter();
+        param.setString( URL );
+
+        String macro = "[$Winston]";
+
+        Token skippedToken = new Token( src, TokenType.COMMAND, command, command, param );
+        Token textToken = new Token( src, TokenType.COMMAND, macro, macro, param );
+        Token eoTextToken = new Token( src, TokenType.COMMAND, "[-url]", "[-url]", null );
+        tl.add( skippedToken );
+        tl.add( textToken );
+        tl.add( eoTextToken );
+
+        return( tl );
+    }
 }
