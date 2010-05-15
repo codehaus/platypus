@@ -17,41 +17,26 @@ import org.pz.platypus.interfaces.OutputContextable;
  *
  * @author ask
  */
-public abstract class UrlCommand implements OutputCommandable
+public abstract class UrlRaw implements OutputCommandable
 {
     private final String root = "[url:";
 
     protected abstract void outputUrl( final OutputContextable context, String url );
 
-    public int process(OutputContextable context, Token tok, int tokNum)
+    public int process( OutputContextable context, Token tok, int tokNum )
     {
-        if( context == null || tok == null || tok.getParameter().getString() == null ) {
+        if( context == null || tok == null || tok.getParameter() == null ) {
             throw new IllegalArgumentException();
         }
 
         String urlParameter = tok.getParameter().getString();
-//
-//        String coverText = null;
-//
-//        // test for "|text: after URL, which would signal presence of cover text. If found,
-//        // set url and coverText to the respective strings in urlParameter; else, it's all
-//        // URL, so set url and leave coverText = null
-//        int textFlag = urlParameter.indexOf( "|text:" );
-//        if( textFlag > 0 ) {
-//            coverText = urlParameter.substring( textFlag + "|text:".length() );
-//            url = urlParameter.substring( 0, textFlag - 1);
-//        }
-//        else {
-//            url = urlParameter;
-//        }
-
         if( urlParameter == null ) {
-            showErrorMsg( tok, context );
-            return 0;
+            showErrorMsg( context, tok );
         }
-
-        outputUrl( context, urlParameter );
-
+        else {
+            outputUrl( context, urlParameter );
+        }
+        
         return 0;
     }
 
@@ -65,7 +50,7 @@ public abstract class UrlCommand implements OutputCommandable
      * @param tok contains the location data
      * @param context contains the location of the logger and literals file
      */    
-    private void showErrorMsg(Token tok, OutputContextable context) {
+    private void showErrorMsg( OutputContextable context, Token tok ) {
         GDD gdd = context.getGdd();
         gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                         gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +
