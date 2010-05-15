@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.*;
+import org.pz.platypus.commands.Alignment;
 import org.pz.platypus.test.mocks.MockLiterals;
 
 /**

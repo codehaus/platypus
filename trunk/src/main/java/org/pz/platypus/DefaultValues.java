@@ -7,7 +7,7 @@
 
 package org.pz.platypus;
 
-import org.pz.platypus.commandTypes.Alignment;
+import org.pz.platypus.commands.Alignment;
 import org.pz.platypus.commandTypes.EolTreatment;
 
 /**

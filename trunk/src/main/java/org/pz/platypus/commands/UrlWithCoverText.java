@@ -80,12 +80,20 @@ public abstract class UrlWithCoverText implements OutputCommandable
             }
 
             // if it's a macro, process the macro and get the injected text token
-            if( tok.getType() == TokenType.COMMAND &&
-                tok.getRoot().startsWith( "[$" )) {
-                    String key = tok.getRoot().substring( 1, tok.getRoot().length() - 1 );
-                    String macroText = gdd.getUserStrings().getString( key );
-                    coverText.append( macroText );
-                    continue;
+//            if( tok.getType() == TokenType.COMMAND &&
+//                tok.getRoot().startsWith( "[$" )) {
+//                    String key = tok.getRoot().substring( 1, tok.getRoot().length() - 1 );
+//                    String macroText = gdd.getUserStrings().getString( key );
+//                    coverText.append( macroText );
+//                    continue;
+//            }
+
+            // if it's a macro, we have to do the lookup ourselves.
+            if( tok.getType() == TokenType.MACRO ) {
+                String macroKey = tok.getParameter().getString();
+                String macroText = gdd.getUserStrings().getString( macroKey );
+                coverText.append( macroText );
+                continue;  
             }
 
             // if it's the [-url] (end of cover text) command, we're done.

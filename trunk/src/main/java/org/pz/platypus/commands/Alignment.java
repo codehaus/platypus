@@ -5,7 +5,7 @@
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus.commandTypes;
+package org.pz.platypus.commands;
 
 import org.pz.platypus.GDD;
 

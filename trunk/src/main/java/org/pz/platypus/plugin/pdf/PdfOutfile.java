@@ -13,8 +13,8 @@ import com.lowagie.text.pdf.*;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;
+import org.pz.platypus.commands.Alignment;
 import org.pz.platypus.plugin.common.Underline;
-import org.pz.platypus.commandTypes.Alignment;
 import org.pz.platypus.exceptions.FileCloseException;
 
 import java.io.FileNotFoundException;
