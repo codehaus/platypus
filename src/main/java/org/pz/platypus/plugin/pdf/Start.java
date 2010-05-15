@@ -161,7 +161,7 @@ public class Start implements Pluggable
                     processSymbol( outfileName, tok, i, pdfData );
                     break;
                 case MACRO:
-                    processMacro();
+                    processMacro( gdd, tok, i );
                     break;
                 case EOF:
                     return;
@@ -282,9 +282,17 @@ public class Start implements Pluggable
         return( commandList.size() + 1 ); // the +1 is for the COMPOUND_COMMAND_END token
     }
 
-    void processMacro()
+    /**
+     * Look up the macro and insert a new token with the text right after the present token
+     * @param gdd  GDD data
+     * @param tok  current token (the macro)
+     * @param tokNum  the number of the current token
+     */
+    void processMacro( final GDD gdd, final Token tok, final int tokNum )
     {
-
+        UserStrings macros = gdd.getUserStrings();
+        String macroText = macros.getString( tok.getParameter().getString() );
+        gdd.getInputTokens().add( tokNum+1, new Token( tok.getSource(), TokenType.TEXT, macroText ));
     }
 
     /**

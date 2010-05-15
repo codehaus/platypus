@@ -230,10 +230,10 @@ public class PlatypusParser
                         return( parsePoint );
                     }
 
-//                    // is it a macro?
-//                    if( context.chars[parsePoint+1] == '$' ) {
-//                        return( processMacro( context, tokens ) + 1 );
-//                    }
+                    // is it a macro?
+                    if( context.chars[parsePoint+1] == '$' ) {
+                        return( processMacro( context, tokens ) + 1 );
+                    }
 
                     // is it a block comment?
                     if( context.chars[parsePoint+1] == '%' ) {
@@ -428,6 +428,11 @@ public class PlatypusParser
             return( "[*" );
         }
 
+        if( context.chars[context.startPoint] == '[' &&
+            context.chars[context.startPoint+1] == '$' ) {
+            return( "[$" );
+        }
+
         for( i = context.startPoint; ; i++ )
         {
             if ( context.isEnd( i )) {
@@ -460,23 +465,23 @@ public class PlatypusParser
         MacroParser mp = new MacroParser( gdd );
 
         // if config file says we don't process macros, then just write them through as a token
-        PropertyFile configFile = gdd.getConfigFile();
-        if( configFile != null ) {
-            String doWeExpandMacros =
-                configFile.lookup( "pi.out." + gdd.getOutputPluginPrefix() + ".platy_macroexpand" );
-            if ( doWeExpandMacros.equals( "no" )) {
+//        PropertyFile configFile = gdd.getConfigFile();
+//        if( configFile != null ) {
+//            String doWeExpandMacros =
+//                configFile.lookup( "pi.out." + gdd.getOutputPluginPrefix() + ".platy_macroexpand" );
+//            if ( doWeExpandMacros.equals( "no" )) {
                 return( outputMacroAsToken( context, tokens, mp ) + context.startPoint );
-            }
-        }
+//            }
+//        }
 
-        // expand the macro
-        try {
-            final int charsSpanned = mp.parse( context.chars, context.startPoint );
-            return( context.startPoint + charsSpanned - 1 );
-        }
-        catch ( IllegalArgumentException iae ) {
-            return( Status.UNFIXABLE_PARSE_ERR );
-        }
+//        // expand the macro
+//        try {
+//            final int charsSpanned = mp.parse( context.chars, context.startPoint );
+//            return( context.startPoint + charsSpanned - 1 );
+//        }
+//        catch ( IllegalArgumentException iae ) {
+//            return( Status.UNFIXABLE_PARSE_ERR );
+//        }
     }
 
     /**
@@ -492,7 +497,9 @@ public class PlatypusParser
                                     final MacroParser mp )
     {
         String macro = mp.extractMacroName( context.chars, context.startPoint + 1 );
-        tokens.add( new Token(  context.source, TokenType.MACRO, "[" + macro + "]" ));
+        CommandParameter param = new CommandParameter();
+        param.setString( macro.substring( 1 ) ); //remove the initial $ or *
+        tokens.add( new Token(  context.source, TokenType.MACRO, "[" + macro + "]", null, param ));
         return( macro.length() +  1 );
     }
 
