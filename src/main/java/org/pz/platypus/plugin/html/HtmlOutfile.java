@@ -39,6 +39,7 @@ public class HtmlOutfile
     private int styleNum = 0;
     private int tab = 0;
     private final String styleStem = "platypus";
+    private boolean inFont = false;
 
     public HtmlOutfile()
     {
@@ -295,6 +296,12 @@ public class HtmlOutfile
     }
 
     public void emitFontSizeTag() {
+        endFontTagIfAny();
+        startNewFont();
+        inFont = true;
+    }
+
+    private void startNewFont() {
         emitText("<font size=");
         String fontSize = String.valueOf(htmlData.getFontSize());
         emitText(wrapInQuotes(fontSize));
@@ -307,6 +314,12 @@ public class HtmlOutfile
     }
 
     private void endFontTagIfAny() {
-        emitText("</font>");
+        if (alreadyProcessingFont()) {
+            emitText("</font>");
+        }
+    }
+
+    private boolean alreadyProcessingFont() {
+        return inFont;    
     }
 }
