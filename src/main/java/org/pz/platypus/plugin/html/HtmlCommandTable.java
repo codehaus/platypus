@@ -62,6 +62,7 @@ public class HtmlCommandTable
         add( new HtmlStrikethruOff() );
         add( new HtmlEoParagraph() );
         add( new HtmlParagraphIndent() );
+        add( new HtmlParagraphIndentRight() );
         add( new HtmlHardCR() );
     }
 

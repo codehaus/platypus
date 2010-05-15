@@ -217,7 +217,9 @@ public class HtmlOutfile
     }
 
     private void outputPaddingRight() {
-        
+        float rindent = htmlData.getParagraphIndentRight();
+        emitText("padding-right" + ":" + " " + rindent + "pt" + ";");
+        outputNewLine();
     }
 
     private void outputPaddingLeft() {
