@@ -48,7 +48,8 @@ public class UserStrings
             return( Status.INVALID_PARAM );    
         }
 
-        if ( ! ( key.startsWith( "$" ) && Character.isLetterOrDigit( key.codePointAt( 1 ) ))) {
+//        if ( ! ( key.startsWith( "$" ) && Character.isLetterOrDigit( key.codePointAt( 1 ) ))) {
+        if ( ! Character.isLetterOrDigit( key.codePointAt( 0 ) )) {
             return( Status.INVALID_PARAM );
         }
 
