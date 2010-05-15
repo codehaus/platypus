@@ -37,6 +37,7 @@ public class HtmlEol implements OutputCommandable
 
         // if we're at the last input token...
         if( nextTok == null ) {
+            htmlData.getOutfile().handleEof();
             htmlData.getOutfile().endCurrentParagraphIfAny();
             return 0;
         }

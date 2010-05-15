@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 
+
 /**
  * Manage output to the PDF file
  */
@@ -252,7 +253,9 @@ public class HtmlOutfile
     }
 
     private void outputNewLine() {
-        emitText("\n");
+        String newline = System.getProperty("line.separator");
+        // emitText("\n");
+        emitText(newline);
     }
 
     private void outputStyleName() {
@@ -289,5 +292,21 @@ public class HtmlOutfile
             emitText(s);
         }
         emitText(">");
+    }
+
+    public void emitFontSizeTag() {
+        emitText("<font size=");
+        String fontSize = String.valueOf(htmlData.getFontSize());
+        emitText(wrapInQuotes(fontSize));
+        emitText(">");
+    }
+
+    public void handleEof() {
+        endCurrentParagraphIfAny();
+        endFontTagIfAny();
+    }
+
+    private void endFontTagIfAny() {
+        emitText("</font>");
     }
 }
