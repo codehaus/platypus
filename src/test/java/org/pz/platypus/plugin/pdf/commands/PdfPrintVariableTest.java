@@ -69,14 +69,14 @@ public class PdfPrintVariableTest
     {
         // first add the macro to the user strings
         UserStrings userMacros = gdd.getUserStrings();
-        int ret = userMacros.add( "$foo", "bar" );
+        int ret = userMacros.add( "foo", "bar" );
         assertEquals( Status.OK, ret );
 
         // then add the [* token to the TokenList
         CommandParameter cp = new CommandParameter();
-        cp.setString( "$foo" );
+        cp.setString( "foo" );
         cp.setUnit( UnitType.NONE );
-        Token newToken = new Token(  new Source(), TokenType.COMMAND, "[*", "[*$foo]", cp );
+        Token newToken = new Token(  new Source(), TokenType.COMMAND, "[*", "[*foo]", cp );
         TokenList tl = gdd.getInputTokens();
         tl.add( newToken );
 
