@@ -32,7 +32,7 @@ public abstract class UrlWithCoverText implements OutputCommandable
 
     public int process(OutputContextable context, Token tok, int tokNum)
     {
-        if( context == null || tok == null || tok.getParameter().getString() == null ) {
+        if( context == null || tok == null || tok.getParameter() == null ) {
             throw new IllegalArgumentException();
         }
 
@@ -46,7 +46,7 @@ public abstract class UrlWithCoverText implements OutputCommandable
         // get the cover text
         String coverText = getCoverText( context, tokNum );
         if( coverText == null || coverText.isEmpty() ) {
-            showNoCoverTextlErrorMsg( tok, context);
+            showNoCoverTextlErrorMsg( tok, context );
             outputUrl( context, url, null );
         }
         else {
