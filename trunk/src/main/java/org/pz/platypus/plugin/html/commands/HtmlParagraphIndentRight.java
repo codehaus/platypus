@@ -14,13 +14,13 @@ import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.utilities.Conversions;
 
 /**
- * Implementation of indentation of a full paragraph for HTML plugin
+ * Implementation of indentation of a full paragraph from the right side for HTML plugin.
  *
  * @author ask
  */
-public class HtmlParagraphIndent implements OutputCommandable
+public class HtmlParagraphIndentRight implements OutputCommandable
 {
-    private String root = "[paraindent:";
+    private String root = "[paraindentR:";
 
     public int process( final OutputContextable context, final Token tok, final int tokNum )
     {
@@ -31,11 +31,11 @@ public class HtmlParagraphIndent implements OutputCommandable
         HtmlData htmlData = (HtmlData) context;
 
         float newIndent = Conversions.convertParameterToPoints( tok.getParameter(), htmlData );
-        
-        htmlData.setParagraphIndent( newIndent, tok.getSource() );
+
+        htmlData.setParagraphIndentRight( newIndent, tok.getSource() );
 
         htmlData.getOutfile().generateStyleClassDefinition();
-
+        
         return 0;
     }
 
