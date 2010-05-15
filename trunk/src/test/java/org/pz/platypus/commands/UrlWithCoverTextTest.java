@@ -121,6 +121,31 @@ public class UrlWithCoverTextTest
         assertEquals( "CNN", coverTextFromCommand );
     }
 
+   @Test
+    public void testErrorWhenOtherCommandPrecedesEndOfTextCommand()
+    {
+        final GDD gdd = new GDD();
+        gdd.initialize();
+        MockLiterals mockLits = new MockLiterals();
+        gdd.setLits( mockLits );
+        gdd.setupLogger(( "org.pz.platypus.Platypus" ));
+        gdd.getLogger().setLevel( Level.OFF );
+        TokenList tl = createTokenListWithOtherCommandBeforeEndOfTextCommand();
+        gdd.setInputTokens( tl );
+
+        class DocumentData extends DocData {
+            public DocumentData( GDD gdd ){
+                super( gdd );
+            }
+        };
+
+        OutputContextable oc = new DocumentData( gdd );
+        urlCumText.process( oc, tl.get( 0 ), 0 );
+        assertEquals( "CNN", urlCumText.getTextOut() );
+        assertEquals( "www.cnn.com", urlCumText.getUrlOut() );
+        assertEquals( "ERROR.URL_COVER_TEXT_NOT_PROPERLY_ENDED", mockLits.getLastLit() );
+    }
+
     @Test
     public void testValidProcess()
     {
@@ -162,10 +187,28 @@ public class UrlWithCoverTextTest
         return( tl );
     }
 
+    private TokenList createTokenListWithOtherCommandBeforeEndOfTextCommand()
+    {
+        TokenList tl = new TokenList();
+        Source src = new Source();
+        String URL = "www.cnn.com";
+        String command = "[url:" + URL + "]";
+        CommandParameter param = new CommandParameter();
+        param.setString( URL );
+
+        Token skippedToken = new Token( src, TokenType.COMMAND, command, command, param );
+        Token textToken = new Token( src, TokenType.TEXT, "CNN" );
+        Token otherCommandToken = new Token( src, TokenType.COMMAND, "[+b]", "[+b]", null );
+        tl.add( skippedToken );
+        tl.add( textToken );
+        tl.add( otherCommandToken );
+
+        return( tl );
+    }
+
     // creates a valid list with the skipped start of URL command, some text, and the close of URL command.
     private TokenList createValidTokenList()
     {
-
         TokenList tl = new TokenList();
         Source src = new Source();
         String URL = "www.cnn.com";
