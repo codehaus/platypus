@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -114,7 +114,7 @@ public class UserStringsTest
         assertEquals( 0, us.getSize() );
         int ret;
 
-        ret = us.add( "$abc", "Value for $abc" );
+        ret = us.add( "abc", "Value for $abc" );
         assertEquals( Status.OK, ret );
         assertEquals( 1, us.getSize() );
     }
@@ -127,11 +127,11 @@ public class UserStringsTest
         assertEquals( 0, us.getSize() );
         int ret;
 
-        ret = us.add( "$xx1", "abc" );
+        ret = us.add( "xx1", "abc" );
         assertEquals( Status.OK, ret );
         assertEquals( 1, us.getSize() );
 
-        ret = us.add( "$xx2", "def" );
+        ret = us.add( "xx2", "def" );
         assertEquals( Status.OK, ret );
         assertEquals( 2, us.getSize() );
 
@@ -145,11 +145,11 @@ public class UserStringsTest
         assertEquals( 0, us.getSize() );
         int ret;
 
-        ret = us.add( "$ghi", "Value for $ghi" );
+        ret = us.add( "ghi", "Value for $ghi" );
         assertEquals( Status.OK, ret );
         assertEquals( 1, us.getSize() );
 
-        assertTrue( us.getString( "$ghi").equals( "Value for $ghi"));
+        assertTrue( us.getString( "ghi" ).equals( "Value for $ghi" ));
     }
 
     @Test
@@ -160,13 +160,13 @@ public class UserStringsTest
         assertEquals( 0, us.getSize() );
         int ret;
 
-        ret = us.add( "$abc", "Value for $abc" );
+        ret = us.add( "abc", "Value for $abc" );
         assertEquals( Status.OK, ret );
         assertEquals( 1, us.getSize() );
 
         MockLiterals mockLits = new MockLiterals();
         mockLits.setGetLitShouldReturnKey( true );
         String dumpResults = us.dump( mockLits );
-        assertTrue( dumpResults.contains( "USER_DEFINED_STRINGS: \n\t$abc: Value for $abc\n" ));
+        assertTrue( dumpResults.contains( "USER_DEFINED_STRINGS: \n\tabc: Value for $abc\n" ));
     }
 }

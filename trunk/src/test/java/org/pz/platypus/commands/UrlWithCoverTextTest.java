@@ -181,7 +181,7 @@ public class UrlWithCoverTextTest
         gdd.getLogger().setLevel( Level.OFF );
 
         UserStrings us = gdd.getUserStrings();
-        us.add( "$Winston", "Churchill" );
+        us.add( "Winston", "Churchill" );
 
         TokenList tl = createValidTokenListWithMacro();
         gdd.setInputTokens( tl );
@@ -270,10 +270,14 @@ public class UrlWithCoverTextTest
         String macro = "[$Winston]";
 
         Token skippedToken = new Token( src, TokenType.COMMAND, command, command, param );
-        Token textToken = new Token( src, TokenType.COMMAND, macro, macro, param );
+
+        CommandParameter param2 = new CommandParameter();
+        param2.setString("Winston" );
+
+        Token macroToken = new Token( src, TokenType.MACRO, macro, macro, param2 );
         Token eoTextToken = new Token( src, TokenType.COMMAND, "[-url]", "[-url]", null );
         tl.add( skippedToken );
-        tl.add( textToken );
+        tl.add( macroToken );
         tl.add( eoTextToken );
 
         return( tl );
