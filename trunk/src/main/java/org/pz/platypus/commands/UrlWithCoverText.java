@@ -12,7 +12,6 @@ import org.pz.platypus.Token;
 import org.pz.platypus.TokenList;
 import org.pz.platypus.TokenType;
 import org.pz.platypus.plugin.pdf.commands.PdfUrlWithCoverTextEnd;
-import org.pz.platypus.plugin.pdf.commands.PdfPrintVariable;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 
@@ -82,8 +81,10 @@ public abstract class UrlWithCoverText implements OutputCommandable
 
             // if it's a macro, process the macro and get the injected text token
             if( tok.getType() == TokenType.COMMAND &&
-                tok.getRoot().startsWith( new PdfPrintVariable().getRoot() )) {
-                    new PdfPrintVariable().process( context, tok, currNum );
+                tok.getRoot().startsWith( "[$" )) {
+                    String key = tok.getRoot().substring( 1, tok.getRoot().length() - 1 );
+                    String macroText = gdd.getUserStrings().getString( key );
+                    coverText.append( macroText );
                     continue;
             }
 
