@@ -27,7 +27,7 @@ def String javaRun = "java -jar " + jarUnderTest
 testItalics( javaRun )
 testUrl( javaRun )
 // TODO: this test does not work currently - will check it out tomorrow
-// testParaIndent( javaRun)
+testParaIndent( javaRun)
 testFontSize( javaRun )
 
 return
@@ -65,7 +65,7 @@ yet another groovy test
 many more are going to come.
 """;
 
-  def expectedOutput = "padding-left: 20.0pt; "
+  def expectedOutput = "padding-left: 5.0pt; "
 
   test( javaRun, input, expectedOutput )
 
@@ -88,7 +88,7 @@ def void test( String javaRun, inputStr, expectedStr )
     htmlFile = null
   
     try {
-      def String testFileName = "testInput.html"
+      def String testFileName = "testInput.txt"
       // create a Platypus file containing italicized text.
       testFile = createInputFile(testFileName, inputStr)
       // run Platypus and capture for error message as well as a generated HTML file
@@ -167,7 +167,7 @@ def File createInputFile(String fileName, String fileContents)
 {
   def File testFile = new File( fileName )
   PrintWriter pw = new PrintWriter( testFile )
-  pw.write( fileContents );
+  pw.println( fileContents );
   pw.close()
 
   // Make sure we have successfully created the input file
