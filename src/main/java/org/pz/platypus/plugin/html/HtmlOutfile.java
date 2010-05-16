@@ -44,8 +44,9 @@ public class HtmlOutfile
     public HtmlOutfile()
     {
         openStatus = false;
-        head.addElement(htmlBody);
-        html.addElement(head);
+        htmlBody.setPrettyPrint( true );
+        head.addElement( htmlBody );
+        html.addElement( head );
     }
 
     /**
@@ -321,5 +322,15 @@ public class HtmlOutfile
 
     private boolean alreadyProcessingFont() {
         return inFont;    
+    }
+
+    public void setMarginRight() {
+        float marginRight = htmlData.getMarginRight();
+        // TODO: not sure how to fix this right now
+    }
+
+    public void setMarginTop() {
+        int marginTop = (int) htmlData.getMarginTop();
+        htmlBody.addAttribute("TOPMARGIN", marginTop);
     }
 }
