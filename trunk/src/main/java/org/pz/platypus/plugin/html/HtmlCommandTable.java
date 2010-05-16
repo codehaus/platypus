@@ -65,6 +65,8 @@ public class HtmlCommandTable
         add( new HtmlParagraphIndentRight() );
         add( new HtmlHardCR() );
         add( new HtmlFsize() );
+        add( new HtmlMarginRight() );
+        add( new HtmlMarginTop() );
     }
 
     /**
