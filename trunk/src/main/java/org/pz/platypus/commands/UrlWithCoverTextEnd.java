@@ -15,7 +15,7 @@ import org.pz.platypus.interfaces.OutputContextable;
 /**
  * Abstract portion of command that marks the end of cover text for a URL
  *
- * @author ask
+ * @author alb
  */
 public abstract class UrlWithCoverTextEnd implements OutputCommandable
 {
