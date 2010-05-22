@@ -16,7 +16,7 @@ import org.pz.platypus.interfaces.OutputContextable;
  *
  * @author alb
  */
-public abstract class BulletListStartPlain implements OutputCommandable
+public abstract class BulletListPlainStart implements OutputCommandable
 {
     private final String root = "[list]";
 

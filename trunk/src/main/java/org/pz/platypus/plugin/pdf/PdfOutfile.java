@@ -13,6 +13,7 @@ import com.lowagie.text.pdf.*;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;
+import org.pz.platypus.BulletLists;
 import org.pz.platypus.commands.Alignment;
 import org.pz.platypus.plugin.common.Underline;
 import org.pz.platypus.exceptions.FileCloseException;
@@ -20,6 +21,7 @@ import org.pz.platypus.exceptions.FileCloseException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.EmptyStackException;
 
 /**
  * Manage output to the PDF file
@@ -40,6 +42,9 @@ public class PdfOutfile
     /** the largest entity written to an iTDocument is a paragraph */
     Paragraph iTPara = null;
 
+    /** the collection of active bullet lists */
+    BulletLists bulletLists = null;
+
     /** iText variable that ColumnText uses to see if there's more to write out */
     int iTStatus;
 
@@ -55,6 +60,7 @@ public class PdfOutfile
         iTPara = null;
         iTWriter = null;
         iTDocument = null;
+        bulletLists = new BulletLists();
     }
 
     /**
@@ -218,13 +224,105 @@ public class PdfOutfile
         assert( column != null );
         assert( pdfData != null );
 
-        doParagraphAlignment( para, pdfData );
-        doParagraphIndent( para, pdfData );
-        doParagraphIndentRight( para, pdfData );
-        doFirstLineIndent( para, pdfData );
-        doParagraphSpaceBefore( para, pdfData );
+        if( isAListItem() ) {
+            addItemToList( para );
+        }
+        else {
+            doParagraphAlignment( para, pdfData );
+            doParagraphIndent( para, pdfData );
+            doParagraphIndentRight( para, pdfData );
+            doFirstLineIndent( para, pdfData );
+            doParagraphSpaceBefore( para, pdfData );
+            column.addElement( para );
+        }
+    }
 
-        column.addElement( para );
+    /**
+     * Adds a new bullet list to the stack of bulleted lists. (These are saved in a stack because
+     * lists can nest).
+     *
+     * @param bulletSymbol symbol to be used as the bullet marker
+     */
+    public void startPlainBulletList( final String bulletSymbol )
+    {
+        // set the skip to 0 lines, output old text, start a new paragraph.
+        float initialParaSkip = pdfData.getParagraphSkip();
+        int initialParaSkipSource = pdfData.getParagraphSkipLine();
+        pdfData.setParagraphSkip( 0f, new Source( 0, initialParaSkipSource ));
+        startNewParagraph();
+
+        // then reset the paragraph skip to the previous value.
+        pdfData.setParagraphSkip( initialParaSkip, new Source( 0, initialParaSkipSource ));
+
+        // create the bullet list
+        String bulletMarker = bulletSymbol;
+        float indentMargin = 18f;   // for the nonce, all indents are 1/4"
+
+        List bulletList = new List( List.UNORDERED, indentMargin );
+        if( bulletMarker == null || bulletMarker.isEmpty() ) {
+            bulletMarker = "-";
+        }
+        bulletList.setListSymbol( bulletMarker );
+        bulletLists.add( bulletList );
+    }
+
+    /**
+     * Adds a paragraph to the currently active bullet list.
+     *
+     * @param para the paragraph to add
+     */
+    public void addItemToList( Paragraph para )
+    {
+        if( para == null ) {
+            return;  // TODO: should add an error message
+        }
+
+        List currList;
+        try {
+            currList = (List) bulletLists.peek();
+        }
+        catch( EmptyStackException ese ) {
+            return;     // TODO: should add an errro message
+        }
+
+        ListItem li = new ListItem( para );
+        if( currList != null ) {
+            currList.add( li );
+        }
+
+        iTPara = null;
+
+    }
+
+    /**
+     * End the currently active bullet list. This removes it from the stack of active
+     * bullet lists and adds it to the current column.
+     */
+    public void endPlainBulletList()
+    {
+        List currList;
+        try {
+            currList = (List) bulletLists.pop();
+        }
+        catch( EmptyStackException ese ) {
+            return;     // TODO: should add an error message
+        }
+
+        // if in a paragraph, add it to the list before closing the list.
+        if( iTPara != null ) {
+            addItemToList( iTPara );
+        }
+        
+        iTColumn.addElement( currList );
+    }
+    /**
+     * Are we in a bullet list?
+     *
+     * @return true if in a bullet list, false otherwise.
+     */
+    public boolean isAListItem()
+    {
+        return( bulletLists.size() > 0 );
     }
 
     /**
