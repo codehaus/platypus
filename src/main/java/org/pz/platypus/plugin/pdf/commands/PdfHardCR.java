@@ -12,6 +12,7 @@ import org.pz.platypus.TokenList;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;
+import org.pz.platypus.plugin.pdf.PdfOutfile;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Chunk;
 
@@ -33,11 +34,29 @@ public class PdfHardCR implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        PdfData pdf = (PdfData) context;
-        Paragraph currPar = pdf.getOutfile().getItPara();
-        if( currPar != null ) {
-            currPar.add( new Chunk( Chunk.NEWLINE ));
+        PdfData pdd = (PdfData) context;
+        PdfOutfile outfile = pdd.getOutfile();
+        if( outfile == null ) {
+            return( 0 ); //TODO: Error message, though effectively an impossible error.
         }
+
+        Paragraph currPar = pdd.getOutfile().getItPara();
+        if( outfile.isAListItem() ) {
+            if( currPar != null && ! currPar.isEmpty() ) {
+                outfile.addItemToList( currPar );
+                return( 0 );
+            }
+        }
+//        else {
+//            currPar.add( new Chunk( Chunk.NEWLINE ));
+//        }
+//        return( 0 );
+//
+//        PdfData pdf = (PdfData) context;
+//        Paragraph currPar = pdf.getOutfile().getItPara();
+//        if( currPar != null ) {
+            currPar.add( new Chunk( Chunk.NEWLINE ));
+//        }
 
         // if it's the first token in line, it = a blank line, so an additional
         // NEWLINE needs to be emitted.

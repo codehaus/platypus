@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -15,7 +15,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Chunk;
 
 /**
- * End of line command (auto-inserted by Platypus at end of input line) for PDF plugin
+ * Blank line (auto-inserted by Platypus) for PDF plugin
  *
  * @author alb
  */
@@ -41,6 +41,7 @@ public class PdfEoParagraph implements OutputCommandable
             currPar.add( new Chunk( Chunk.NEWLINE ));
         }
         return 0;
+
     }
 
     public String getRoot()
