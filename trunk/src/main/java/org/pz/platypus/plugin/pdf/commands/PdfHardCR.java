@@ -41,7 +41,7 @@ public class PdfHardCR implements OutputCommandable
         }
 
         Paragraph currPar = pdd.getOutfile().getItPara();
-        if( outfile.isAListItem() ) {
+        if( outfile.inABulletList() ) {
             if( currPar != null && ! currPar.isEmpty() ) {
                 outfile.addItemToList( currPar );
                 return( 0 );
