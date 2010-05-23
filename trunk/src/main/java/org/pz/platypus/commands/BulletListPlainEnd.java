@@ -28,9 +28,7 @@ public abstract class BulletListPlainEnd implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        endBulletList( context, tok, tokNum );
-
-        return( 0 );
+        return( endBulletList( context, tok, tokNum ));
     }
 
     public String getRoot()

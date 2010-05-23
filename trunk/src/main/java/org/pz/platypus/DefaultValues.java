@@ -23,6 +23,7 @@ public class DefaultValues
 
     public static final int     ALIGNMENT = Alignment.LEFT;
     public final static float   BASELINE_LOCATION = 20f;                 // used in footer
+    public static final String  BULLET = "\u2022";                       // a black dot
     public static final int     COLUMN_COUNT = 1;
     public final static float   COLUMN_WIDTH = 0f;          // when 0, use computed column width
     public static final int     EOL_TREATMENT = EolTreatment.SOFT;

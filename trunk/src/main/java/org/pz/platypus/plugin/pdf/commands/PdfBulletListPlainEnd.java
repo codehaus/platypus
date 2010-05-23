@@ -26,6 +26,14 @@ public class PdfBulletListPlainEnd extends BulletListPlainEnd
         PdfOutfile outFile = pdd.getOutfile();
 
         outFile.endPlainBulletList();
+
+        // if this is the last command in the line, we don't want the concluding [cr]
+        // to insert a blank into the text. 
+
+        Token nextTok = pdd.getGdd().getInputTokens().getNextToken( tokNum );
+        if( nextTok != null && nextTok.getRoot().equals( "[cr]" )) {
+            return( 1 );
+        }
         return( 0 );
     }
 
