@@ -189,11 +189,16 @@ public class PdfOutfile
         }
 
         // First output any unwritten paragraph text to the column(s)
-        if ( iTPara != null ) {
+        if( iTPara != null ) {
             addParagraph( iTPara, iTColumn );
             iTPara = null;
         }
 
+        // if in a bullet list, close the list up
+        if( inABulletList() ) {
+            endPlainBulletList();
+        }
+        
         // then output the column content
         addColumnsContentToDocument();
 
@@ -224,7 +229,7 @@ public class PdfOutfile
         assert( column != null );
         assert( pdfData != null );
 
-        if( isAListItem() ) {
+        if( inABulletList() ) {
             addItemToList( para );
         }
         else {
@@ -312,15 +317,23 @@ public class PdfOutfile
         if( iTPara != null ) {
             addItemToList( iTPara );
         }
-        
-        iTColumn.addElement( currList );
+
+        // if this list is part of another list (here called the outer list) add it to that list.
+        if( ! bulletLists.empty() ) {
+            List outerList = (List) bulletLists.peek();
+            outerList.add( currList );
+        }
+        // if not, add it to the column of text.
+        else {
+            iTColumn.addElement( currList );
+        }
     }
     /**
      * Are we in a bullet list?
      *
      * @return true if in a bullet list, false otherwise.
      */
-    public boolean isAListItem()
+    public boolean inABulletList()
     {
         return( bulletLists.size() > 0 );
     }

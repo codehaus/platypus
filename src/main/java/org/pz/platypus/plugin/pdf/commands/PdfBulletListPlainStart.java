@@ -25,7 +25,8 @@ public class PdfBulletListPlainStart extends BulletListPlainStart
         PdfData pdd = (PdfData) context;
         PdfOutfile outFile = pdd.getOutfile();
 
-        outFile.startPlainBulletList( "-" );
+        outFile.startPlainBulletList( "\u2022" );
+//        outFile.startPlainBulletList( "\u00B7" );
         return( 0 );
     }
 
