@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -9,6 +9,7 @@ package org.pz.platypus.utilities;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
+import org.pz.platypus.Token;
 
 /**
  * Various Error Message-Generating Routines
@@ -17,6 +18,28 @@ import org.pz.platypus.Source;
  */
 public class ErrorMsg
 {
+    /**
+     * Most Platypus error messages start with the file# and line# where an error occurred.
+     * This method generates the literal of file and line numbers for the token, plus a ": ".
+     *
+     * @param gdd container that holds location of the literals file
+     * @param tok the erroneous token
+     * @return  the file and line #s, or an empty string in case of error
+     */
+    public static String location( final GDD gdd, final Token tok )
+    {
+        if( gdd == null || tok == null || tok.getSource() == null ) {
+            return( "" );
+        }
+
+        StringBuffer loc = new StringBuffer( 30 );
+        loc.append( gdd.getLit( "FILE#" ) + " " +
+                    tok.getSource().getFileNumber() + " " +
+                    gdd.getLit( "LINE#" ) + " " +
+                    tok.getSource().getLineNumber() + ": " );
+        return( loc.toString() );
+    }
+
     /**
      * Logs warning when a command that is not supported in a code section is encountered.
      *

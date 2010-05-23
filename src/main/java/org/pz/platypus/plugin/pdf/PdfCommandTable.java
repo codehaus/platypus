@@ -57,6 +57,7 @@ public class PdfCommandTable
         add( new PdfBoldOn() );
         add( new PdfBulletListPlainEnd() );
         add( new PdfBulletListPlainStart() );
+        add( new PdfBulletListPlainStartWithOptions() );
         add( new PdfCodeOff() );
         add( new PdfCodeOn() );
         add( new PdfCodeWithOptions() );

@@ -243,12 +243,28 @@ public class PdfOutfile
     }
 
     /**
+     * Converts bullet string into an iText Chunk and calls the method that
+     * adds a list using the Chunk to define the bullet symbol.
+     *
+     * @param bulletSymbol string to use as a bullet symbol (most often, a single character)
+     */
+    public void startPlainBulletList( final String bulletSymbol )
+    {
+        String bullet = bulletSymbol;
+        if( bullet == null || bullet.isEmpty() ) {
+            bullet = DefaultValues.BULLET;
+        }
+
+        startPlainBulletList( new Chunk( bullet ));
+    }
+
+    /**
      * Adds a new bullet list to the stack of bulleted lists. (These are saved in a stack because
      * lists can nest).
      *
-     * @param bulletSymbol symbol to be used as the bullet marker
+     * @param bulletSymbol symbol to be used as the bullet marker (an iText Chunk)
      */
-    public void startPlainBulletList( final String bulletSymbol )
+    public void startPlainBulletList( final Chunk bulletSymbol )
     {
         // set the skip to 0 lines, output old text, start a new paragraph.
         float initialParaSkip = pdfData.getParagraphSkip();
@@ -260,12 +276,12 @@ public class PdfOutfile
         pdfData.setParagraphSkip( initialParaSkip, new Source( 0, initialParaSkipSource ));
 
         // create the bullet list
-        String bulletMarker = bulletSymbol;
+        Chunk bulletMarker = bulletSymbol;
         float indentMargin = 18f;   // for the nonce, all indents are 1/4"
 
         List bulletList = new List( List.UNORDERED, indentMargin );
         if( bulletMarker == null || bulletMarker.isEmpty() ) {
-            bulletMarker = "-";
+            bulletMarker = new Chunk( DefaultValues.BULLET );
         }
         bulletList.setListSymbol( bulletMarker );
         bulletLists.add( bulletList );
