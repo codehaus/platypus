@@ -7,12 +7,12 @@
 
 package org.pz.platypus.plugin.pdf.commands;
 
-import org.pz.platypus.GDD;
-import org.pz.platypus.Token;
-import org.pz.platypus.DefaultValues;
+import org.pz.platypus.*;
 import org.pz.platypus.commands.BulletListPlainStart;
 import org.pz.platypus.commands.BulletListPlainStartWithOptions;
 import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.OutputCommandable;
+import org.pz.platypus.interfaces.Commandable;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
 import org.pz.platypus.utilities.ErrorMsg;
@@ -51,7 +51,7 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
         Chunk bulletSymbol;
         param = TextTransforms.lop( param, "bullet:".length() );
         if( param.startsWith( "{" )) {
-            bulletSymbol = lookupBulletSymbol( param );
+            bulletSymbol = lookupBulletSymbol( param.substring( 1 ), pdd.getGdd(), tok );
         }
         else {
             bulletSymbol = extractBulletSymbolFromParam( param );
@@ -62,8 +62,26 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
         return( 0 );
     }
 
-    Chunk lookupBulletSymbol( final String param )
+    Chunk lookupBulletSymbol( final String param, final GDD gdd, final Token tok )
     {
+        StringBuilder sb = new StringBuilder( 10 );
+        int i = 0;
+        while( i < param.length() &&
+                param.charAt( i ) != '}' &&
+                param.charAt( i ) != ']' )
+            sb.append( param.charAt( i++ ));
+
+        if( param.charAt( i ) != '}' ) {
+            errorUnclosedOption( gdd, tok );
+            return( new Chunk( DefaultValues.BULLET ));
+        }
+
+        Commandable value = gdd.getCommandTable().getCommand( "[" + sb.toString() + "]" );
+        if( ! ( value instanceof Symbol )) {
+            errorBulletSymbolNotFound( gdd, tok );
+        }
+        
+        PropertyFile pf = new PropertyFile( );
 
         return new Chunk( ">" ); //TODO
     }
@@ -87,8 +105,31 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
 
     private void errorInvalidOption( final GDD gdd, final Token tok )
     {
+        assert gdd != null;
+        assert tok != null;
+
         StringBuilder msg = new StringBuilder( ErrorMsg.location( gdd, tok ));
         msg.append( gdd.getLit( "ERROR.INVALID_OPTION_FOR_BULLET_LIST" ));
+        gdd.logWarning( msg.toString() );
+    }
+
+    private void errorUnclosedOption(final GDD gdd, final Token tok )
+    {
+        assert gdd != null;
+        assert tok != null;
+
+        StringBuilder msg = new StringBuilder( ErrorMsg.location( gdd, tok ));
+        msg.append( gdd.getLit( "ERROR.UNCLOSED_OPTION_FOR_BULLET_LIST" ));
+        gdd.logWarning( msg.toString() );
+    }
+
+    private void errorBulletSymbolNotFound(final GDD gdd, final Token tok )
+    {
+        assert gdd != null;
+        assert tok != null;
+
+        StringBuilder msg = new StringBuilder( ErrorMsg.location( gdd, tok ));
+        msg.append( gdd.getLit( "ERROR.SYMBOL_FOR_BULLET_LIST_NOT_FOUND" ));
         gdd.logWarning( msg.toString() );
     }
 
