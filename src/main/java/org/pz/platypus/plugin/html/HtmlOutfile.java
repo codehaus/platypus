@@ -256,7 +256,6 @@ public class HtmlOutfile
 
     private void outputNewLine() {
         String newline = System.getProperty("line.separator");
-        // emitText("\n");
         emitText(newline);
     }
 
@@ -298,11 +297,11 @@ public class HtmlOutfile
 
     public void emitFontSizeTag() {
         endFontTagIfAny();
-        startNewFont();
+        startNewFontSize();
         inFont = true;
     }
 
-    private void startNewFont() {
+    private void startNewFontSize() {
         emitText("<font size=");
         String fontSize = String.valueOf(htmlData.getFontSize());
         emitText(wrapInQuotes(fontSize));
@@ -332,5 +331,17 @@ public class HtmlOutfile
     public void setMarginTop() {
         int marginTop = (int) htmlData.getMarginTop();
         htmlBody.addAttribute("TOPMARGIN", marginTop);
+    }
+
+    public void handleNewFontFace() {
+        startNewFontFace();
+    }
+
+    private void startNewFontFace() {
+        endFontTagIfAny();
+        emitText("<font face=");
+        String fontFace = htmlData.getFontFace();
+        wrapInQuotes(fontFace);
+        emitText(">");
     }
 }
