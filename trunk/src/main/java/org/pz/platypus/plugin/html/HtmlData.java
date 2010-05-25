@@ -143,6 +143,11 @@ public class HtmlData extends DocData implements OutputContextable
         font.setSize( newFontSize, newSource );        
     }
 
+    public void setFontFace(String newFontFace, Source source) {
+        setFontFace(newFontFace, source);
+        getOutfile().handleNewFontFace();
+    }
+
     /**
      * Inner class containing the value of the data item, plus
      * the line at which it was las changed. Made static for
