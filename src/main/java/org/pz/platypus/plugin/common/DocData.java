@@ -11,6 +11,7 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;
 import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.ICommandTable;
 
 /**
  * Abstract container class for all the state of the output document.
@@ -94,6 +95,7 @@ public abstract class DocData implements OutputContextable
     protected Value columnCount;
     private Value userSpecifiedColumnWidth;
 
+    private ICommandTable commandTable;
     private int currColumn;
     private Value firstLineIndent;
     private Value leading;
@@ -136,6 +138,7 @@ public abstract class DocData implements OutputContextable
 
         codeSection     = new Value( false );
         columnCount     = new Value( DefaultValues.COLUMN_COUNT );
+        commandTable    = null;
         currColumn      = 0;
 
         firstLineIndent = new Value( DefaultValues.FIRST_LINE_INDENT );
@@ -295,7 +298,16 @@ public abstract class DocData implements OutputContextable
         setValue( columnCount, newCount, fileAndLine, "_columnCount" );
     }
 
+    public ICommandTable getCommandTable()
+    {
+        return( commandTable );
+    }
 
+    public void setCommandTable( ICommandTable newTable )
+    {
+        commandTable = newTable;
+    }
+    
     public int getCurrColumn()
     {
         return( currColumn );

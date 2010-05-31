@@ -40,31 +40,66 @@ public class PdfSymbol implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        String specifiedFontName = null;
+        PdfData pdd = (PdfData) context;
 
-        PdfData pdf = (PdfData) context;
+        String fontName = getFontName( passedValue, pdd.getGdd(), tok );
+//        if( passedValue.startsWith( "{" ))
+//        {
+//            specifiedFontName = extractFontName( passedValue, pdf.getGdd(), tok );
+//            if( specifiedFontName.isEmpty() ) {
+//                return 0;
+//            }
+//
+//            passedValue = passedValue.substring( passedValue.indexOf( '}' ) + 1 );
+//        }
 
-        if( passedValue.startsWith( "{" ))
-        {
-            specifiedFontName = extractFontName( passedValue, pdf.getGdd(), tok );
-            if( specifiedFontName.isEmpty() ) {
-                return 0;
-            }
 
-            passedValue = passedValue.substring( passedValue.indexOf( '}' ) + 1 );
-        }
-
+        String charCode = getCharCode( passedValue );
         // emits the string representing the symbol as text. It's either the char or
         // the Unicode encoding for the char in the form: \\u12CD
 
-        if( passedValue.startsWith( "\\\\" )) {
-            String charAsString = getUnicodeValue( passedValue );
-            pdf.getOutfile().emitChar( charAsString, specifiedFontName );
+//        if( passedValue.startsWith( "\\\\" )) {
+//            String charAsString = getUnicodeValue( passedValue );
+        if( charCode != null && ! charCode.isEmpty() ) {
+            pdd.getOutfile().emitChar( charCode, fontName );
         }
         else {
-            pdf.getOutfile().emitText( passedValue );
+            pdd.getOutfile().emitText( passedValue );
         }
         return 0;
+    }
+
+    public String getCharCode( final String symEquiv )
+    {
+        String symEntry;
+
+        // first remove any font specification
+        if( symEquiv.startsWith( "{" )) {
+            symEntry = symEquiv.substring( symEquiv.indexOf( '}' ) + 1 );
+            if( symEntry.isEmpty() ) {
+                return( "" );
+            }
+        }
+        else {
+            symEntry = symEquiv;
+        }
+
+        // should now start with the \\\\ escape sequence
+        if( symEntry.startsWith( "\\\\" )) {
+            String charAsString = getUnicodeValue( symEntry );
+            return( charAsString );
+        }
+
+        return( "" );
+    }
+    public String getFontName( final String symbolEquiv, final GDD gdd, final Token tok )
+    {
+        if( symbolEquiv.startsWith( "{" )) {
+            return( extractFontName( symbolEquiv, gdd, tok ));
+        }
+
+        // if the symbol entry does not begin with {, there is no font specified.
+        return( "" );
     }
 
     /**
@@ -107,7 +142,14 @@ public class PdfSymbol implements OutputCommandable
      */
     String getUnicodeValue( final String symbolAsUnicode )
     {
-        int k = getCharValueForUnicode( symbolAsUnicode.substring( 3 ));
+        int k;
+
+        try {
+            k = getCharValueForUnicode( symbolAsUnicode.substring( 3 ));
+        }
+        catch( NumberFormatException nfe ) {
+            return( "" );
+        }
         String charAsString = new String( Character.toChars( k ));
         return( charAsString );
     }
@@ -121,13 +163,18 @@ public class PdfSymbol implements OutputCommandable
      */
     public char getCharValueForUnicode( final String unicodeValue )
     {
-           String str = passedValue.substring( 3 );
-           int i = Integer.parseInt( str, 16 );
+ //          String str = unicodeValue.substring( 3 );
+           int i = Integer.parseInt( unicodeValue, 16 );
            return (char) i;
     }
 
     public String getRoot()
     {
         return( root );
+    }
+
+    public String getSymEquivalent()
+    {
+        return( passedValue );
     }
 }
