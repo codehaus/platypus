@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -43,32 +43,24 @@ public class PdfSymbol implements OutputCommandable
         PdfData pdd = (PdfData) context;
 
         String fontName = getFontName( passedValue, pdd.getGdd(), tok );
-//        if( passedValue.startsWith( "{" ))
-//        {
-//            specifiedFontName = extractFontName( passedValue, pdf.getGdd(), tok );
-//            if( specifiedFontName.isEmpty() ) {
-//                return 0;
-//            }
-//
-//            passedValue = passedValue.substring( passedValue.indexOf( '}' ) + 1 );
-//        }
-
-
         String charCode = getCharCode( passedValue );
-        // emits the string representing the symbol as text. It's either the char or
-        // the Unicode encoding for the char in the form: \\u12CD
 
-//        if( passedValue.startsWith( "\\\\" )) {
-//            String charAsString = getUnicodeValue( passedValue );
         if( charCode != null && ! charCode.isEmpty() ) {
             pdd.getOutfile().emitChar( charCode, fontName );
         }
         else {
+            // if a problem occurred, emit the character escape code as text, such as: \\u12CD.
             pdd.getOutfile().emitText( passedValue );
         }
         return 0;
     }
 
+    /**
+     * Get the Unicode character code to emit
+     * @param symEquiv the symbol equivalent (consisting of what is on the right of the = sign
+     *        in the symbols resource file. Could contain font + char, or just char to emit.
+     * @return  char code, or empty string if an error occurs.
+     */
     public String getCharCode( final String symEquiv )
     {
         String symEntry;
@@ -92,6 +84,7 @@ public class PdfSymbol implements OutputCommandable
 
         return( "" );
     }
+    
     public String getFontName( final String symbolEquiv, final GDD gdd, final Token tok )
     {
         if( symbolEquiv.startsWith( "{" )) {
@@ -144,6 +137,10 @@ public class PdfSymbol implements OutputCommandable
     {
         int k;
 
+        if( symbolAsUnicode.length() < 4 ) {
+            return( "" );
+        }
+
         try {
             k = getCharValueForUnicode( symbolAsUnicode.substring( 3 ));
         }
@@ -163,9 +160,8 @@ public class PdfSymbol implements OutputCommandable
      */
     public char getCharValueForUnicode( final String unicodeValue )
     {
- //          String str = unicodeValue.substring( 3 );
-           int i = Integer.parseInt( unicodeValue, 16 );
-           return (char) i;
+        int i = Integer.parseInt( unicodeValue, 16 );
+        return (char) i;
     }
 
     public String getRoot()
