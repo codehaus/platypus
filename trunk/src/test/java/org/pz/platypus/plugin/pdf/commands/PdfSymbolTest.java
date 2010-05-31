@@ -29,6 +29,7 @@ public class PdfSymbolTest
     private GDD gdd;
     private PdfData pdd;
     private PdfSymbol pds;
+    PdfSymbol ps;
 
     @Before
     public void setUp()
@@ -48,6 +49,29 @@ public class PdfSymbolTest
         String pdfSymbol   = "\\\\u2013";
         pds = new PdfSymbol( platySymbol, pdfSymbol  );
         assertEquals( platySymbol, pds.getRoot() );
+    }
+
+    @Test
+    public void getCharCodeInvalid1()
+    {
+        String root = "[beta]";
+        String sym = "{}";   // invalid, as it contains no symbol name
+        ps = new PdfSymbol( root, sym );
+
+        String charCode = ps.getCharCode( sym );
+        assertTrue( charCode.isEmpty() );
+    }
+
+
+    @Test
+    public void getCharCodeInvalid2()
+    {
+        String root = "[beta]";
+        String sym = "{Arial}\\20";   // invalid, because char part should start with \\\\
+        ps = new PdfSymbol( root, sym );
+
+        String charCode = ps.getCharCode( sym );
+        assertTrue( charCode.isEmpty() );
     }
 
     @Test
@@ -113,8 +137,45 @@ public class PdfSymbolTest
         assertEquals( "\u00E4", mo.getContent() );
     }
 
+    @Test
+    public void testInvalidUnicodeValue1()
+    {
+        String value = new PdfSymbol( "", "" ).getUnicodeValue( "!!" ); // invalid b/c < 4 chars
+        assertEquals( "", value );
+    }
+
+    @Test
+    public void testInvalidUnicodeValue2()
+    {
+        String value = new PdfSymbol( "", "" ).getUnicodeValue( "!!!!" );  // invalid b/c not valid value
+        assertEquals( "", value );
+    }
+    @Test
+    public void getCharCodeValidWithoutFontName()
+    {
+        String root = "[nine]"; // not a real Platypus command, but immaterial in this test.
+        String sym  = "\\\\u0039";
+        ps = new PdfSymbol( root, sym );
+
+        String charCode = ps.getCharCode( ps.getSymEquivalent() );
+        assertTrue( ! charCode.isEmpty() );
+        assertEquals( charCode, ( "9" ));
+    }
+
+    @Test
+    public void getCharCodeValidWithFontName()
+    {
+        String root = "[nine]"; // not a real Platypus command, but immaterial in this test.
+        String sym  = "{Symbola}\\\\u0039";
+        ps = new PdfSymbol( root, sym );
+
+        String charCode = ps.getCharCode( ps.getSymEquivalent() );
+        assertTrue( ! charCode.isEmpty() );
+        assertEquals( charCode, ( "9" ));
+    }
+
     @Test (expected=IllegalArgumentException.class)
-    public void testValidCallToProcess()
+    public void testInvalidCallToProcess()
     {
         String platySymbol = "[N~]";
         String pdfSymbol   = "Ñ";
@@ -124,7 +185,7 @@ public class PdfSymbolTest
         cp.setString( pdfSymbol );
         Token tok = new Token( new Source(), TokenType.SYMBOL, platySymbol, pdfSymbol, cp );
 
-        pds.process( null, tok, 7  );
+        pds.process( null, tok, 7  ); // invalide because first param cannot be null
     }
 
     @Test
@@ -133,5 +194,24 @@ public class PdfSymbolTest
         String fontName = new PdfSymbol( "", "" ).extractFontName( "{SYMBOL}\\\\u00E4", null, null );
         assertEquals( "SYMBOL", fontName );
 
+    }
+
+    @Test
+    public void extractValidFontName2()
+    {
+        String root = "[trademark]"; // not a real Platypus command, but immaterial in this test.
+        String sym  = "{Symbol}\\\\u2122";
+        ps = new PdfSymbol( root, sym );
+
+        String charCode = ps.extractFontName( sym, gdd, new Token( new Source(), TokenType.COMMAND, "" ));
+        assertTrue( ! charCode.isEmpty() );
+        assertEquals( charCode, ( "Symbol" ));
+    }
+
+    @Test
+    public void testExtractInvalidFontName()
+    {
+        String fontName = new PdfSymbol( "", "" ).extractFontName( null, null, null );
+        assertEquals( "", fontName );
     }
 }
