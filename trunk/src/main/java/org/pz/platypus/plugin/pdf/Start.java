@@ -52,7 +52,7 @@ public class Start implements Pluggable
      * @param newOutfile the outfile for this PDF
      * @param newCommandTable command table for this PDF
      */
-    public Start( final PdfOutfile newOutfile, final PdfCommandTable newCommandTable)
+    public Start( final PdfOutfile newOutfile, final PdfCommandTable newCommandTable )
     {
         outfile = newOutfile;
         commandTable = newCommandTable;
@@ -116,6 +116,7 @@ public class Start implements Pluggable
         pdfData.setOutfile( outfile );
         outfile.setPdfData( pdfData );
         commandTable.load( gdd );
+        pdfData.setCommandTable( commandTable );
         gdd.log( "Command table in PDF plug-in loaded with " + commandTable.getSize() +
                  " commands");
     }

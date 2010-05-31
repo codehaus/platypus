@@ -697,7 +697,7 @@ public class PdfOutfile
         }
 
         FontSelector fs = new FontSelector();
-        if( fontName == null ) {
+        if( fontName == null || fontName.isEmpty() ) {
             fs.addFont( pdfData.getFont().getItextFont() );
         }
         else {

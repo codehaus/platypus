@@ -7,14 +7,14 @@
 
 package org.pz.platypus.plugin.pdf;
 
+import org.pz.platypus.GDD;
+import org.pz.platypus.interfaces.ICommandTable;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.plugin.pdf.commands.*;
-import org.pz.platypus.GDD;
-import org.pz.platypus.commands.UrlWithCoverTextEnd;
 
 import java.util.HashMap;
-import java.util.Set;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 /**
  * Contains all the commands used in the PDF plugins,
@@ -24,7 +24,7 @@ import java.util.MissingResourceException;
  * @author alb
  */
 @SuppressWarnings("unchecked")
-public class PdfCommandTable
+public class PdfCommandTable  implements ICommandTable
 {
     /** the hashtable into which the commands are loaded */
     private HashMap<String, OutputCommandable> commandTable;
@@ -49,7 +49,7 @@ public class PdfCommandTable
     /**
      * load commands in to the command table
      */
-    void loadCommands()
+    public void loadCommands()
     {
         add( new DefUserString() );
         add( new PdfAlignment() );
@@ -107,7 +107,7 @@ public class PdfCommandTable
      *
      * @param gdd the global document data
      */
-    void loadSymbols( final GDD gdd )
+    public void loadSymbols( final GDD gdd )
     {
         try {
             PdfSymbolsTable pst = new PdfSymbolsTable( gdd );
@@ -127,7 +127,7 @@ public class PdfCommandTable
      * add a OutputCommandable item to the hash table, using its root as the key to the entry
      * @param entry to be added (either a command or a symbol)
      */
-    void add( final OutputCommandable entry )
+    public void add( final OutputCommandable entry )
     {
         commandTable.put( entry.getRoot(), entry );
     }
