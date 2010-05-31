@@ -7,20 +7,20 @@
 
 package org.pz.platypus.plugin.pdf.commands;
 
-import org.pz.platypus.*;
-import org.pz.platypus.commands.BulletListPlainStart;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.pdf.FontSelector;
+import org.pz.platypus.DefaultValues;
+import org.pz.platypus.GDD;
+import org.pz.platypus.Symbol;
+import org.pz.platypus.Token;
 import org.pz.platypus.commands.BulletListPlainStartWithOptions;
-import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.pdf.PdfData;
-import org.pz.platypus.plugin.pdf.PdfOutfile;
 import org.pz.platypus.plugin.pdf.PdfFont;
+import org.pz.platypus.plugin.pdf.PdfOutfile;
 import org.pz.platypus.utilities.ErrorMsg;
 import org.pz.platypus.utilities.TextTransforms;
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.FontSelector;
 
 /**
  * Implementation of turning on a plain bullet list with user-specified
@@ -54,7 +54,7 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
         Chunk bulletSymbol;
         param = TextTransforms.lop( param, "bullet:".length() );
         if( param.startsWith( "{" )) {
-            bulletSymbol = lookupBulletSymbol( param.substring( 1 ), pdd.getGdd(), tok, pdd );
+            bulletSymbol = lookupBulletSymbol( param.substring( 1 ), tok, pdd );
         }
         else {
             bulletSymbol = extractBulletSymbolFromParam( param );
@@ -68,12 +68,18 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
     /**
      * Look up the symbol in the symbol table and get the Unicode value and any symbol font info.
      * @param param value passed with the "bullet:" parameter
-     * @param gdd GDD
+     * @param pdd the PDF document data
      * @param tok the token for the whole bullet list command
      * @return
      */
-    Chunk lookupBulletSymbol( final String param, final GDD gdd, final Token tok, PdfData pdd )
+    Chunk lookupBulletSymbol( final String param, final Token tok, final PdfData pdd )
     {
+        assert( pdd != null );
+        assert( tok != null );
+        assert( param != null );
+
+        GDD gdd = pdd.getGdd();
+
         StringBuilder sb = new StringBuilder( 10 );
         int i = 0;
         while( i < param.length() &&
@@ -108,15 +114,12 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
             PdfFont newFont = new PdfFont( pdd, font, pdd.getFont() );
             FontSelector fs = new FontSelector();
             fs.addFont( newFont.getItextFont() );
-//            Phrase phr = ( fs.process( sym ));
             Chunk chk = new Chunk( sym, newFont.getItextFont() );
             return( chk );
         }
-
-      //  return new Chunk( ">" ); //TODO
     }
 
-/**
+    /**
      * extracts a literal that serves as the bullet character (e.g. -, >, ->, etc.)
      *
      * @param param parameter portion that specifies the bullet character
