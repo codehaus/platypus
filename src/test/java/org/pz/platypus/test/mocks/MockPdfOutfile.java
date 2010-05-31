@@ -9,6 +9,7 @@ package org.pz.platypus.test.mocks;
 
 import org.pz.platypus.plugin.pdf.PdfOutfile;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Chunk;
 
 /**
  * Mock of PdfOutfile class for use in unit tests
@@ -23,22 +24,12 @@ public class MockPdfOutfile extends PdfOutfile
 
     @Override
     public void emitChar( final String s, final String fontName ) {
-        if( content == null ) {
-            content = s;
-        }
-        else {
-            content += s;
-        }
+        addContent( s );
     }
 
     @Override
     public void emitText( final String s ) {
-        if( content == null ) {
-            content = s;
-        }
-        else {
-            content += s;
-        }
+        addContent( s );
     }
 
     @Override
@@ -57,6 +48,27 @@ public class MockPdfOutfile extends PdfOutfile
         newParagraphCount += 1;
     }
 
+    @Override
+    public void startPlainBulletList( Chunk chunk )
+    {
+        addContent( chunk.getContent() );
+    }
+
+    @Override
+    public void startPlainBulletList( String st )
+    {
+        addContent( st );
+    }
+
+    private void addContent( final String s )
+    {
+        if( content == null ) {
+            content = s;
+        }
+        else {
+            content += s;
+        }
+    }
     //=== get activity results ===//
 
     public String getContent()
