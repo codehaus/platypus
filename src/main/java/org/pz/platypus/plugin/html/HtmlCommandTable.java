@@ -67,6 +67,7 @@ public class HtmlCommandTable
         add( new HtmlFsize() );
         add( new HtmlMarginRight() );
         add( new HtmlMarginTop() );
+        add( new HtmlFface() );
     }
 
     /**

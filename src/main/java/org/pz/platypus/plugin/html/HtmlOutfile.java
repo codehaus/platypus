@@ -341,7 +341,8 @@ public class HtmlOutfile
         endFontTagIfAny();
         emitText("<font face=");
         String fontFace = htmlData.getFontFace();
-        wrapInQuotes(fontFace);
+        fontFace = wrapInQuotes(fontFace);
+        emitText(fontFace);
         emitText(">");
     }
 }

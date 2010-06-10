@@ -11,7 +11,6 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.pdf.PdfData;
 
 /**
  * Implementation of fsize (in font family of commands) for PDF plugin
