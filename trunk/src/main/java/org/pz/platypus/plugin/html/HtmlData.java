@@ -144,7 +144,7 @@ public class HtmlData extends DocData implements OutputContextable
     }
 
     public void setFontFace(String newFontFace, Source source) {
-        setFontFace(newFontFace, source);
+        font.setFace(newFontFace, source);
         getOutfile().handleNewFontFace();
     }
 
