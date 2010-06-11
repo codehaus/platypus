@@ -28,6 +28,7 @@ public class HtmlData extends DocData implements OutputContextable
 {
     LinkedList<String> listAsStack = new LinkedList<String>();
     LinkedList<String> nestTagsList = new LinkedList<String>();
+    private String fface = "";
 
     public void configureBody(Body body) {
         int lmargin = (int) getMarginLeft();
@@ -144,7 +145,7 @@ public class HtmlData extends DocData implements OutputContextable
     }
 
     public void setFontFace(String newFontFace, Source source) {
-        font.setFace(newFontFace, source);
+        fface = newFontFace.replaceAll("[^\\w]", "");
         getOutfile().handleNewFontFace();
     }
 
@@ -418,7 +419,7 @@ public class HtmlData extends DocData implements OutputContextable
 
     public String getFontFace()
     {
-        return( font.getFace() );
+        return fface;
     }
 
     public float getFontSize()
