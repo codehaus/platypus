@@ -58,8 +58,7 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
                 }
                 
                 if( isText( t )) {
-                    pdd.setFontSize( initialFontSize, t.getSource() );
-                    pdd.getOutfile().emitText( t.getContent() );
+                    emitCode( initialFontSize, pdd, t );
                 }
 
                 if( isBlankLine( t )) {
@@ -74,6 +73,12 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
             if( endOfCode( t )) {
                 break;
             }
+            else { // it's some kind of command //TODO: make sure that line number has been emitted
+                if( t.getType()  == TokenType.COMMAND ) {
+                    emitCode( initialFontSize, pdd, t );
+                }
+            }
+
         }
 
         if( i >= tokens.size() ) {
@@ -85,6 +90,14 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
         return( i - tokNum - 1 );     // return the number of tokens we skipped
     }
 
+    /**
+     * Emits code
+     */
+    private void emitCode( final float fontSize, final PdfData pdd, final Token tok )
+    {
+        pdd.setFontSize( fontSize, tok.getSource() );
+        pdd.getOutfile().emitText( tok.getContent() );
+    }
     /**
      * Emits a CR or CR/LF to the PDF outfile.
      * @param outfile to which newLine is written
