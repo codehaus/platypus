@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -13,6 +13,9 @@ import com.lowagie.text.Chunk;
 
 /**
  * Mock of PdfOutfile class for use in unit tests
+ *
+ * Almost all output activities simply write to String, content. Then content can be
+ * retrieved and compared with expected output.
  *
  * @author alb
  */
