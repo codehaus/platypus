@@ -64,7 +64,7 @@ public class PdfBulletListStartWithOptionsTest
     public void testStartNewListValidWithCharSpecified()
     {
         parm = new CommandParameter();
-        parm.setString( "bullet:>>]" ); // the bullet is the string >>
+        parm.setString( "bullet:>>]" ); // the bullet is the string: >>
         tok = new Token( new Source(), TokenType.COMMAND, "[list|", "[list|", parm );
 
         bl.startNewList( pdd, tok, 6 );
