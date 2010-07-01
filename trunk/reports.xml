@@ -6,6 +6,8 @@
 	Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
 	
 	This generates the reports for Platypus
+	
+	v. 1.1 JDepend and JavaNCSS added. Validated. JavaNCSS has some dependencies to be removed from the taskdef.
 -->
 
 <project name="platypus-build" default="all" basedir=".">
@@ -37,11 +39,12 @@
 	<property name="test.report.dir"		location="${top.dir}\test-reports"/>
 	<property name="javadoc.dir"			location="${top.dir}\reports\javadoc"/>
 	<property name="jdepend.dir"			location="${top.dir}\reports\jdepend"/>
+	<property name="javancss.dir"			location="${top.dir}\reports\javancss"/>
 	
 	<!-- miscellaneous properties -->
 	<property name="version"				value="0.2.2 RC1" />
 	<property name="message" 				value="Reports for Platypus" />
-	<property name="build-message"			value="Build Platypus, Do not run tests" />
+	<property name="build-message"			value="Run all Platypus reports" />
 
     <path id="project.classpath">
         <pathelement location="${classes.dir}"/>
@@ -49,28 +52,49 @@
             <include name="*.jar"/>
         </fileset>
     </path>
+	
+	<taskdef name="javancss"
+       	classname="javancss.JavancssAntTask"
+		classpath="C:\Tools\JavaNCSS\32.53\javancss.jar;C:\Tools\JavaNCSS\32.53\jhbasic.jar;C:\Tools\JavaNCSS\32.53\ccl.jar;" />
 
-<!--	
+		<!-- Use this for revision of taskdef
+			<target name="javancss" description="Counts JAVANCSS">
+			<taskdef name="javancss" classname="javancss.JavancssAntTask">
+			<classpath><pathelement location="${javancss.path}/ccl.jar" />
+			<pathelement location="${javancss.path}/javacc.jar" />
+			<pathelement location="${javancss.path}/javancss.jar" />
+			<pathelement location="${javancss.path}/jhbasic.jar" />
+			</classpath>
+			</taskdef>
+	-->		
+
 <target name="all"
-        depends="javadoc"
-		depends="javancss"
-        description="Run all major targets">
+        depends="javadoc, jdepend, javancss"
+        description="Run all reports">
 	<echo> ${message} </echo>
 </target>
--->
-<!--
-<taskdef name="javancss" description="Java metrics report"
-		classname="javancss.JavancssAntTask"
-        classpath="${CLASSPATH}"/>
-			
-	<delete dir="${javadoc.dir}" />
-	<mkdir  dir="${javadoc.dir}" />		
 
-   <javancss srcdir="${build.src}"
-            abortOnFail="false" ccnPerFuncMax="10"
-            includes="**/*.java"/>
--->
-<!-- javadoc for everything except the plugins, which must fix an annotation bug in Javadoc-->
+
+<target name="javancss" description="Java metrics report">		
+	<delete dir="${javancss.dir}" />
+	<mkdir  dir="${javancss.dir}" />		
+
+    <javancss 
+		srcdir="${src.dir}" 
+		abortOnFail="false"
+        includes="**/*.java"
+		generateReport="true"
+		outputfile="${javancss.dir}\javancss.xml"
+		format="xml" >
+	</javancss>
+	
+	<style 
+		in="${javancss.dir}\javancss.xml"
+		out="${javancss.dir}\javancss.html"
+		style="C:\Tools\JavaNCSS\javancss-32.53\xslt\javancss2html.xsl" />	
+</target>
+
+<!-- javadoc for everything except the plugins, which must await a fix of an annotation bug in Javadoc-->
 <target name="javadoc" description="Generate Javadoc">
 	<delete dir="${javadoc.dir}" />
 	<mkdir  dir="${javadoc.dir}" />
@@ -118,255 +142,6 @@
          includes="jdepend-report.xml" 
          style="${ant.home}/etc/jdepend.xsl" />
 </target>
-<!--	
-	<javac srcdir="${src.dir}"
-		   destdir="${classes.dir}">
-		   <classpath refid="project.classpath" />
-	</javac>
-</target>
 
- <target name="compile-prep" description="Clean compilation output directory" >
-	<mkdir dir="${classes.dir}"/>
-    <delete dir="${classes.dir}\org" />	
-</target>
-
-<target name="compile-listing-plugin" depends="compile" description="Compile listing plug-in with Java 6">
-	<javac srcdir="${src.listing.plugin.dir}"
-		   destdir="${classes.dir}">
-		   <classpath refid="project.classpath" />
-	</javac>
-</target>
-
-<target name="compile-pdf-plugin" depends="compile" description="Compile PDF plug-in with Java 6">
-	<javac srcdir="${src.pdf.plugin.dir}"
-		   destdir="${classes.dir}">
-		   <classpath refid="project.classpath" />
-	</javac>
-</target>
-
-<target name="compile-rtf-plugin" depends="compile" description="Compile PDF plug-in with Java 6">
-	<javac srcdir="${src.rtf.plugin.dir}"
-		   destdir="${classes.dir}">
-		   <classpath refid="project.classpath" />
-	</javac>
-</target>
-
-<target name="compile-html-plugin" depends="compile" description="Compile HTML plug-in with Java 6">
-	<javac srcdir="${src.html.plugin.dir}"
-		   destdir="${classes.dir}">
-		   <classpath refid="project.classpath" />
-	</javac>
-</target>
-
-<target name="jar-dir-prep" description="Prepare JAR directory">
-	<mkdir  dir="${jar.dir}"/>
-    <delete dir="${jar.dir}\plugins\" />
-	<mkdir  dir="${jar.dir}\plugins\" />
-    <copy todir="${jar.dir}">
-		<fileset dir="${top.dir}" >
-            <include  name="platypus.home" />
-        </fileset>
-    </copy>
-</target>
-
-<target name="main-jar" depends="compile" description="Build main JAR file">
-	<jar destfile="${jar.dir}\platypus.jar">
-		<fileset dir="${build.dir}\classes\">
-			<exclude name="**\plugin\html\**" />
-			<exclude name="**\plugin\listing\**" />	
-			<exclude name="**\plugin\pdf\**" />
-			<exclude name="**\plugin\rtf\**" />	
-		</fileset>
-		<manifest>
-			<attribute name="Implementation-Title" value="Platypus Page Layout And Typesetting System" />
-			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
-			<attribute name="Implementation-Version" value="${version}" />
-			<attribute name="Main-Class" value="org.pz.platypus.Platypus" />
-            <attribute name="Class-Path" value="lib/iText-2.1.7.jar lib/commons-cli-1.2.jar" />
-		</manifest>
-	</jar>
-</target>
-
-<target name="plugin-listing-jar" description="Create JAR for listing plugin">
-    <delete dir="${jar.dir}\plugins\listing\" />
-    <mkdir dir="${jar.dir}\plugins\listing\org\pz\platypus\plugin\listing" />
-	<copy todir="${jar.dir}\plugins\listing\org\pz\platypus\plugin\listing">
-		<fileset dir="${classes.dir}\org\pz\platypus\plugin\listing" />
-    </copy>
-
-	<jar destfile="${jar.dir}\plugins\listing.jar"
-		 basedir="${jar.dir}\plugins\listing" >
-		 <manifest>
-			<attribute name="Implementation-Title" value="Platypus listing output plugin" />
-			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
-			<attribute name="Implementation-Version" value="Platypus ${version}" />
-            <attribute name="Class-Path" value="../lib/iText-2.1.7.jar" />
-		</manifest>
-    </jar>
-
-    <delete dir="${jar.dir}\plugins\listing\" />
-</target>
-
-<target name="plugin-pdf-jar" description="Create JAR for pdf plugins">
-    <delete dir="${jar.dir}\plugins\pdf\" />
-    <mkdir dir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin\pdf" />
-	<copy todir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin\pdf">
-		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\pdf" />
-    </copy>
-
-    <copy todir="${jar.dir}\plugins\pdf\org\pz\platypus\plugin">
-        <fileset dir="${build.dir}\classes\org\pz\platypus\plugin">
-            <include name="*.class"/>
-        </fileset>
-    </copy>
-
-	<jar destfile="${jar.dir}\plugins\pdf.jar"
-		 basedir="${jar.dir}\plugins\pdf\" >
-        <manifest>
-			<attribute name="Implementation-Title" value="Platypus PDF output plugin" />
-			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
-			<attribute name="Implementation-Version" value="Platypus ${version}" />
-            <attribute name="Class-Path" value="../lib/iText-2.1.7.jar ../lib/commons-cli-1.2.jar" />
-		</manifest>
-    </jar>
-    <delete dir="${jar.dir}\plugins\pdf\" />
-</target>
-
-<target name="plugin-rtf-jar" description="Create JAR for rtf plugins">
-    <delete dir="${jar.dir}\plugins\rtf\" />
-    <mkdir dir="${jar.dir}\plugins\rtf\org\pz\platypus\plugin\rtf" />
-	<copy todir="${jar.dir}\plugins\rtf\org\pz\platypus\plugin\rtf">
-		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\rtf" />
-    </copy>
-
-	<jar destfile="${jar.dir}\plugins\rtf.jar"
-		 basedir="${jar.dir}\plugins\rtf\" >
-        <manifest>
-			<attribute name="Implementation-Title" value="Platypus RTF output plugin" />
-			<attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
-			<attribute name="Implementation-Version" value="Platypus ${version}" />
-		</manifest>
-    </jar>
-	<delete dir="${jar.dir}\plugins\rtf\" />
-</target>
-
-
-<target name="plugin-html-jar" description="Create JAR for html plugins">
-    <delete dir="${jar.dir}\plugins\html\" />
-    <mkdir dir="${jar.dir}\plugins\html\org\pz\platypus\plugin\html" />
-	<copy todir="${jar.dir}\plugins\html\org\pz\platypus\plugin\html">
-		<fileset dir="${build.dir}\classes\org\pz\platypus\plugin\html" />
-	</copy>
-
-	<jar destfile="${jar.dir}\plugins\html.jar"
-		 basedir="${jar.dir}\plugins\html\" >
-        <manifest>
-		    <attribute name="Implementation-Title" value="Platypus HTML output plugin" />
-		    <attribute name="Implementation-Vendor" value="http://platypus.pz.org" />
-		    <attribute name="Implementation-Version" value="Platypus ${version}" />
-            <attribute name="Class-Path" value="../lib/commons-cli-1.2.jar ../lib/ecs-1.4.2.jar" />
-	    </manifest>
-    </jar>
-
-    <delete dir="${jar.dir}\plugins\html\" />
-</target>
-
-<target  name="setup-config-files" description="Set up config files">
-    <delete dir="${jar.dir}\config\"/>
-	<mkdir  dir="${jar.dir}\config\" />
-
-    <copy todir="${jar.dir}\config\">
-		<fileset dir="${config.dir}" >
-            <exclude name="*.txt" />
-        </fileset>
-    </copy>
-</target>
-
-<target  name="setup-docs" description="set up misc docs in root of JAR">
-    <copy todir="${jar.dir}" >
-        <fileset dir="${docs.dir}" />
-    </copy>
-    <copy  todir="${jar.dir}" >
-        <fileset dir="${misc.dir}" >
-            <include name="*.bat" />
-			<include name="*.pdf" />
-        </fileset>
-    </copy>
-</target>
-
-<target  name="setup-fonts" description="package free fonts">
-    <delete dir="${jar.dir}\fonts"/>
-	<mkdir  dir="${jar.dir}\fonts\" />
-    <copy todir="${jar.dir}\fonts\" >
-        <fileset dir="${fonts.dir}" />
-    </copy>
-</target>
-
-<target  name="setup-licenses" description="package licenses">
-    <delete dir="${jar.dir}\licenses\"/>
-	<mkdir  dir="${jar.dir}\licenses\" />
-    <copy todir="${jar.dir}\licenses\" >
-        <fileset dir="${licenses.dir}" />
-    </copy>
-</target>
-
-<target name="setup-vendor-libs" description="Set up 3rd party libs">
-    <delete dir="${vendor.lib.dir}" />
-	<mkdir  dir="${vendor.lib.dir}" />
-	<copy todir="${vendor.lib.dir}">
-		<fileset dir="${vendor.libs}">
-                <exclude name="junit*" />
-                <exclude name="hamcrest*" />
-        </fileset>
-    </copy>
-</target>
-
- 
-<target name="zip-all">
-    <delete file="${jar.dir}\platypus.home" />
-    <zip destfile="${build.dir}\platypus-${version}.zip"
-         basedir="${jar.dir}" >
-    </zip>
-</target>
--->
-<!-- ========================================== 
-			  unit testing targets  
-     ========================================== 
-
-<target name="compile-unit-tests" depends= "compile-prep, compile, compile-listing-plugin, compile-pdf-plugin, compile-rtf-plugin" description="Compile unit tests">
-	<javac srcdir="${src.test.dir}"
-		   destdir="${classes.dir}"
-		   debug="on">
-		   <classpath refid="project.classpath" />
-	</javac>
-</target>
-
-<target name="unit-test" depends="compile-unit-tests" description="Run unit tests, create report">
-	<copy todir="${jar.dir}">
-		<fileset dir="${top.dir}" >
-			<include name="platypus.home" />
-		</fileset>
-    </copy>
-	<delete dir="${test.report.dir}"/>
-	<mkdir  dir="${test.report.dir}" />
-
-	<junit fork="yes" printsummary="no" haltonfailure="no" showoutput="yes" >
-		<formatter type="xml"/>
-		<classpath refid="project.classpath" />
-		<batchtest fork="yes" todir="${test.report.dir}">
-			<fileset dir="${classes.dir}">
-				<include name="**/*Test.class"/>
-			</fileset>
-		</batchtest>
-	</junit>
-	
-	<junitreport todir="${test.report.dir}">
-		<fileset dir="${test.report.dir}">
-			<include name="TEST-*.xml" />
-		</fileset>
-		<report todir="${test.report.dir}\html" />
-	</junitreport>
-</target>
--->
 </project>
  
