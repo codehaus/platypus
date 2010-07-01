@@ -36,7 +36,8 @@
 	<!-- test directories and resources -->
 	<property name="test.report.dir"		location="${top.dir}\test-reports"/>
 	<property name="javadoc.dir"			location="${top.dir}\reports\javadoc"/>
-
+	<property name="jdepend.dir"			location="${top.dir}\reports\jdepend"/>
+	
 	<!-- miscellaneous properties -->
 	<property name="version"				value="0.2.2 RC1" />
 	<property name="message" 				value="Reports for Platypus" />
@@ -49,13 +50,27 @@
         </fileset>
     </path>
 
+<!--	
 <target name="all"
         depends="javadoc"
+		depends="javancss"
         description="Run all major targets">
 	<echo> ${message} </echo>
 </target>
+-->
+<!--
+<taskdef name="javancss" description="Java metrics report"
+		classname="javancss.JavancssAntTask"
+        classpath="${CLASSPATH}"/>
+			
+	<delete dir="${javadoc.dir}" />
+	<mkdir  dir="${javadoc.dir}" />		
 
-<!-- javadoc for everything except the plugins, which must be fixed on an annotation bug -->
+   <javancss srcdir="${build.src}"
+            abortOnFail="false" ccnPerFuncMax="10"
+            includes="**/*.java"/>
+-->
+<!-- javadoc for everything except the plugins, which must fix an annotation bug in Javadoc-->
 <target name="javadoc" description="Generate Javadoc">
 	<delete dir="${javadoc.dir}" />
 	<mkdir  dir="${javadoc.dir}" />
@@ -73,7 +88,7 @@
 					  org.pz.platypus.plugin.listing,
 					  org.pz.platypus.plugin.rtf,
 					  org.pz.platypus.utilities"
-        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;"        
+        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;C:\Tools\Java\jdk1.6.0_04\lib\tools.jar"        
         excludepackagenames="com.lowagie.text.*,org.apache.commons.cli*"
         author="true"
         version="true"
@@ -84,6 +99,24 @@
         <doctitle><![CDATA[<h1>Platypus Code</h1>]]></doctitle>
         <bottom><![CDATA[<i>Copyright &#169; 2006-10 Pacific Data Works LLC</i>]]> </bottom>
     </javadoc>
+</target>
+
+<target name="jdepend" description="Dependency Report">
+	<delete dir="${jdepend.dir}" />
+	<mkdir  dir="${jdepend.dir}" />
+	
+	<jdepend format="xml" outputfile="${jdepend.dir}/jdepend-report.xml">
+      <exclude name="java.*"/>
+      <exclude name="javax.*"/>
+      <classespath>
+        <pathelement location="${classes.dir}" />
+      </classespath>
+      <classpath location="${classes.dir}" />
+    </jdepend>
+
+    <style basedir="${jdepend.dir}" destdir="${jdepend.dir}"
+         includes="jdepend-report.xml" 
+         style="${ant.home}/etc/jdepend.xsl" />
 </target>
 <!--	
 	<javac srcdir="${src.dir}"
