@@ -57,7 +57,7 @@
 	<property name="test.report.dir"		location="${top.dir}\test-reports"/>
 
 	<!-- miscellaneous properties -->
-	<property name="version"				value="0.2.1" />
+	<property name="version"				value="0.2.2 RC1" />
 	<property name="message" 				value="Build Platypus for Test and Release" />
 	<property name="build-message"			value="Build Platypus, Do not run tests" />
 
