@@ -1,6 +1,6 @@
 /**
  * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- * <p/>
+ *
  * Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
@@ -15,11 +15,11 @@ import java.io.IOException;
 /**
  * The compound command processing strategy.
  *
- * @author: ask
+ * @author ask
  */
 
-public class HtmlCompoundCommandListingStrategy extends HtmlListingStrategy {
-
+public class HtmlCompoundCommandListingStrategy extends HtmlListingStrategy
+{
     private final Token tok;
 
     public HtmlCompoundCommandListingStrategy(Token tok) {
@@ -37,6 +37,5 @@ public class HtmlCompoundCommandListingStrategy extends HtmlListingStrategy {
                          convertToHtmlText( tok.getContent() ) +
                          "</font></span>";
         return s;
-    }
-        
+    }        
 }

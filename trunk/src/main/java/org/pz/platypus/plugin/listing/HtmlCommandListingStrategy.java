@@ -1,6 +1,6 @@
 /**
  * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
- * <p/>
+ * 
  * Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
  * Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
@@ -15,11 +15,11 @@ import java.io.IOException;
 /**
  * The Command token listing strategy.
  * 
- * @author: ask
+ * @author ask
  */
 
-public class HtmlCommandListingStrategy extends HtmlListingStrategy {
-
+public class HtmlCommandListingStrategy extends HtmlListingStrategy
+{
     private final Token tok;
 
     public HtmlCommandListingStrategy(Token tok) {

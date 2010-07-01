@@ -68,7 +68,7 @@ public class PlatypusHomeDirectory
      * Looks to see if the current directory holds a file called 'platypus.home'. If it does, and there is
      * a subdirectory called 'config' than the current directory is deemed the home directory.
      *
-     * @return
+     * @return home directory for Platypus
      */
     String getHomeDirectoryFromTextFile()
     {

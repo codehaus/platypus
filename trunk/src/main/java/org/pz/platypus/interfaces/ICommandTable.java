@@ -32,7 +32,7 @@ public interface ICommandTable
 
     /** get the processor for a command or symbol
      *
-     *  @param root, the unique key for identifying/looking up a command
+     *  @param root the unique key for identifying/looking up a command
      *  @return the command, or null on error
      */
     public OutputCommandable getCommand( final String root );

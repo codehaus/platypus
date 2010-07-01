@@ -151,25 +151,29 @@ public class Start implements Pluggable
     /**
      *  Should we start a new Html line? Every token carries with it
      *  the original source line number. If it changes, we start a new
-     *  Html line. 
-     * @param tok
-     * @param lineNumber
-     * @return
+     *  HTML line.
+     *
+     * @param tok the token we're processing
+     * @param lineNumber the line number
+     * @return whether we should start a new HTML line
      */
-    private boolean isItANewHtmlLine(Token tok, int lineNumber) {
+    private boolean isItANewHtmlLine(Token tok, int lineNumber)
+    {
         return tok.getSource().getLineNumber() != lineNumber;
     }
 
-    /**    will the next record indicate the present command is a replacement?
-     *     If so, don't print this command, just skip it. The next token
-     *     (containing the original command) will be printed on the next loop cycle.
+    /**
+     *  Will the next record indicate the present command is a replacement?
+     *  If so, don't print this command, just skip it. The next token
+     *  (containing the original command) will be printed on the next loop cycle.
      *
-     * @param tok
-     * @param tokensList
-     * @param i
-     * @return
+     * @param tok the command token, the next token is/isn't a replacement command
+     * @param tokensList list of input tokens
+     * @param i which token in the token list
+     * @return whether to skip the current token in favor of the replacement token
      */
-    private boolean skipThisToken(Token tok, TokenList tokensList, int i) {
+    private boolean skipThisToken( Token tok, TokenList tokensList, int i)
+    {
         if ( tok.getType().equals( TokenType.COMMAND )) {
             if ( tokensList.isNextToken( i, TokenType.REPLACED_COMMAND ))
                 return true;
@@ -178,21 +182,24 @@ public class Start implements Pluggable
     }
 
     /**
-     *  We skip next one or many tokens at times. For example, we process
+     * We skip next one or many tokens at times. For example, we process
      * the explicit newline command i.e. "[]", and output a newline.
-     * If this token appears at the end of a line (i.e. next immediate token is "[cr]",
-     * we don't want to output one more Html newline. 
-     * @param currTokIndex
-     * @param tok
-     * @param tokensList
-     * @return
+     * If this token appears at the end of a line (i.e. next immediate token is "[cr]"),
+     * we don't want to output one more Html newline.
+     *
+     * @param currTokIndex where we are in the token list
+     * @param tok current token
+     * @param tokensList list of input tokens
+     * @return the number of tokens to skip
      * @throws IOException
      */
-    private int skipNextTokens(int currTokIndex, Token tok, TokenList tokensList) throws IOException {
+    private int skipNextTokens( int currTokIndex, Token tok, TokenList tokensList ) throws IOException
+    {
         if ( tok.getContent().endsWith( "[]" )) {
             if ( tokensList.areNextTokenContentsEqualTo(currTokIndex, "[cr]") )
                 return 1;                
-        } else if ( tok.getType().equals( TokenType.COMPOUND_COMMAND )) {
+        }
+        else if ( tok.getType().equals( TokenType.COMPOUND_COMMAND )) {
             return tokensToSkip( tokensList, currTokIndex );
         }
 
@@ -269,13 +276,14 @@ public class Start implements Pluggable
         return( fwOut );
     }
 
-    /** Write a String to the output - deals with the business of actual writing.
-     *  If any exceptions happen while writing - are logged and rethrown. 
+    /**
+     * Write a String to the output - deals with the business of actual writing.
+     * If any exceptions happen while writing - are logged and rethrown.
      *
-     * @param outfile
-     * @param gdd
-     * @param s
-     * @return
+     * @param outfile output file
+     * @param gdd  global document data
+     * @param s string to write to ouput
+     * @return the string written out. Needed?
      * @throws IOException
      */
     public String writeStringToFile(FileWriter outfile, GDD gdd, String s) throws IOException {
@@ -293,8 +301,9 @@ public class Start implements Pluggable
     }
 
     /**
-     * We skip all compound commands tokens. 
-     * @param tokList
+     * We skip all compound commands tokens.
+     *
+     * @param tokList list of tokens
      * @param tokenNumber which token in the input stream tok is
      * @throws IOException in event of exception in writing to file
      * @return how many tokens to skip over for this command.
