@@ -21,7 +21,7 @@ public class Conversions
     /**
      * Utility function to convert units in command parameters to points
      * @param cp the command parameter
-     * @param docData, which is used in a few calculations
+     * @param docData which is used in a few calculations
      * @return the value in points
      */
     public static float convertParameterToPoints( final CommandParameter cp,

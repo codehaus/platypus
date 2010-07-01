@@ -15,11 +15,11 @@ import java.io.IOException;
 /**
  * The macro processing strategy.
  *
- * @author: ask
+ * @author ask
  */
 
-public class HtmlMacroListingStrategy extends HtmlListingStrategy {
-
+public class HtmlMacroListingStrategy extends HtmlListingStrategy
+{
     private final Token tok;
 
     public HtmlMacroListingStrategy(Token tok) {
@@ -38,5 +38,4 @@ public class HtmlMacroListingStrategy extends HtmlListingStrategy {
                          "</b></font></span>";
         return s;        
     }
-        
 }

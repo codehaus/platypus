@@ -16,7 +16,7 @@ import java.io.IOException;
  * The block comment processing strategy.
  * Decides how the block comment token will be formatted as Html.
  *
- * @author: ask
+ * @author ask
  */
 public class HtmlBlockCommentListingStrategy extends HtmlListingStrategy {
 

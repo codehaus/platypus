@@ -16,16 +16,18 @@ import java.util.logging.Logger;
 
 /** The strategy base class.
  *
- * @author: ask
+ * @author ask
  */
-public abstract class HtmlListingStrategy {
+public abstract class HtmlListingStrategy
+{
     protected Logger logger;
 
     public abstract String format(Token tok, GDD gdd) throws IOException;
     public abstract boolean canOutputHtmlEndOfLine();
 
-    /** The "factory method" for creating the correct Strategy instance.
-     *  Ideally, this would be the only "switching on types" code.
+    /**
+     * The "factory method" for creating the correct Strategy instance.
+     * Ideally, this would be the only "switching on types" code.
      *
      * @param tok token that is to be processed
      * @return The strategy object encapsulating the processing algorithm.
@@ -97,5 +99,4 @@ public abstract class HtmlListingStrategy {
         }
         return( sb.toString() );
     }
-    
 }

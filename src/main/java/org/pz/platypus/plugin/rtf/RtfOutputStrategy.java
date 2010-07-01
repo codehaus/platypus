@@ -9,13 +9,13 @@ package org.pz.platypus.plugin.rtf;
 
 import org.pz.platypus.Token;
 
-/** The strategy base class.
+/**
+ * The strategy base class.
  *
- * @author: ask
+ * @author ask
  */
-public abstract class RtfOutputStrategy {
-
-
+public abstract class RtfOutputStrategy
+{
     /** The "factory method" for creating the correct Strategy instance.
      *  Ideally, this would be the only "switching on types" code.
      *
