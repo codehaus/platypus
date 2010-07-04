@@ -27,8 +27,61 @@ testValidErrMessageWhenColumnWidthTooBig( javaRun )
 testNoNPEwhenSpecifyingIndents( javaRun )
 testNoNPEwhenURLisFirstElementInFile( javaRun )
 testNoNPEwhenSymbolisFirstElementInFile( javaRun )
+testThereIsOutputOnCodeOnly( javaRun )
 
 return
+/**
+ * PLATYPUS-39 in JIRA at Codehaus. Make sure that an input file of code listing only
+ * does not generate an NPE and results in a PDF file
+ */
+
+def void testThereIsOutputOnCodeOnly( String javaRun )
+{
+  def String description =
+      "Test: No NPE and a generated PDF for code listing-only file (consult PLATYPUS-39)"
+
+      // create a file containing one line of text.
+      def String testFileName = "testText.plat"
+
+      def File testFile = new File( testFileName )
+      PrintWriter pw = new PrintWriter( testFile )
+      pw.write(
+          "[code|lines:1,5]\n" +
+          "int binarySearch( int a, int value )\n" +
+          "{\n" +
+          "int low = 0;\n" +
+          "int high = a.length – 1;\n" +
+          "[-code]\n"
+      );
+      pw.close()
+
+      if ( ! testFile.exists() ) {
+          println( "***FAILURE in ${description}. Could not create test file" )
+          return
+      }
+
+    // run it and test for error message as well as a generated PDF file
+    String commandLine =  javaRun + " ${testFileName} ${testFileName}.pdf "
+    def proc = commandLine.execute()
+    def err = proc.err.text
+
+    def File pdfFile = new File( "${testFileName}.pdf" )
+
+    if( ! pdfFile.exists()  &&
+        ( err != null &&  err.contains( "The input file did not generate any output." ))
+            //&& err == null)
+    ) {
+        println( "***FAILURE in " + description )
+        println( err )
+    }
+    else {
+        println( "Success in " + description )
+
+    }
+
+    testFile.delete()
+    pdfFile.delete()
+}
 
 /**
  * PLATYPUS-21 in JIRA at Codehaus. Make sure that an input file that specifies

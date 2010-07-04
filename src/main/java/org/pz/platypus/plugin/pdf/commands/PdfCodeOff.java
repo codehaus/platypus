@@ -11,6 +11,7 @@ import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.Token;
 import org.pz.platypus.plugin.pdf.*;
+import com.lowagie.text.Paragraph;
 
 /**
  * End of a code section or code listing
@@ -30,6 +31,20 @@ public class PdfCodeOff implements OutputCommandable
         PdfData pdd = (PdfData) context;
         if( ! pdd.inCodeSection() ) {
             return 0; //not currently in a code section
+        }
+
+        // must output the paragraph manually for listing, because the [-code] command after a
+        // listing implies an end of a paragraph.
+        if( pdd.isInCodeListing() ) {
+            pdd.setInCodeListing( false );
+            PdfOutfile outfile = pdd.getOutfile();
+            if( outfile != null ) {
+                Paragraph para = outfile.getItPara();
+                if( para != null && para.size() > 0 ) {
+                    outfile.addParagraph( para, outfile.getItColumn() );
+                    outfile.setItPara( new Paragraph( pdd.getLeading() ));
+                }
+            }
         }
 
         PdfRestoreFormat.restore( pdd, tok.getSource() );

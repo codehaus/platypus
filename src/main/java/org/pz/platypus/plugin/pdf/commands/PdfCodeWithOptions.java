@@ -36,6 +36,7 @@ public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommand
 
         PdfData pdd = (PdfData) context;
 
+        pdd.setInCodeListing( true );
         // switch to monospace, etc.
         switchToCodeMode( pdd, tok, tokNum );
 
