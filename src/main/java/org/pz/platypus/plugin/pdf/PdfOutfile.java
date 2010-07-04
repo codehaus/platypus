@@ -888,7 +888,7 @@ public class PdfOutfile
 
         /**
          * Create the text string we'll use. Currently em-dash page# em-dash
-         * @return
+         * @return the footer string
          */
         private String getFooterText()
         {
