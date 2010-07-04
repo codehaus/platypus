@@ -54,7 +54,7 @@ public class TextIndenter
     /**
      * Gets the width of the current column, or if the current column has been set
      * artificially to force a new page, then compute the width of column 0.
-     * @return
+     * @return  width of the current column 
      */
     float calculateColWidth()
     {

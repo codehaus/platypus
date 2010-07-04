@@ -67,10 +67,11 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
 
     /**
      * Look up the symbol in the symbol table and get the Unicode value and any symbol font info.
+     * 
      * @param param value passed with the "bullet:" parameter
      * @param pdd the PDF document data
      * @param tok the token for the whole bullet list command
-     * @return
+     * @return Chunk containing for the bullet symbol
      */
     Chunk lookupBulletSymbol( final String param, final Token tok, final PdfData pdd )
     {
