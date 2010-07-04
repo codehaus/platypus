@@ -98,6 +98,7 @@ public abstract class DocData implements OutputContextable
     private ICommandTable commandTable;
     private int currColumn;
     private Value firstLineIndent;
+    private boolean inCodeListing;
     private Value leading;
     private Value lineHeight;   // not the same as leading
     private Value lineNumberSkip;
@@ -118,8 +119,8 @@ public abstract class DocData implements OutputContextable
     private Value strikethru;
     protected Underline underline;
 
-    /** Default ctor
-     * 
+    /**
+     * Default ctor
      */
     public DocData() {
         
@@ -142,6 +143,8 @@ public abstract class DocData implements OutputContextable
         currColumn      = 0;
 
         firstLineIndent = new Value( DefaultValues.FIRST_LINE_INDENT );
+
+        inCodeListing   = false;
 
         leading         = new Value( DefaultValues.LEADING );
         lineHeight      = new Value( DefaultValues.LEADING );
@@ -338,6 +341,16 @@ public abstract class DocData implements OutputContextable
         return( gdd );
     }
 
+    public boolean isInCodeListing()
+    {
+        return( inCodeListing );
+    }
+
+    public void setInCodeListing( final boolean isListing )
+    {
+        inCodeListing = isListing;
+    }
+    
     public float getLeading()
     {
         return( leading.fval );

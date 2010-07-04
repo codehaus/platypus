@@ -76,7 +76,6 @@ public class PdfOutfile
             throw new IllegalArgumentException( "null PdfData passed to PdfOutfile.open() ");
         }
 
-
         GDD gdd = pdd.getGdd();
 
         if( filename == null || filename.isEmpty() ) {
@@ -229,6 +228,19 @@ public class PdfOutfile
         assert( column != null );
         assert( pdfData != null );
 
+        ColumnText outputColumn = column;
+
+        try
+        {
+            if( ! isOpen() ) {
+                makeSureOutfileIsOpen();
+                outputColumn = iTColumn;
+            }
+        }
+        catch( IOException ioe ) {
+            return; //TODO: Should emit error message    
+        }
+
         if( inABulletList() ) {
             addItemToList( para );
         }
@@ -238,7 +250,7 @@ public class PdfOutfile
             doParagraphIndentRight( para, pdfData );
             doFirstLineIndent( para, pdfData );
             doParagraphSpaceBefore( para, pdfData );
-            column.addElement( para );
+            outputColumn.addElement( para );
         }
     }
 
