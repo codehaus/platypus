@@ -9,6 +9,7 @@ package org.pz.platypus.plugin.pdf;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
@@ -362,13 +363,61 @@ public class PdfFont implements Cloneable
         
         File ff = new File( fontFile );
         if( ff.exists() ) {
-            FontFactory.register( fontFile, typeface );
+            registerFont( fontFile, typeface );
             gdd.log( "Registered fonts for " + typeface + " in iText" );
         }
         else {
             gdd.logWarning( gdd.getLit( "COULD_NOT_FIND_FONT" ) + " " + fontFile + " " +
             gdd.getLit ( "FROM_FONT_LIST" ) + ". " );
         }
+    }
+
+    /**
+     * Actual font registration. Takes care of specious warning emitted by iText registering
+     * a TrueType collection (.ttc) file
+     *
+     * @param fontFile the complete filename including the path
+     * @param typeface  the name by which the typeface is registered.
+     */
+    private void registerFont( String fontFile, String typeface )
+    {
+        if( ! fontFile.toLowerCase().endsWith( ".ttc" )) {
+            FontFactory.register( fontFile, typeface );
+            return;
+        }
+
+        // if the file is a TrueTypeCollection (.ttc), iText generates an error message
+        // which it writes to stderr, and then registers the fonts. Since, there's no way
+        // to prevent this unneeded message, we do the registration manually here to avoid
+        // printing out the error message (about which the user can do nothing).
+
+        String[] names;
+
+        try
+        {
+            names = BaseFont.enumerateTTCNames(fontFile);
+            if( names == null ) {
+                ttcFileErrorMsg( gdd, fontFile );
+                return;
+            }
+        }
+        catch( DocumentException de ) {
+            ttcFileErrorMsg( gdd, fontFile );
+            return;
+        }
+        catch( IOException ioe ) {
+            ttcFileErrorMsg( gdd, fontFile );
+            return;
+        }
+
+        for( int i = 0; i < names.length; i++ ) {
+            FontFactory.register( fontFile + "," + i );
+        }
+    }
+
+    void ttcFileErrorMsg( final GDD gdd, final String fontFile )
+    {
+        gdd.logWarning(  gdd.getLit( "ERROR.REGISTERING_TTC_FONT") + " " +fontFile );
     }
 
     /**
