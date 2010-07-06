@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 public class Start implements Pluggable
 {
     private Logger logger;
+    private boolean inCode = false;
 
     /**
      * Start() is always called first by Platypus, followed by a call to process()
@@ -128,10 +129,31 @@ public class Start implements Pluggable
      */
     private void printToken(FileWriter outfile, GDD gdd, Token tok) throws IOException {
         HtmlListingStrategy strategy = HtmlListingStrategy.getFormatStrategy( tok );
-        final String s = strategy.format(tok, gdd);
+        String s = strategy.format(tok, gdd);
+        if (s.indexOf("[code]") != -1) {
+            inCode = true;
+        } else if (s.indexOf("[-code]") != -1) {
+            inCode = false;
+        }
+        if (inCode) {
+            s = makeInitialSpacesHard(s);
+        }
         writeStringToFile(outfile, gdd, s);
         if (strategy.canOutputHtmlEndOfLine())
             outfile.write( "</li>\n" );
+    }
+
+    private String makeInitialSpacesHard(String s) {
+        StringBuilder sb = new StringBuilder();
+        for ( int i = 0; i < s.length(); ++i ) {
+            char ch = s.charAt(i);
+            if ( ch == ' ') {
+                sb.append("&nbsp;");
+            } else {
+                sb.append(ch);
+            }
+        }
+        return sb.toString();
     }
 
     /**
