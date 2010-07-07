@@ -132,12 +132,18 @@ public class Start implements Pluggable
         String s = strategy.format(tok, gdd);
         if (s.indexOf("[code]") != -1) {
             inCode = true;
+            writeIt(outfile, gdd, strategy, s); // do not process whitespace(s)
+            return;                             // in front of [code] command itself
         } else if (s.indexOf("[-code]") != -1) {
             inCode = false;
         }
         if (inCode) {
             s = makeInitialSpacesHard(s);
         }
+        writeIt(outfile, gdd, strategy, s);
+    }
+
+    private void writeIt(FileWriter outfile, GDD gdd, HtmlListingStrategy strategy, String s) throws IOException {
         writeStringToFile(outfile, gdd, s);
         if (strategy.canOutputHtmlEndOfLine())
             outfile.write( "</li>\n" );
