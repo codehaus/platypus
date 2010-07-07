@@ -123,19 +123,15 @@ public class CommandTable
      *
      * @return number of commands loaded
      */
-    int loadCommandsFromFile( final PropertyFile pf )
+    void loadCommandsFromFile( final PropertyFile pf )
     {
         assert( pf != null );
-
-        int i = 0;
 
         Set<String> commands =  pf.getContents().keySet();
         for( String root : commands )
         {
             loadCommand( root, pf.getContents().get( root ));
-            i++;
         }
-        return( i );
     }
 
     /**
