@@ -11,6 +11,7 @@ import org.pz.platypus.commandTypes.*;
 import org.pz.platypus.interfaces.Commandable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 
@@ -176,7 +177,7 @@ public class CommandTable
     {
         SymbolsList sl = new SymbolsList( gdd );
         sl.load();
-        ArrayList<String> symbols = sl.getList();
+        List<String> symbols = sl.getList();
         for( String symbol : symbols ) {
             add( new Symbol( symbol ));
         }
