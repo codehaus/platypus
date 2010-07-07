@@ -11,6 +11,8 @@ import org.pz.platypus.exceptions.InvalidConfigFileException;
 
 import java.util.ArrayList;
 import java.io.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Contains a list of symbols that are used in Platypus. These symbols are loaded from
@@ -88,9 +90,9 @@ public class SymbolsList
         }
     }
 
-    ArrayList<String>  getList()
+    List<String> getList()
     {
-        return( symbolsList );
+        return( Collections.unmodifiableList(symbolsList) );
     }
 
 }
