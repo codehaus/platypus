@@ -7,6 +7,7 @@
 
 package org.pz.platypus.plugin.html;
 
+import org.apache.ecs.ECSDefaults;
 import org.apache.ecs.html.Body;
 import org.apache.ecs.html.Html;
 import org.apache.ecs.wml.Head;
@@ -16,6 +17,7 @@ import org.pz.platypus.exceptions.FileCloseException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 
 
 /**
@@ -42,9 +44,29 @@ public class HtmlOutfile
     public HtmlOutfile()
     {
         openStatus = false;
-        htmlBody.setPrettyPrint( true );
+
+        configureHtmlPrettyPrint();
+
+        html.setPrettyPrint( true );
+        html.setNeedClosingTag( true );
         html.addElement( head );
+
+        htmlBody.setPrettyPrint( true );
+
         html.addElement( htmlBody );
+    }
+
+    private void configureHtmlPrettyPrint() {
+        try {
+            Field fld = ECSDefaults.class.getDeclaredField("defaults");
+            fld.setAccessible(true);
+            ECSDefaults ed = (ECSDefaults) fld.get(null);
+            Field pp = ECSDefaults.class.getDeclaredField("pretty_print");
+            pp.setAccessible(true);
+            pp.setBoolean(ed, Boolean.TRUE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
