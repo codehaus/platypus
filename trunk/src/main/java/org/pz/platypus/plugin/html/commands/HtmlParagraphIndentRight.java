@@ -34,7 +34,7 @@ public class HtmlParagraphIndentRight implements OutputCommandable
 
         htmlData.setParagraphIndentRight( newIndent, tok.getSource() );
 
-        htmlData.getOutfile().generateStyleClassDefinition();
+        // htmlData.getOutfile().generateStyleClassDefinition();
         
         return 0;
     }

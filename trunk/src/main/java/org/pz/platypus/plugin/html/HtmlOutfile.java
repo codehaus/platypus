@@ -36,9 +36,7 @@ public class HtmlOutfile
     Body htmlBody = new Body();
     
     private boolean inParagraph = false;
-    private int styleNum = 0;
     private int tab = 0;
-    private final String styleStem = "platypus";
     private boolean inFont = false;
 
     public HtmlOutfile()
@@ -53,10 +51,10 @@ public class HtmlOutfile
      * Open the output file. Does basic checks, calls openPdfFile(), and handles any exceptions
      * @param gdd Global document data
      * @param filename name of file to open
-     * @param pdfData
+     * @param htmlData
      * @throws java.io.IOException in event of a problem opening the file
      */
-    public void open( final GDD gdd, final String filename, final HtmlData pdfData) throws IOException
+    public void open( final GDD gdd, final String filename, final HtmlData htmlData) throws IOException
     {
         assert( gdd != null );
 
@@ -120,7 +118,9 @@ public class HtmlOutfile
      */
     public void startNewParagraph()
     {
-        emitText("<p " + "CLASS=" + wrapInQuotes(getLatestStyleName()) + ">");
+        // atul - suppress emitting of CLASS till we have proper CSS support
+        // emitText("<p " + "CLASS=" + wrapInQuotes(getLatestStyleName()) + ">");
+        emitText("<p>"); 
         setInParagraph(true);
     }
 
@@ -171,128 +171,8 @@ public class HtmlOutfile
         htmlData = newPdfData;
     }
 
-    public void outputHtmlNewLine() {
-        emitText("<br>");
-    }
-
-    public void generateStyleClassDefinition() {
-        outputStylePreamble();
-        outputStyleSpecs();
-        outputStylePostScript();
-    }
-
-    private void outputStylePostScript() {
-        outputClosingBrace();
-        tabin();
-        outputXmlCommentEnd();
-        closeStyleTag();
-        outputNewLine();
-    }
-
-    private void closeStyleTag() {
-        outputCloseTag("STYLE");
-    }
-
-    private void outputCloseTag(String tagElem) {
-        outputNewLine();
-        emitText("</");
-        emitText(tagElem);
-        emitText(">");                
-        outputNewLine();
-    }
-
-    private void outputXmlCommentEnd() {
-        outputNewLine();
-        emitText("-->");
-    }
-
-    private void outputClosingBrace() {
-        emitText("}");
-    }
-
-    private void tabin() {
-        --tab;
-    }
-
-    private void outputStyleSpecs() {
-        outputPaddingLeft();
-        outputPaddingRight();
-    }
-
-    private void outputPaddingRight() {
-        float rindent = htmlData.getParagraphIndentRight();
-        emitText("padding-right" + ":" + " " + rindent + "pt" + ";");
-        outputNewLine();
-    }
-
-    private void outputPaddingLeft() {
-        float indent = htmlData.getParagraphIndent();
-        emitText("padding-left" + ":" + " " + indent + "pt" + ";");
-        outputNewLine();
-    }
-
-    private void outputStylePreamble() {
-        outputNewLine();
-        outputNewLine();
-        openStyleTag();
-        outputXmlCommentStart();
-        outputStyleName();
-        openStyleDefinition();
-    }
-
-    private void openStyleDefinition() {
-        tabout();
-        outputOpenBrace();
-    }
-
-    private void outputOpenBrace() {
-        emitText("{");
-        outputNewLine();
-    }
-
-    private void tabout() {
-        ++tab;
-    }
-
-    private void outputNewLine() {
-        String newline = System.getProperty("line.separator");
-        emitText(newline);
-    }
-
-    private void outputStyleName() {
-        emitText(".");
-        emitText(generateNewStyleName());
-        outputNewLine();
-    }
-
-    private String generateNewStyleName() {
-        ++styleNum;
-        return getLatestStyleName();
-    }
-
-    private String getLatestStyleName() {
-        return styleStem + String.valueOf(styleNum);
-    }
-
-    private void outputXmlCommentStart() {
-        outputNewLine();
-        emitText("<!--");
-    }
-
     private String wrapInQuotes(String s) {
         return "\"" + s + "\"";
-    }
-
-    private void openStyleTag() {
-        outputOpenTag("STYLE ", "TYPE=", wrapInQuotes("text/css"));
-    }
-
-    private void outputOpenTag(String... tagElemSpec) {
-        emitText("<");
-        for (String s : tagElemSpec) {
-            emitText(s);
-        }
-        emitText(">");
     }
 
     public void emitFontSizeTag() {
@@ -324,7 +204,7 @@ public class HtmlOutfile
     }
 
     public void setMarginRight() {
-        float marginRight = htmlData.getMarginRight();
+        // float marginRight = htmlData.getMarginRight();
         // TODO: not sure how to fix this right now
     }
 
