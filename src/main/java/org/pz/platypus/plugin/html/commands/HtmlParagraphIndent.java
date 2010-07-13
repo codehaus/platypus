@@ -34,7 +34,7 @@ public class HtmlParagraphIndent implements OutputCommandable
         
         htmlData.setParagraphIndent( newIndent, tok.getSource() );
 
-        htmlData.getOutfile().generateStyleClassDefinition();
+        // htmlData.getOutfile().generateStyleClassDefinition();
 
         return 0;
     }
