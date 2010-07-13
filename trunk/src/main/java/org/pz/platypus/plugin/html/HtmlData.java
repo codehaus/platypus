@@ -121,9 +121,9 @@ public class HtmlData extends DocData implements OutputContextable
             } else if (cmdName.equals( "[-b]" )) {
                 outfile.emitText( "</b>" );
             } else if (cmdName.equals( "[+i]" )) {
-                outfile.emitText( "<I>" );
+                outfile.emitText( "<i>" );
             } else if (cmdName.equals( "[-i]" )) {
-                outfile.emitText( "</I>" );
+                outfile.emitText( "</i>" );
             } else if (cmdName.equals( "[+st]" )) {
                 outfile.emitText( "<s>" );
             } else if (cmdName.equals( "[-st]" )) {
