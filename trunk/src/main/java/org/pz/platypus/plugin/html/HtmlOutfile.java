@@ -45,8 +45,8 @@ public class HtmlOutfile
     {
         openStatus = false;
         htmlBody.setPrettyPrint( true );
-        head.addElement( htmlBody );
         html.addElement( head );
+        html.addElement( htmlBody );
     }
 
     /**
