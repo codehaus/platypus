@@ -30,7 +30,7 @@ public class HtmlItalicsOn implements OutputCommandable
         HtmlData html = (HtmlData) context;
         html.push(getRoot());        
         HtmlOutfile outfile = html.getOutfile();
-        outfile.emitText( "<I>" );
+        outfile.emitText( "<i>" );
         return 0;
     }
 
