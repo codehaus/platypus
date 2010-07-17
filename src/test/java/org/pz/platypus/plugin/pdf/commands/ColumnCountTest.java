@@ -14,10 +14,9 @@ import org.pz.platypus.*;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.Columns;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
-import org.pz.platypus.plugin.pdf.commands.PdfColumnCount;
 import org.pz.platypus.test.mocks.MockLogger;
 import org.pz.platypus.test.mocks.MockLiterals;
-import org.pz.platypus.interfaces.OutputContextable;
+
 
 import java.util.logging.Level;
 
