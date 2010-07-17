@@ -27,7 +27,6 @@ public class PdfBulletListPlainStart extends BulletListPlainStart
 
         String bulletDot = "\u2022";
         outFile.startPlainBulletList( bulletDot );
-//        outFile.startPlainBulletList( "\u00B7" );  // little dot
         return( 0 );
     }
 
