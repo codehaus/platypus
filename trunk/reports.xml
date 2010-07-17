@@ -8,6 +8,7 @@
 	This generates the reports for Platypus
 	
 	v. 1.1 JDepend and JavaNCSS added. Validated. JavaNCSS has some dependencies to be removed from the taskdef.
+	v. 1.2 Javadoc added.
 -->
 
 <project name="platypus-build" default="all" basedir=".">
@@ -101,18 +102,8 @@
     <javadoc
 		sourcepath="${src.dir}"
         destdir="${javadoc.dir}"
-        failonerror="true"
-        packagenames="org.pz.platypus,
-				      org.pz.platypus.commands,
-					  org.pz.platypus.commandTypes,
-					  org.pz.platypus.exceptions,
-					  org.pz.platypus.interfaces,
-					  org.pz.platypus.parsers,
-					  org.pz.platypus.plugin.common,
-					  org.pz.platypus.plugin.listing,
-					  org.pz.platypus.plugin.rtf,
-					  org.pz.platypus.utilities"
-        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;C:\Tools\Java\jdk1.6.0_04\lib\tools.jar"        
+        failonerror="false"
+        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;"        
         excludepackagenames="com.lowagie.text.*,org.apache.commons.cli*"
         author="true"
         version="true"
