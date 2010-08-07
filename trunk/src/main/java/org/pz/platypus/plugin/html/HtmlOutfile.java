@@ -158,16 +158,18 @@ public class HtmlOutfile
      */
     public void startNewParagraph()
     {
-        // atul - suppress emitting of CLASS till we have proper CSS support
-        // emitText("<p " + "CLASS=" + wrapInQuotes(getLatestStyleName()) + ">");
-        emitText("<p>"); 
+        endFontTagIfAny();
+        emitText("<p>");
         setInParagraph(true);
+        restartFontTagIfAny();        
     }
 
     public void endCurrentParagraphIfAny() {
         if (getInParagraph()) {
+            endFontTagIfAny();
             emitText("</p>");
-            setInParagraph(false);            
+            setInParagraph(false);
+            restartFontTagIfAny();
         }
     }
 
@@ -229,14 +231,10 @@ public class HtmlOutfile
     }
 
     public void handleEof() {
-        endCurrentParagraphIfAny();
-        endFontTagIfAny();
-    }
-
-    private void endFontTagIfAny() {
-        if (alreadyProcessingFont()) {
-            emitText("</font>");
+        if (getInParagraph()) {
+            endCurrentParagraphIfAny(); // this handles leftover ending of font tags ( if any ;-)
         }
+        endFontTagIfAny();
     }
 
     private boolean alreadyProcessingFont() {
@@ -258,6 +256,20 @@ public class HtmlOutfile
         inFont = true;
     }
 
+    private void restartFontTagIfAny() {
+        emitText("<font face=");
+        String fontFace = htmlData.getFontFace();
+        fontFace = wrapInQuotes(fontFace);
+        emitText(fontFace);
+        emitText(">");
+    }
+
+    private void endFontTagIfAny() {
+        if (alreadyProcessingFont()) {
+            emitText("</font>");
+        }
+    }
+    
     private void startNewFontFace() {
         endFontTagIfAny();
         emitText("<font face=");
