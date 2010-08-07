@@ -137,7 +137,7 @@ public class HtmlData extends DocData implements OutputContextable
     }
 
     public boolean areWeInAParagraphAlready() {
-        return false;  //To change body of created methods use File | Settings | File Templates.
+        return false;  
     }
 
     public void setFontSize(float newFontSize, Source newSource) {
