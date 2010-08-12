@@ -36,35 +36,42 @@ public class PdfFontFactory
     }
 
     /**
-     * Creates an iText Font object based on the class fields
+     * Creates an iText Font object based on a passed-in PdfFont
+     *
      * @param f the PdfFont containing the parameters for the font
      * @return the iText Font object
      */
     public Font createItextFont( final PdfFont f )
     {
+        PdfFont pf = f;
+
         int style = 0;
  //       Color col  = new Color( color.getR(), color.getG(), color.getB() );
         Font font = null;
 
-        String iTextFontName = createItextFontName( f );
+        if( pf == null ) {
+            pf = new PdfFont( pdfData );
+        }
+
+        String iTextFontName = createItextFontName( pf );
         if( iTextFontName == null ) { // if the font is not in the fontlist nor is it a Base14 font
-            f.setFace( DefaultValues.FONT_TYPEFACE, new Source()); //don't care about Source for this.
+            pf.setFace( DefaultValues.FONT_TYPEFACE, new Source()); //don't care about Source for this.
             iTextFontName = BaseFont.TIMES_ROMAN;
         }
 
-        if( ! isBase14Font( f.getFace() )) {
-            style = computeItextStyle( f );
-            font = getIdentityHFont( iTextFontName, f.getSize(), style );
+        if( ! isBase14Font( pf.getFace() )) {
+            style = computeItextStyle( pf );
+            font = getIdentityHFont( iTextFontName, pf.getSize(), style );
         }
 
-        if( font == null ) {
-            font = getCp1252Font( iTextFontName, f.getSize(), style );
+        if( font == null ) {   //TODO: identify when this would be the case.
+            font = getCp1252Font( iTextFontName, pf.getSize(), style );
         }
 
         if( font == null || font.getBaseFont() == null ) { //TODO: Make error msg use literals
             gdd.logWarning( "iText could not find font for: " + iTextFontName + ". Using Times-Roman" );
             font = FontFactory.getFont( BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.EMBEDDED,
-                    f.getSize(), style );
+                   pf.getSize(), style );
         }
 
         return( font );
@@ -104,11 +111,17 @@ public class PdfFontFactory
      * returns its name as registered by iText (which is the family name for the font).
      *
      * @param f PdfFont whose iText name we're getting
-     * @return a string containing the iText usable name for this font.
+     * @return a string containing the iText usable name for this font, or null if passed-in font is
+     *             null or the font name is not recognized or found.
      */
     String createItextFontName( final PdfFont f )
     {
         String iTextFontName;
+
+        if( f == null ) {
+            return( null );
+        }
+
         String typefaceName = f.getFace();
 
         // handle the different versions of base14 fonts
@@ -171,7 +184,7 @@ public class PdfFontFactory
         {
             if( ! FontFactory.isRegistered( typefaceName )) {
                 if ( ! findAndRegisterFont( typefaceName )) {
-                    return (null);
+                    return( null );
                 }
             }
 
