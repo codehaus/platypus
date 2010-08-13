@@ -16,6 +16,7 @@ import org.pz.platypus.TypefaceMap;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Handles the complexities of creating a font for iText
@@ -67,6 +68,10 @@ public class PdfFontFactory
             font = FontFactory.getFont( BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.EMBEDDED,
                    pf.getSize(), style );
         }
+
+// #if debug
+//        Set fonts = FontFactory.getRegisteredFonts();
+//        Set families = FontFactory.getRegisteredFamilies();
 
         return( font );
     }
@@ -357,13 +362,16 @@ public class PdfFontFactory
      * Actual font registration. Takes care of specious warning emitted by iText registering
      * a TrueType collection (.ttc) file
      *
+     * called from RegisterOneFont()
+     *
      * @param fontFile the complete filename including the path
      * @param typeface  the name by which the typeface is registered.
      */
     private void registerFont( String fontFile, String typeface )
     {
         if( ! fontFile.toLowerCase().endsWith( ".ttc" )) {
-            FontFactory.register( fontFile, typeface );
+            //FontFactory.register( fontFile, typeface ); THIS was the problem in PLATYPUS-42
+            FontFactory.register( fontFile );
             return;
         }
 
