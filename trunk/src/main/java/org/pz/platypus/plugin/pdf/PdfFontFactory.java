@@ -11,10 +11,8 @@ import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
-import org.pz.platypus.DefaultValues;
 import org.pz.platypus.GDD;
 import org.pz.platypus.TypefaceMap;
-import org.pz.platypus.Source;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,10 +52,6 @@ public class PdfFontFactory
         }
 
         String iTextFontName = createItextFontName( pf );
-        if( iTextFontName == null ) { // if the font is not in the fontlist nor is it a Base14 font
-            pf.setFace( DefaultValues.FONT_TYPEFACE, new Source()); //don't care about Source for this.
-            iTextFontName = BaseFont.TIMES_ROMAN;
-        }
 
         if( ! isBase14Font( pf.getFace() )) {
             style = computeItextStyle( pf );
@@ -82,6 +76,7 @@ public class PdfFontFactory
      * strikethrough and underline ourselves, we use it to communicate italic and bold
      * only. This computation done here.
      *
+     * @param f the PdfFont whose style is being checked
      * @return the iText Style
      */
     int computeItextStyle( PdfFont f )
@@ -101,60 +96,71 @@ public class PdfFontFactory
         }
 
         return( style );
-    }    
+    }
 
     /**
-     * Get the name by which iText refers to this font. This routine is mostly occupied
-     * with the special handling of the base14 fonts.
+     * Gets the iText font name for any of the Base14 fonts.
      *
-     * For all other fonts, this method makes sure the font is registered with iText and
-     * returns its name as registered by iText (which is the family name for the font).
-     *
-     * @param f PdfFont whose iText name we're getting
-     * @return a string containing the iText usable name for this font, or null if passed-in font is
-     *             null or the font name is not recognized or found.
+     * @param font the PdfFont whose name we're looking up.
+     * @return the iText name or null if an error has occured
      */
-    String createItextFontName( final PdfFont f )
+    String computeBase14ItextFontName( final PdfFont font )
     {
-        String iTextFontName;
+        final String typefaceName;
+        String iTextFontName = null;
+        PdfFont f;
 
-        if( f == null ) {
-            return( null );
+        // in the impossible event this gets passed a null, then
+        // replace it with the default font. It might be better
+        // to just throw an exception. Should revisit this later.
+        if( font == null ) {
+            f = new PdfFont( pdfData );
+        }
+        else {
+            f = font;
         }
 
-        String typefaceName = f.getFace();
+        typefaceName = f.getFace();
 
-        // handle the different versions of base14 fonts
         if ( typefaceName.equals( "COURIER" )) {
-            if ( f.getBold() )
-            {
-                if ( f.getItalics() )
+            if ( f.getBold() ) {
+                if ( f.getItalics() ) {
                     iTextFontName = BaseFont.COURIER_BOLDOBLIQUE;
-                else
+                }
+                else {
                     iTextFontName = BaseFont.COURIER_BOLD;
+                }
             }
             else
-            if ( f.getItalics() )
+            if ( f.getItalics() ) {
                 iTextFontName = BaseFont.COURIER_OBLIQUE;
+            }
             else
                 iTextFontName = BaseFont.COURIER;
+
+            return( iTextFontName );
         }
-        else
+
         if ( typefaceName.equals( "HELVETICA" )) {
-            if ( f.getBold() )
-            {
-                if ( f.getItalics() )
+            if ( f.getBold() ) {
+                if ( f.getItalics() ) {
                     iTextFontName = BaseFont.HELVETICA_BOLDOBLIQUE;
-                else
+                }
+                else {
                     iTextFontName = BaseFont.HELVETICA_BOLD;
+                }
             }
             else
-            if ( f.getItalics() )
+            if ( f.getItalics() ) {
                 iTextFontName = BaseFont.HELVETICA_OBLIQUE;
-            else
+            }
+            else {
                 iTextFontName = BaseFont.HELVETICA;
+            }
+
+            return( iTextFontName );
         }
-        else
+
         if ( typefaceName.equals( "TIMES_ROMAN" )) {
             if ( f.getBold() )
             {
@@ -168,38 +174,69 @@ public class PdfFontFactory
                 iTextFontName = BaseFont.TIMES_ITALIC;
             else
                 iTextFontName = BaseFont.TIMES_ROMAN;
+
+            return( iTextFontName );
         }
-        else
+
         if ( typefaceName.equals( "SYMBOL" )) {
             iTextFontName = BaseFont.SYMBOL;
+            return( iTextFontName );
         }
-        else
+
         if ( typefaceName.equals( "DINGBATS" )) {
             iTextFontName = BaseFont.ZAPFDINGBATS;
+            return( iTextFontName );
         }
-        else
-        // It's not a base14 font. So make sure we've loaded the font files for Platypus
-        // then look up this font among them. If it's still not there, then return
-        // a TIMES_ROMAN and note the error.
-        {
-            if( ! FontFactory.isRegistered( typefaceName )) {
-                if ( ! findAndRegisterFont( typefaceName )) {
-                    return( null );
-                }
-            }
 
-            if( FontFactory.isRegistered( typefaceName )) {
-                iTextFontName = typefaceName;
-            }
-            else {
-                // in theory, cannot get here.
-                gdd.logWarning( gdd.getLit( "COULD_NOT_FIND") + " " + typefaceName + " " +
-                                gdd.getLit( "IN_FONT_REGISTER" ) + ". " +
-                                gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
-                iTextFontName = null;
-            }
-        }
+        // in theory, impossible, since the font is validated before the function is called.
         return( iTextFontName );
+    }
+
+    /**
+     * Get the name by which iText refers to this font. This routine is mostly occupied
+     * with the special handling of the Base14 fonts.
+     *
+     * For all other fonts, this method makes sure the font is registered with iText and
+     * returns its name as registered by iText (which is the family name for the font).
+     *
+     * @param f PdfFont whose iText name we're getting
+     * @return a string containing the iText usable name for this font. If passed-in font is
+     *             null or the font name is not recognized or found, TIMES_ROMAN is returned.
+     */
+    String createItextFontName( final PdfFont f )
+    {
+        if( f == null ) {
+            errFontNotFound( "NULL" );
+            return( BaseFont.TIMES_ROMAN );
+        }
+
+        String typefaceName = f.getFace();
+
+        // if it's a Base14 font, compute the name
+        if ( isBase14Font( typefaceName )) {
+            return( computeBase14ItextFontName( f ));
+        }
+
+        // It's not a base14 font, so is the font already registered in iText?
+        if( FontFactory.isRegistered( typefaceName )) {
+            return( typefaceName );
+        }
+
+        // If not, load the font from Platypus into iText, then look up the
+        // iText name and return that. In case of error, return TIMES_ROMAN.
+
+        if ( ! findAndRegisterFont( typefaceName )) {
+            errFontNotFound( typefaceName );
+            return( BaseFont.TIMES_ROMAN );
+        }
+
+        if( FontFactory.isRegistered( typefaceName )) {
+            return( typefaceName );
+        }
+
+        // in theory, cannot get here.
+        errFontNotFound( typefaceName );
+        return( BaseFont.TIMES_ROMAN );
     }
 
     /**
@@ -213,7 +250,7 @@ public class PdfFontFactory
         String[] fontFiles = lookupFontFilenames( typefaceName );
         if( fontFiles.length == 0 ) {
             gdd.logWarning( gdd.getLit( "COULD_NOT_FIND" ) + " " + typefaceName + " " +
-                            gdd.getLit( "IN_FONT_LIST" ) + ". " +  gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
+                    gdd.getLit( "IN_FONT_LIST" ) + ". " +  gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
             return( false );
         }
         else {
@@ -298,7 +335,6 @@ public class PdfFontFactory
         return( false );
     }
 
-
     /**
      * Get the names of the actual font files that are the implementation of this typeface
      * @param typefaceName the typefaces
@@ -342,16 +378,16 @@ public class PdfFontFactory
         {
             names = BaseFont.enumerateTTCNames(fontFile);
             if( names == null ) {
-                ttcFileErrorMsg( gdd, fontFile );
+                errTtcFileHandling( fontFile );
                 return;
             }
         }
         catch( DocumentException de ) {
-            ttcFileErrorMsg( gdd, fontFile );
+            errTtcFileHandling( fontFile );
             return;
         }
         catch( IOException ioe ) {
-            ttcFileErrorMsg( gdd, fontFile );
+            errTtcFileHandling( fontFile );
             return;
         }
 
@@ -359,12 +395,6 @@ public class PdfFontFactory
             FontFactory.register( fontFile + "," + i );
         }
     }
-
-    void ttcFileErrorMsg( final GDD gdd, final String fontFile )
-    {
-        gdd.logWarning(  gdd.getLit( "ERROR.REGISTERING_TTC_FONT") + " " + fontFile );
-    }
-
 
     /**
      * Unfortunately, iText does not pass along the exception if the file cannot be found.
@@ -389,5 +419,20 @@ public class PdfFontFactory
             gdd.logWarning( gdd.getLit( "COULD_NOT_FIND_FONT" ) + " " + fontFile + " " +
             gdd.getLit ( "FROM_FONT_LIST" ) + ". " );
         }
+    }
+
+    // = = =  error messages, getters and setters = = = //
+
+    void errFontNotFound( String typefaceName )
+    {
+        gdd.logWarning( gdd.getLit( "COULD_NOT_FIND") + " " +
+                        typefaceName + " " +
+                        gdd.getLit( "IN_FONT_REGISTER" ) + ". " +
+                        gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
+    }
+
+    void errTtcFileHandling( final String fontFile )
+    {
+        gdd.logWarning( gdd.getLit( "ERROR.REGISTERING_TTC_FONT") + " " + fontFile );
     }
 }
