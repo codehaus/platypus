@@ -124,9 +124,7 @@ public class HtmlOutfile
     }
 
     /**
-     * Outputs any material that has not yet been output. Then closes the iText Document.
-     * Note that the first text item to be output forces an open of the document. Consult
-     * Start.processText(). So, if the file is closed, no text was output.
+     * Outputs any material that has not yet been output. Then closes the xhtml Document.
      *
      * @throws org.pz.platypus.exceptions.FileCloseException if an error occurs closing the file
      */
@@ -182,7 +180,9 @@ public class HtmlOutfile
     }
 
     /**
-     * Writes text to the HTML file. 
+     * Writes text to the HTML file.            \
+     * TODO: handle quoting of special characters here...
+     * TODO: maybe extract this out in a special class of its own?
      *
      * @param s the text to be written
      */
@@ -190,11 +190,15 @@ public class HtmlOutfile
     {
         String tabSpace = getCurrentTabbedOutSpaces();
         if (!tabSpace.isEmpty()) {
-            htmlBody.addElement(tabSpace);            
+            htmlBody.addElement(tabSpace);
         }
         htmlBody.addElement(s);
     }
 
+    /** Am not so sure we need this one - as the pretty print method is already used...
+     *
+     * @return
+     */
     private String getCurrentTabbedOutSpaces() {
         String spaces = "";
         for (int i = 0; i < tab; ++i) {
@@ -208,9 +212,9 @@ public class HtmlOutfile
         return( openStatus );
     }
 
-    public void setHtmlData( final HtmlData newPdfData )
+    public void setHtmlData( final HtmlData htmlData )
     {
-        htmlData = newPdfData;
+        this.htmlData = htmlData;
     }
 
     private String wrapInQuotes(String s) {
@@ -230,6 +234,10 @@ public class HtmlOutfile
         emitText(">");
     }
 
+    /**
+     * If we have started a paragraph, or a font or any other tag - we need to close it.
+     * This handles the closing up of any open tags...
+     */
     public void handleEof() {
         if (getInParagraph()) {
             endCurrentParagraphIfAny(); // this handles leftover ending of font tags ( if any ;-)
