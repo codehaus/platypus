@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -14,11 +14,11 @@ import org.pz.platypus.plugin.html.commands.*;
 import java.util.HashMap;
 
 /**
- * Contains all the commands used in the PDF plugins,
+ * Contains all the commands used in the PDF plugin,
  * keyed by command root. Class is based substantially
  * on org.pz.Platypus.CommandTable
  *
- * @author alb
+ * @author alb/ask
  */
 @SuppressWarnings("unchecked")
 public class HtmlCommandTable

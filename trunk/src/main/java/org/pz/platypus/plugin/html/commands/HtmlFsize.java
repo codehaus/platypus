@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -15,9 +15,9 @@ import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.pdf.commands.PdfLeading;
 
 /**
- * Implementation of fsize (in font family of commands) for PDF plugin
+ * Implementation of fsize (in font family of commands) for the HTML plugin
  *
- * @author alb
+ * @author alb / ask
  */
 public class HtmlFsize implements OutputCommandable
 {
@@ -48,7 +48,7 @@ public class HtmlFsize implements OutputCommandable
 
     /**
      * Updates the leading by running the command PdfLeading with the new value
-     * @param context context of current token, needed by PdfLeading
+     * @param context context of current token
      * @param tok the current token for font size, from which to extract data for the leading command
      * @param tokNum the number of the font size token
      * @param newFontSize the font size we're moving to.
