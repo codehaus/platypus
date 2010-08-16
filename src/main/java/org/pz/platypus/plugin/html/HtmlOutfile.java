@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2010 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -25,6 +25,8 @@ import java.lang.reflect.Field;
 
 /**
  * Manage output to the HTML file
+ *
+ * @author ask
  */
 public class HtmlOutfile
 {
@@ -57,7 +59,8 @@ public class HtmlOutfile
         htmlBody.setPrettyPrint( true );
     }
 
-    /** The "once only" settings - We set <br>
+    /**
+     * The "once only" settings - We set <br>
      * 1. The title <br>
      * 2. The content-type <br>
      * 3. A comment to note that this doc was generated with platypus <br> 

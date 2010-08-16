@@ -25,7 +25,7 @@ import java.util.ArrayList;
  *      only by the value returned from calling process(). However, it does not issue
  *      any user message(s) as a result of this.
  *
- * @author alb
+ * @author alb/ask
  */
 public class Start implements Pluggable
 {
