@@ -46,7 +46,7 @@ public class HtmlMarginRight implements OutputCommandable
 
         if ( rMargin != currRMargin ) {
             htmlData.setMarginRight( rMargin, tok.getSource() );
-            htmlData.getOutfile().setMarginRight();
+            // htmlData.getOutfile().setMarginRight();
             return 0;
         }
         return 0;

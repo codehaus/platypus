@@ -220,6 +220,12 @@ public class HtmlOutfile
         this.htmlData = htmlData;
     }
 
+    /**
+     * Useful utility method to handle double quotes within
+     * String literals -
+     * @param s
+     * @return
+     */
     private String wrapInQuotes(String s) {
         return "\"" + s + "\"";
     }
@@ -252,11 +258,6 @@ public class HtmlOutfile
         return inFont;    
     }
 
-    public void setMarginRight() {
-        // float marginRight = htmlData.getMarginRight();
-        // TODO: not sure how to fix this right now
-    }
-
     public void setMarginTop() {
         int marginTop = (int) htmlData.getMarginTop();
         htmlBody.addAttribute("TOPMARGIN", marginTop);
@@ -280,7 +281,12 @@ public class HtmlOutfile
             emitText("</font>");
         }
     }
-    
+
+    /**
+     * We need to close previous font (if any) - and output a new
+     * font tag
+     * 
+     */
     private void startNewFontFace() {
         endFontTagIfAny();
         emitText("<font face=");
