@@ -114,7 +114,7 @@ public class Start implements Pluggable
             return;  // the error message has already been displayed; so just exit.
         }
 
-        htmlData.setOutfile( outfile );
+        htmlData.getHtmlDocContext().setOutfile( outfile );
         outfile.setHtmlData( htmlData );
         commandTable.load( gdd );
         gdd.log( "Command table in HTML plug-in loaded with " + commandTable.getSize() +

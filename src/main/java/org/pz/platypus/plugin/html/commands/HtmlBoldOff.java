@@ -11,7 +11,6 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
  * Implementation of turning on bold in the Html plugin
@@ -28,9 +27,9 @@ public class HtmlBoldOff implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        HtmlData html = (HtmlData) context;
-        html.push(getRoot());
-        html.outputTags();
+        HtmlData htmlData = (HtmlData) context;
+        htmlData.getHtmlDocContext().push(getRoot());
+        htmlData.getHtmlDocContext().outputTags();
         return 0;
     }
 

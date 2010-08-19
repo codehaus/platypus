@@ -31,7 +31,7 @@ public class HtmlFface implements OutputCommandable
 
         String newFontFace = tok.getParameter().getString();
         htmlData.setFontFace( newFontFace, tok.getSource() );
-
+        htmlData.getHtmlDocContext().handleFontFace();
         return 0;
     }
 

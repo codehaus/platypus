@@ -29,8 +29,8 @@ public class HtmlStrikethruOn implements OutputCommandable
         }
 
         HtmlData htmlData = (HtmlData) context;
-        htmlData.push(getRoot());                
-        HtmlOutfile outfile = htmlData.getOutfile();
+        htmlData.getHtmlDocContext().push(getRoot());
+        HtmlOutfile outfile = htmlData.getHtmlDocContext().getOutfile();
         outfile.emitText( "<s>" );
         return 0;
     }

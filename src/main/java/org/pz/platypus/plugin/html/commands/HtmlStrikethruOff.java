@@ -11,7 +11,6 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
-import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
  * Implementation of turning on strikethrough in the HTML plugin
@@ -29,8 +28,8 @@ public class HtmlStrikethruOff implements OutputCommandable
         }
 
         HtmlData htmlData = (HtmlData) context;
-        htmlData.push(getRoot());
-        htmlData.outputTags();
+        htmlData.getHtmlDocContext().push(getRoot());
+        htmlData.getHtmlDocContext().outputTags();
 
 //        HtmlOutfile outfile = htmlData.getOutfile();
 //        outfile.emitText( "</s>" );

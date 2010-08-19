@@ -29,8 +29,8 @@ public class HtmlBoldOn implements OutputCommandable
         }
 
         HtmlData html = (HtmlData) context;
-        html.push(getRoot());
-        HtmlOutfile outfile = html.getOutfile();
+        html.getHtmlDocContext().push(getRoot());
+        HtmlOutfile outfile = html.getHtmlDocContext().getOutfile();
         outfile.emitText( "<b>" );
         return 0;
     }

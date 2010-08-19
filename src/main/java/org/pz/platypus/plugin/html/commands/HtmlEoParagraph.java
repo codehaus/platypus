@@ -30,8 +30,8 @@ public class HtmlEoParagraph implements OutputCommandable
         HtmlData htmlData = (HtmlData) context;
 
         // Close current paragraph, if any, and start a new one
-        htmlData.getOutfile().endCurrentParagraphIfAny();
-        htmlData.getOutfile().startNewParagraph();
+        htmlData.getHtmlDocContext().getOutfile().endCurrentParagraphIfAny();
+        htmlData.getHtmlDocContext().getOutfile().startNewParagraph();
 
         return 0;
     }

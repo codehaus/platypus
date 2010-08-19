@@ -27,9 +27,9 @@ public class HtmlItalicsOn implements OutputCommandable
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
         }
-        HtmlData html = (HtmlData) context;
-        html.push(getRoot());        
-        HtmlOutfile outfile = html.getOutfile();
+        HtmlData htmlData = (HtmlData) context;
+        htmlData.getHtmlDocContext().push(getRoot());
+        HtmlOutfile outfile = htmlData.getHtmlDocContext().getOutfile();
         outfile.emitText( "<i>" );
         return 0;
     }

@@ -24,7 +24,7 @@ public class HtmlUrl extends UrlRaw
     {
         //TODO: Even with that I'm not sure adding http:// is right. Let's discuss. ALB
         HtmlData htmlData = (HtmlData) context;
-        HtmlOutfile outfile = htmlData.getOutfile();
+        HtmlOutfile outfile = htmlData.getHtmlDocContext().getOutfile();
         boolean addPrefix = addHttpPrefixIfNecessary(url);
         String text = "<a href=";
 

@@ -46,7 +46,7 @@ public class HtmlMarginTop implements OutputCommandable
 
         if ( tMargin != currTMargin ) {
             htmlData.setMarginTop( tMargin, tok.getSource() );
-            htmlData.getOutfile().setMarginTop();
+            htmlData.getHtmlDocContext().getOutfile().setMarginTop();
             return 0;
         }
         return 0;
