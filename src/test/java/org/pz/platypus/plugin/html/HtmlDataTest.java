@@ -1,6 +1,5 @@
 package org.pz.platypus.plugin.html;
 
-import org.custommonkey.xmlunit.Diff;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -31,14 +30,14 @@ public class HtmlDataTest {
         htmlData = new HtmlData(null, null); // TODO: pass instances instead of null
     }
 
-    @Test
-    public void testIdentical() throws Exception {
-        String myControlXML = "<struct><int>3</int><boolean>false</boolean></struct>";
-        String myTestXML = "<struct><boolean>false</boolean><int>3</int></struct>";
-        Diff myDiff = new Diff(myControlXML, myTestXML);
-        assertTrue("pieces of XML are similar " + myDiff, myDiff.similar());
-        assertTrue("but are they identical? " + myDiff, myDiff.identical());
-    }
+//    @Test
+//    public void testIdentical() throws Exception {
+//        String myControlXML = "<struct><int>3</int><boolean>false</boolean></struct>";
+//        String myTestXML = "<struct><boolean>false</boolean><int>3</int></struct>";
+//        Diff myDiff = new Diff(myControlXML, myTestXML);
+//        assertTrue("pieces of XML are similar " + myDiff, myDiff.similar());
+//        assertTrue("but are they identical? " + myDiff, myDiff.identical());
+//    }
     
     @Test
     public void testTwoTagsAndNoOverLap() {
