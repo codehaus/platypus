@@ -26,9 +26,9 @@ public class HtmlItalicsOff implements OutputCommandable
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
         }
-        HtmlData html = (HtmlData) context;
-        html.push(getRoot());
-        html.outputTags();
+        HtmlData htmlData = (HtmlData) context;
+        htmlData.getHtmlDocContext().push(getRoot());
+        htmlData.getHtmlDocContext().outputTags();
 
         return 0;
     }

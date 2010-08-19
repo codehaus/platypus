@@ -40,7 +40,7 @@ public class HtmlFsize implements OutputCommandable
 
         htmlData.setFontSize( newFontSize, tok.getSource() );
 
-        htmlData.getOutfile().emitFontSizeTag();
+        htmlData.getHtmlDocContext().getOutfile().emitFontSizeTag();
         
         // if in an existing paragraph with a minor font size change, we don't change leading
         return 0;

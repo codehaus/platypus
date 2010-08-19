@@ -11,6 +11,7 @@ import org.pz.platypus.Token;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
+import org.pz.platypus.plugin.html.HtmlDocContext;
 import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
@@ -28,9 +29,10 @@ public class HtmlUnderlineOn implements OutputCommandable
             throw new IllegalArgumentException();
         }
 
-        HtmlData html = (HtmlData) context;
-        html.push(getRoot());
-        HtmlOutfile outfile = html.getOutfile();
+        HtmlData htmlData = (HtmlData) context;
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
+        htmlDocContext.push(getRoot());
+        HtmlOutfile outfile = htmlDocContext.getOutfile();
         outfile.emitText( "<u>" );
 
         return 0;

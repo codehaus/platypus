@@ -37,7 +37,7 @@ public class HtmlHardCR implements OutputCommandable
         // NEWLINE needs to be emitted.
 
         if( isFirstTokenInLine( context, tok, tokNum ) ) {
-            htmlData.getOutfile().emitText("<br>");
+            htmlData.getHtmlDocContext().getOutfile().emitText("<br>");
         }
         return 0;
     }

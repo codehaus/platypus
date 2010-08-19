@@ -11,8 +11,6 @@ import org.pz.platypus.plugin.html.commands.HtmlItalicsOn;
 
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  * <p/>
@@ -41,58 +39,66 @@ public class HtmlDataTest {
     
     @Test
     public void testTwoTagsAndNoOverLap() {
-        htmlData.push("[+b]");
-        Assert.assertEquals(htmlData.nestedTags(), "");
-        htmlData.push("[+i]");
-        Assert.assertEquals(htmlData.nestedTags(), "");
-        htmlData.push("[-i]");
-        Assert.assertEquals(htmlData.nestedTags(), "[-i]");
-        htmlData.push("[-b]");
-        Assert.assertEquals(htmlData.nestedTags(), "[-b]");
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
+        
+        htmlDocContext.push("[+b]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "");
+        htmlDocContext.push("[+i]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "");
+        htmlDocContext.push("[-i]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "[-i]");
+        htmlDocContext.push("[-b]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "[-b]");
     }
 
     @Test
     public void testTwoTagsAndSingleTagOverLap() {
-        htmlData.push("[+b]");
-        Assert.assertEquals(htmlData.nestedTags(), "");
-        htmlData.push("[+i]");
-        Assert.assertEquals(htmlData.nestedTags(), "");
-        htmlData.push("[-b]");
-        Assert.assertEquals(htmlData.nestedTags(), "[-i][-b][+i]");
-        htmlData.push("[-i]");
-        Assert.assertEquals(htmlData.nestedTags(), "[-i]");        
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
+
+        htmlDocContext.push("[+b]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "");
+        htmlDocContext.push("[+i]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "");
+        htmlDocContext.push("[-b]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "[-i][-b][+i]");
+        htmlDocContext.push("[-i]");
+        Assert.assertEquals(htmlDocContext.nestedTags(), "[-i]");        
     }
 
     @Test
     public void testThreeTagsAndSingleTagOverLap() {
-        htmlData.push("[+b]");
-        Assert.assertEquals("", htmlData.nestedTags());
-        htmlData.push("[+i]");
-        Assert.assertEquals("", htmlData.nestedTags());
-        htmlData.push("[+u]");        
-        Assert.assertEquals("", htmlData.nestedTags());
-        htmlData.push("[-b]");
-        Assert.assertEquals("[-u][-i][-b][+i][+u]", htmlData.nestedTags());
-        htmlData.push("[-u]");
-        Assert.assertEquals("[-u]", htmlData.nestedTags());
-        htmlData.push("[-i]");
-        Assert.assertEquals("[-i]", htmlData.nestedTags());                          
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
+        
+        htmlDocContext.push("[+b]");
+        Assert.assertEquals("", htmlDocContext.nestedTags());
+        htmlDocContext.push("[+i]");
+        Assert.assertEquals("", htmlDocContext.nestedTags());
+        htmlDocContext.push("[+u]");
+        Assert.assertEquals("", htmlDocContext.nestedTags());
+        htmlDocContext.push("[-b]");
+        Assert.assertEquals("[-u][-i][-b][+i][+u]", htmlDocContext.nestedTags());
+        htmlDocContext.push("[-u]");
+        Assert.assertEquals("[-u]", htmlDocContext.nestedTags());
+        htmlDocContext.push("[-i]");
+        Assert.assertEquals("[-i]", htmlDocContext.nestedTags());
     }
 
     @Test
     public void testThreeTagsAndTwoTagsOverLap() {
-        htmlData.push("[+b]");
-        Assert.assertEquals("", htmlData.nestedTags());
-        htmlData.push("[+i]");
-        Assert.assertEquals("", htmlData.nestedTags());
-        htmlData.push("[+u]");
-        Assert.assertEquals("", htmlData.nestedTags());
-        htmlData.push("[-b]");
-        Assert.assertEquals("[-u][-i][-b][+i][+u]", htmlData.nestedTags());
-        htmlData.push("[-i]");
-        Assert.assertEquals("[-u][-i][+u]", htmlData.nestedTags());
-        htmlData.push("[-u]");
-        Assert.assertEquals("[-u]", htmlData.nestedTags());
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
+
+        htmlDocContext.push("[+b]");
+        Assert.assertEquals("", htmlDocContext.nestedTags());
+        htmlDocContext.push("[+i]");
+        Assert.assertEquals("", htmlDocContext.nestedTags());
+        htmlDocContext.push("[+u]");
+        Assert.assertEquals("", htmlDocContext.nestedTags());
+        htmlDocContext.push("[-b]");
+        Assert.assertEquals("[-u][-i][-b][+i][+u]", htmlDocContext.nestedTags());
+        htmlDocContext.push("[-i]");
+        Assert.assertEquals("[-u][-i][+u]", htmlDocContext.nestedTags());
+        htmlDocContext.push("[-u]");
+        Assert.assertEquals("[-u]", htmlDocContext.nestedTags());
     }
 
     /** There is no way we can pass a commandTable for creating an HtmlData.
@@ -101,16 +107,18 @@ public class HtmlDataTest {
     @Test
     @Ignore
     public void testNestedTagsCommands() {
-        htmlData.push("[+b]");
-        // Assert.assertEquals(htmlData.nestedTags(), "");
-        Assert.assertEquals(0, htmlData.getNestedTagCmds().size());
-
-        htmlData.push("[+i]");
-        // Assert.assertEquals(htmlData.nestedTags(), "");
-        Assert.assertEquals(0, htmlData.getNestedTagCmds().size());
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
         
-        htmlData.push("[-b]");
-        List<OutputCommandable> listOfTagCmds = htmlData.getNestedTagCmds();
+        htmlDocContext.push("[+b]");
+        // Assert.assertEquals(htmlData.nestedTags(), "");
+        Assert.assertEquals(0, htmlDocContext.getNestedTagCmds().size());
+
+        htmlDocContext.push("[+i]");
+        // Assert.assertEquals(htmlData.nestedTags(), "");
+        Assert.assertEquals(0, htmlDocContext.getNestedTagCmds().size());
+        
+        htmlDocContext.push("[-b]");
+        List<OutputCommandable> listOfTagCmds = htmlDocContext.getNestedTagCmds();
         // Assert.assertEquals(htmlData.nestedTags(), "[-i][-b][+i]");
         Assert.assertEquals(3, listOfTagCmds.size());        
         for(OutputCommandable cmd: listOfTagCmds) {
@@ -118,8 +126,8 @@ public class HtmlDataTest {
             Assert.assertTrue(cmd instanceof HtmlBoldOff);
             Assert.assertTrue(cmd instanceof HtmlItalicsOn);
         }
-        htmlData.push("[-i]");
-        listOfTagCmds = htmlData.getNestedTagCmds();
+        htmlDocContext.push("[-i]");
+        listOfTagCmds = htmlDocContext.getNestedTagCmds();
         Assert.assertEquals(1, listOfTagCmds.size()); 
         // Assert.assertEquals(htmlData.nestedTags(), "[-i]");
         for(OutputCommandable cmd: listOfTagCmds) {

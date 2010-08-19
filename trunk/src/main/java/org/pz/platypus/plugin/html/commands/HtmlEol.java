@@ -13,6 +13,7 @@ import org.pz.platypus.commandTypes.EolTreatment;
 import org.pz.platypus.interfaces.OutputCommandable;
 import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.html.HtmlData;
+import org.pz.platypus.plugin.html.HtmlDocContext;
 import org.pz.platypus.plugin.html.HtmlOutfile;
 
 /**
@@ -31,14 +32,15 @@ public class HtmlEol implements OutputCommandable
         }
 
         HtmlData htmlData = (HtmlData) context;
-        HtmlOutfile outfile = htmlData.getOutfile();
+        HtmlDocContext htmlDocContext = htmlData.getHtmlDocContext();
+        HtmlOutfile outfile = htmlDocContext.getOutfile();
         TokenList tl = htmlData.getGdd().getInputTokens();
         Token nextTok = tl.getNextToken( tokNum );
 
         // if we're at the last input token...
         if( nextTok == null ) {
-            htmlData.getOutfile().handleEof();
-            htmlData.getOutfile().endCurrentParagraphIfAny();
+            htmlDocContext.getOutfile().handleEof();
+            htmlDocContext.getOutfile().endCurrentParagraphIfAny();
             return 0;
         }
 
