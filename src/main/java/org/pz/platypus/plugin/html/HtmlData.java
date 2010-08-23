@@ -29,12 +29,6 @@ public class HtmlData extends DocData implements OutputContextable
     HtmlDocContext htmlDocContext = new HtmlDocContext();
     private String fface = "";
 
-    public void configureBody(Body body) {
-        int lmargin = (int) getMarginLeft();
-        body.addAttribute( "leftmargin", String.valueOf(lmargin) + "px" );
-    }
-
-
     public HtmlDocContext getHtmlDocContext() {
         return htmlDocContext;
     }
