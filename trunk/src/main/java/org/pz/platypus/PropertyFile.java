@@ -32,7 +32,7 @@ public class PropertyFile
     private final HashMap<String, String> contents;
 
     /** input reader for file */
-    private BufferedReader inReader;
+ //   private BufferedReader inReader;
 
     protected final GDD gdd;
 
@@ -64,9 +64,11 @@ public class PropertyFile
     {
         String line;
 
-        if ( open() != Status.OK ) {
+        BufferedReader inReader = open( filename );
+
+        if ( inReader == null ) {
             if( gdd == null || gdd.getLits() == null ) {
-                // only occur if Literals file is being set up, so we have to
+                // only occurs if Literals file is being set up, so we have to
                 // hard-code literals to output the error message.
                 System.err.println( "Could not find/open: " + filename );
             }
@@ -76,10 +78,28 @@ public class PropertyFile
             return( Status.IO_ERR );
         }
 
+        while (( line = retrieveNextLine( inReader )) != null ) {
+            loadLine( line );
+        }
+
+        if( gdd != null && gdd.getLogger() != null ) {
+            gdd.log( "Property file loaded with " + contents.size() + " entries: " + filename );
+        }
+        return( Status.OK );
+    }
+
+    /**
+     * Reads the next line, strips out comments, and trims any whitespace at end of line.
+     *
+     * @param reader the input reader for the file
+     * @return the line, "" if the line is a comment or empty, null at EOF or if an error occurred.
+     */
+    public String retrieveNextLine( BufferedReader reader )
+    {
+        String line;
+
         try {
-            while (( line = inReader.readLine()) != null ) {
-                loadLine( line.trim() );
-            }
+            line = reader.readLine();
         }
         catch ( IOException ie ) {
             if( gdd != null && gdd.getLogger() != null ) {
@@ -88,13 +108,21 @@ public class PropertyFile
             else {
                 System.err.println( "Error processing property file: " + filename );
             }
-            return( Status.IO_ERR );
+            return( null );
         }
 
-        if( gdd != null && gdd.getLogger() != null ) {
-            gdd.log( "Property file loaded with " + contents.size() + " entries: " + filename );
+        // at EOF
+        if( line == null ) {
+            return( null );
         }
-        return( Status.OK );
+
+        // Remove comment lines, which begin with a #
+        if( line.startsWith( "#" )) {
+            return( "" );
+        }
+
+        return( line.trim() );
+
     }
 
     /**
@@ -126,18 +154,22 @@ public class PropertyFile
 
     /**
      * open the property file
-     * @return Status.OK, if all went well; Status.FILE_NOT_FOUND_ERR if file not found.
+     *
+     * @param fileName name of the file to open
+     * @return the buffered reader, if all went well; otherwise, null.
      */
-    int open()
+    public BufferedReader open( final String fileName)
     {
+        BufferedReader reader;
+
         try {
-              inReader = new BufferedReader( new FileReader( filename ));
+              reader = new BufferedReader( new FileReader( fileName ));
         }
         catch ( FileNotFoundException e ) {
-            return( Status.FILE_NOT_FOUND_ERR );
+            return( null );
         }
 
-        return( Status.OK );
+        return( reader );
     }
 
     /**
