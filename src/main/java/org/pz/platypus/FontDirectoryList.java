@@ -7,10 +7,9 @@
 
 package org.pz.platypus;
 
+import java.io.BufferedReader;
 import java.util.*;
 import java.io.File;
-
-import org.pz.platypus.GDD;
 
 /**
  * List of directories containing font files.
@@ -61,9 +60,9 @@ public class FontDirectoryList
         addFontDir( dirs, "/System/Library/Fonts" );
 
         // add the fonts in PLATYPUS_HOME (if it's been defined)
-        String s = gdd.getHomeDirectory();
-        if( s != null ) {
-            addFontDir( fontDirs, s + "fonts" );
+        String homeDir = gdd.getHomeDirectory();
+        if( homeDir != null ) {
+            addFontDir( fontDirs, homeDir + "fonts" );
         }
 
         // add the fonts in the JVM font directory
@@ -71,6 +70,29 @@ public class FontDirectoryList
         if( jvmDir != null ) {
             addFontDir( fontDirs, jvmDir + "/lib/fonts" );
         }
+
+        // add any directories specified in fontdirs.txt file (found in PLATYPUS_HOME/config)
+        if( homeDir != null ) {
+            addDirsInFontDirsTxtFile( homeDir, dirs );
+        }
+
+    }
+
+    void addDirsInFontDirsTxtFile( final String homeDir, LinkedList<String> dirs )
+    {
+        String filename = homeDir + "/config/fontdirs.txt";
+        PropertyFile propFile = new PropertyFile( filename , gdd  );
+
+        BufferedReader inReader = propFile.open( filename );
+        if( inReader == null ) {
+            return;
+        }
+
+        String line;
+        while(( line = propFile.retrieveNextLine( inReader )) != null  ) {
+            addFontDir( dirs, line );    
+        }
+                
     }
 
     /**
