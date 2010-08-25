@@ -347,6 +347,20 @@ public class Start implements Pluggable
                 throw new IOException();
             }
         }
-        outfile.emitText( text );
+        String text1 = escapeSpecialChars( text );
+        outfile.emitText( text1 );
     }
+
+    private String escapeSpecialChars(String s) {
+        s = s.replaceAll("<", "&lt;");
+        s = s.replaceAll(">", "&gt;");
+//        s = s.replaceAll("[euro]", "&euro;");
+//        s = s.replaceAll("[yen]", "&yen;");
+//        s = s.replaceAll("[cents]", "&cent;");
+//        s = s.replaceAll("[currency]", "&curren;");
+        
+        return s;
+    }
+
+
 }
