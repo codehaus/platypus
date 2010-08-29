@@ -57,39 +57,9 @@ public class PropertyFile
      *
      * @return Status.OK, if all went well; else Status.IO_ERR
      */
-//    public void load() throws IOException
     public int load()           
     {
         String line;
-//
-//        TextFileReader reader = new TextFileReader( filename );
-//        try {
-//            reader.open();
-//            reader.setTrimWhiteSpace( true );
-//        }
-//        catch( IOException ioe ) {
-//            if( gdd == null || gdd.getLits() == null ) {
-//                // only occurs if Literals file is being set up, so we have to
-//                // hard-code literals to output the error message.
-//                System.err.println( "Could not find/open: " + filename );
-//            }
-//            else {
-//                gdd.logSevere( gdd.getLit( "ERROR.MISSING_CONFIG_FILE" ) + " " + filename );
-//            }
-//            throw new IOException();
-//        }
-//
-//        try {
-//            while(( line = reader.retrieveNextLine() ) != null ) {
-//                loadLine( line );
-//            }
-//        }
-//        catch( IOException ioe ) {
-//            if( gdd != null && gdd.getLogger() != null ) {
-//                gdd.logSevere( gdd.getLit( "ERROR.PROCESSING_FILE" ) + " " + filename );
-//            }
-//            throw new IOException();
-//        }
 
         BufferedReader inReader = open( filename );
 
