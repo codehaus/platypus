@@ -10,7 +10,6 @@ package org.pz.platypus;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +35,6 @@ public class PropertyFileTest
     public void loadInvalidLine()   // loading empty/null lines shoud add no records to the property file
     {
         pf = new PropertyFile();
-        HashMap<String,String>contents = (HashMap<String,String>) pf.getContents();
         assertEquals( 0, pf.getSize() );
 
         pf.loadLine( null );
@@ -50,7 +48,6 @@ public class PropertyFileTest
     public void loadCommentLine()   // loading a comment should add no records to the property file
     {
         pf = new PropertyFile();
-        HashMap<String,String>contents = (HashMap<String,String>) pf.getContents();
         assertEquals( 0, pf.getSize() );
 
         pf.loadLine( "#this is a comment" );
@@ -229,6 +226,39 @@ public class PropertyFileTest
             if( f.exists() ) {
                 f.delete();
             }
+        }
+    }
+
+    @Test
+    public void validLoadofTwoLines()
+    {
+        String inputFilename = "test-file_OK_to_delete4";
+        String lineContent = "a=b\nc=d\n";
+
+        pf = new PropertyFile( inputFilename, gdd );
+
+        File f = new File ( inputFilename );
+        try {
+            f.createNewFile();
+        }
+        catch( Exception e ) {
+            //do nothing.
+        }
+
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter( inputFilename ));
+            out.write( lineContent );
+            out.close();
+        }
+        catch( Exception e ) {
+            fail( "error writing content to input Property File in PropertyFileTest.java" );
+        }
+
+        assertEquals( Status.OK, pf.load() );
+        assertEquals( 2, pf.getSize() );
+
+        if( f.exists() ) {
+            f.delete();
         }
     }
 }
