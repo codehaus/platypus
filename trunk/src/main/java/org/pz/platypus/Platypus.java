@@ -251,6 +251,7 @@ public class Platypus
         final String filename = getConfigFilename( Clargs, Gdd );
 
         final PropertyFile configFile = new PropertyFile( filename, Gdd );
+        
         if ( configFile.load() != Status.OK ) { //curr: throw unchecked exception at point of error, don't propagate upwards. Catch() already in main().
             throw new MissingResourceException( null, null, null );  //curr: make it a specialized unchecked exception. i.e., ConfigFileLoadException...
         }
