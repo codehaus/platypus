@@ -57,12 +57,6 @@ public class PdfFontFactoryTest
     }
 
     @Test
-    public void createItextFontNameTest()
-    {
-        assertEquals( BaseFont.TIMES_ROMAN, ff.createItextFontName( new PdfFont( pdd ) ));
-    }
-
-    @Test
     public void computeItextStyle()
     {
         assertEquals( 0, ff.computeItextStyle( new PdfFont( pdd )));
@@ -109,6 +103,13 @@ public class PdfFontFactoryTest
         // if null is given as the font name, return a Times family font (namely, Times Roman)
         Font iTextFont = ff.createItextFont( null );
         assertEquals( "Times", iTextFont.getFamilyname());        
+    }
+    
+
+    @Test
+    public void createItextFontNameTest()
+    {
+        assertEquals( BaseFont.TIMES_ROMAN, ff.createItextFontName( new PdfFont( pdd ) ));
     }
 
     @Test
