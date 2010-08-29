@@ -31,9 +31,6 @@ public class PropertyFile
     /** the Map of key value pairs taken from the property file */
     private final HashMap<String, String> contents;
 
-    /** input reader for file */
- //   private BufferedReader inReader;
-
     protected final GDD gdd;
 
     public PropertyFile( final String propertyFilename, final GDD Gdd )
@@ -60,9 +57,39 @@ public class PropertyFile
      *
      * @return Status.OK, if all went well; else Status.IO_ERR
      */
-    public int load()
+//    public void load() throws IOException
+    public int load()           
     {
         String line;
+//
+//        TextFileReader reader = new TextFileReader( filename );
+//        try {
+//            reader.open();
+//            reader.setTrimWhiteSpace( true );
+//        }
+//        catch( IOException ioe ) {
+//            if( gdd == null || gdd.getLits() == null ) {
+//                // only occurs if Literals file is being set up, so we have to
+//                // hard-code literals to output the error message.
+//                System.err.println( "Could not find/open: " + filename );
+//            }
+//            else {
+//                gdd.logSevere( gdd.getLit( "ERROR.MISSING_CONFIG_FILE" ) + " " + filename );
+//            }
+//            throw new IOException();
+//        }
+//
+//        try {
+//            while(( line = reader.retrieveNextLine() ) != null ) {
+//                loadLine( line );
+//            }
+//        }
+//        catch( IOException ioe ) {
+//            if( gdd != null && gdd.getLogger() != null ) {
+//                gdd.logSevere( gdd.getLit( "ERROR.PROCESSING_FILE" ) + " " + filename );
+//            }
+//            throw new IOException();
+//        }
 
         BufferedReader inReader = open( filename );
 
@@ -122,7 +149,6 @@ public class PropertyFile
         }
 
         return( line.trim() );
-
     }
 
     /**
@@ -158,7 +184,7 @@ public class PropertyFile
      * @param fileName name of the file to open
      * @return the buffered reader, if all went well; otherwise, null.
      */
-    public BufferedReader open( final String fileName)
+    public BufferedReader open( final String fileName )
     {
         BufferedReader reader;
 
@@ -188,7 +214,6 @@ public class PropertyFile
     }
 
     //=== getters and setters ===
-
 
     public Map<String,String> getContents()
     {
