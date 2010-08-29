@@ -44,7 +44,6 @@ public class PdfFontFactoryTest
         ff = new PdfFontFactory( gdd, pdd );
     }
 
-
     @Test
     public void isNotBase14FontName()
     {
@@ -70,6 +69,31 @@ public class PdfFontFactoryTest
     }
 
     @Test
+    public void computeItextStyleBold()
+    {
+        PdfFont pdff = new PdfFont( pdd );
+        pdff.setBold( true, new Source() );
+        assertEquals( Font.BOLD, ff.computeItextStyle( pdff ));
+    }
+
+    @Test
+    public void computeBase14ItextFontNameTestSymbol()
+    {
+        PdfFont pdff = new PdfFont( pdd );
+        pdff.setFace( "SYMBOL", new Source() );
+        assertEquals( BaseFont.SYMBOL, ff.computeBase14ItextFontName( pdff ));
+    }
+
+    @Test
+    public void computeBase14ItextFontNameTestCourierOblique()
+    {
+        PdfFont pdff = new PdfFont( pdd );
+        pdff.setFace( "COURIER", new Source() );
+        pdff.setItalics( true, new Source() );
+        assertEquals( BaseFont.COURIER_OBLIQUE, ff.computeBase14ItextFontName( pdff ));
+    }
+
+    @Test
     public void createItextFontFromDefault()
     {
         Font iTextFont = ff.createItextFont( new PdfFont( pdd ));
@@ -79,5 +103,24 @@ public class PdfFontFactoryTest
         assertEquals( "Times", iTextFont.getFamilyname() );
     }
 
+    @Test
+    public void createItextFontFromNull()
+    {
+        // if null is given as the font name, return a Times family font (namely, Times Roman)
+        Font iTextFont = ff.createItextFont( null );
+        assertEquals( "Times", iTextFont.getFamilyname());        
+    }
 
+    @Test
+    public void isRegisteredWithItextYesTest()
+    {
+        // 'symbol' is one of the base14 fonts for PDFs, and so is always registered in iText.
+        assertTrue( ff.isRegisteredWithItext( "symbol" ));
+    }
+
+    @Test
+    public void isRegisteredWithItextNoTest()
+    {
+        assertFalse( ff.isRegisteredWithItext( "no-such-font" ));
+    }
 }
