@@ -223,7 +223,8 @@ public class PdfFontFactory
         }
 
         // It's not a base14 font, so is the font already registered in iText?
-        if( FontFactory.isRegistered( typefaceName )) {
+        if ( isRegisteredWithItext( typefaceName )) {
+//        if( FontFactory.isRegistered( typefaceName )) {
             return( typefaceName );
         }
 
@@ -235,13 +236,38 @@ public class PdfFontFactory
             return( BaseFont.TIMES_ROMAN );
         }
 
-        if( FontFactory.isRegistered( typefaceName )) {
+        if ( isRegisteredWithItext( typefaceName )) {
+//        if( FontFactory.isRegistered( typefaceName )) {
             return( typefaceName );
         }
 
         // in theory, cannot get here.
+//        Set regFonts = FontFactory.getRegisteredFonts();   // debug statements, in case we do get here.
+//        Set regFamilies = FontFactory.getRegisteredFamilies();
         errFontNotFound( typefaceName );
         return( BaseFont.TIMES_ROMAN );
+    }
+
+    /**
+     * This test whether a font is registered by name or by family name in iText. Either way is
+     * good enough for our purposes.
+     *
+     * @param fontName the font we're checking
+     * @return true if iText has the font registered by name or by family name, false otherwise.
+     */
+    boolean isRegisteredWithItext( final String fontName )
+    {
+        assert( fontName != null );
+        if( FontFactory.isRegistered( fontName )) {
+            return( true );
+        }
+
+        Set<String> regFamilies = (Set<String>) FontFactory.getRegisteredFamilies();
+        if( regFamilies.contains( fontName.toLowerCase())) {
+            return( true );
+        }
+
+        return( false );
     }
 
     /**
@@ -254,8 +280,7 @@ public class PdfFontFactory
     {
         String[] fontFiles = lookupFontFilenames( typefaceName );
         if( fontFiles.length == 0 ) {
-            gdd.logWarning( gdd.getLit( "COULD_NOT_FIND" ) + " " + typefaceName + " " +
-                    gdd.getLit( "IN_FONT_LIST" ) + ". " +  gdd.getLit( "USING_TIMES_ROMAN" ) + "." );
+            errFontNotFound( typefaceName );
             return( false );
         }
         else {
@@ -299,15 +324,6 @@ public class PdfFontFactory
      */
     Font getIdentityHFont( final String fontName, float size, int style )
     {
-        // for the time being, if the font is an .otf font, don't open it with IDENTITY-H. Symbola is an
-        // exception that seems to work.
-        // need to explore the problem further in iText. It's recorded as PLATYPUS-32 in JIRA at Codehaus.
-        // returning null forces the calling routine to open the font with CP1252 encoding, which is
-        // fine for .otf fonts
-//        if( isFileOtf( fontName ) && ( ! fontName.toLowerCase().equals( "symbola" ))) {
-//            return( null );
-//        }
-
         Font font;
         try {
             font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style );
@@ -365,12 +381,10 @@ public class PdfFontFactory
      * called from RegisterOneFont()
      *
      * @param fontFile the complete filename including the path
-     * @param typeface  the name by which the typeface is registered.
      */
-    private void registerFont( String fontFile, String typeface )
+    private void registerFont( String fontFile )
     {
         if( ! fontFile.toLowerCase().endsWith( ".ttc" )) {
-            //FontFactory.register( fontFile, typeface ); THIS was the problem in PLATYPUS-42
             FontFactory.register( fontFile );
             return;
         }
@@ -420,7 +434,7 @@ public class PdfFontFactory
 
         File ff = new File( fontFile );
         if( ff.exists() ) {
-            registerFont( fontFile, typeface );
+            registerFont( fontFile );
             gdd.log( "Registered fonts for " + typeface + " in iText" );
         }
         else {
