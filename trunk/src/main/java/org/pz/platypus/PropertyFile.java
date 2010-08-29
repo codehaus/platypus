@@ -170,7 +170,7 @@ public class PropertyFile
 
         int equalsSign = line.indexOf( "=" );
         if ( equalsSign < 0 ) {
-            return; //curr: issue err msg here
+            return; //TODO: issue err msg here
         }
 
         key = line.substring( 0, equalsSign );
