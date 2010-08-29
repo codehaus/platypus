@@ -224,7 +224,6 @@ public class PdfFontFactory
 
         // It's not a base14 font, so is the font already registered in iText?
         if ( isRegisteredWithItext( typefaceName )) {
-//        if( FontFactory.isRegistered( typefaceName )) {
             return( typefaceName );
         }
 
@@ -237,7 +236,6 @@ public class PdfFontFactory
         }
 
         if ( isRegisteredWithItext( typefaceName )) {
-//        if( FontFactory.isRegistered( typefaceName )) {
             return( typefaceName );
         }
 
