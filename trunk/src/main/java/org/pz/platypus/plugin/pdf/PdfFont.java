@@ -72,6 +72,7 @@ public class PdfFont implements Cloneable
         italics = existingFont.getItalics();
         source = existingFont.getSource();
 
+        fontFactory = new PdfFontFactory( gdd, pdd );
         iTfont = fontFactory.createItextFont( this );
     }
 
