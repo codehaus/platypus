@@ -9,20 +9,19 @@ package org.pz.platypus;
 
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.BufferedReader;
+import java.io.*;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
 /**
+ * Tests of PropertyFile.java, which handles reading in property files.
+ * Note: these tests create a file and then delete it.
  *
  * @author alb
  */
 public class PropertyFileTest
 {
-
-//    private Literals lits;
     private GDD gdd;
     private PropertyFile pf;
 
@@ -30,7 +29,6 @@ public class PropertyFileTest
     public void testConstructor()
     {
         pf = new PropertyFile();
-        HashMap<String,String>contents = (HashMap<String,String>) pf.getContents();
         assertEquals( 0, pf.getSize() );
     }
 
@@ -63,7 +61,6 @@ public class PropertyFileTest
     public void loadValidLine()   // loading a valide record should add a record to the property file
     {
         pf = new PropertyFile();
-        HashMap<String,String>contents = (HashMap<String,String>) pf.getContents();
         assertEquals( 0, pf.getSize() );
 
         pf.loadLine( "platypus=typesetting" );
@@ -75,7 +72,6 @@ public class PropertyFileTest
     public void testForInvalidLineLoaded()   //
     {
         pf = new PropertyFile();
-        HashMap<String,String>contents = (HashMap<String,String>) pf.getContents();
         assertEquals( 0, pf.getSize() );
 
         pf.loadLine( "platypus=typesetting" );
@@ -87,16 +83,152 @@ public class PropertyFileTest
     public void testOpenReaderInvalidFile()
     {
         pf = new PropertyFile();
-        HashMap<String,String>contents = (HashMap<String,String>) pf.getContents();
         BufferedReader bf = pf.open( "no such file ");
         assertEquals( null, bf );
     }
 
-//    @Test(expected=IOException.class)
-//    public void testOpenOfInvalidFile() throws IOException
-//    {
-//        pf = new PropertyFile( "this file does not exist", gdd );
-//        pf.load();
-//    }
+    @Test
+    public void testOpenReaderValidFile()
+    {
+        pf = new PropertyFile();
 
+        String inputFilename = "test-file_OK_to_delete";
+
+        File f = new File ( inputFilename );
+        try {
+            f.createNewFile();
+        }
+        catch( Exception e ) {
+            //do nothing.
+        }
+        BufferedReader bf = pf.open( inputFilename );
+        assertNotNull( bf );
+
+        try {
+            bf.close();
+        }
+        catch( Exception e) {}
+        finally{
+            if( f.exists() ) {
+                f.delete();
+            }
+        }
+    }
+
+    @Test
+    public void retrieveNextLineEmptyFile()
+    {
+        pf = new PropertyFile();
+
+        String inputFilename = "test-file_OK_to_delete1";
+
+        File f = new File ( inputFilename );
+        try {
+            f.createNewFile();
+        }
+        catch( Exception e ) {
+            //do nothing.
+        }
+        BufferedReader bf = pf.open( inputFilename );
+        assertNotNull( bf );
+
+        String s = pf.retrieveNextLine( bf );
+        assertNull( s );
+               
+        try {
+            bf.close();
+        }
+        catch( Exception e) {}
+        finally{
+            if( f.exists() ) {
+                f.delete();
+            }
+        }
+    }
+
+    @Test
+    public void retrieveNextLineValid()
+    {
+        pf = new PropertyFile();
+
+        String inputFilename = "test-file_OK_to_delete2";
+        String lineContent = "a=b";
+
+        File f = new File ( inputFilename );
+        try {
+            f.createNewFile();
+        }
+        catch( Exception e ) {
+            //do nothing.
+        }
+
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter( inputFilename ));
+            out.write( lineContent );
+            out.close();
+        }
+        catch( Exception e ) {
+            fail( "error writing content to input Property File in PropertyFileTest.java" );
+        }
+
+        BufferedReader bf = pf.open( inputFilename );
+        assertNotNull( bf );
+
+        String s = pf.retrieveNextLine( bf );
+        assertEquals( lineContent, s );
+
+        try {
+            bf.close();
+        }
+        catch( Exception e) {}
+        finally{
+            if( f.exists() ) {
+                f.delete();
+            }
+        }
+    }
+
+    @Test
+    public void retrieveNextUntilEOF()
+    {
+        pf = new PropertyFile();
+
+        String inputFilename = "test-file_OK_to_delete3";
+        String lineContent = "a=b";
+
+        File f = new File ( inputFilename );
+        try {
+            f.createNewFile();
+        }
+        catch( Exception e ) {
+            //do nothing.
+        }
+
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter( inputFilename ));
+            out.write( lineContent );
+            out.close();
+        }
+        catch( Exception e ) {
+            fail( "error writing content to input Property File in PropertyFileTest.java" );
+        }
+
+        BufferedReader bf = pf.open( inputFilename );
+        assertNotNull( bf );
+
+        // retrieve the one line we wrote (above), now retrieve another line. Should trigger EOF response
+        pf.retrieveNextLine( bf );
+        String s = pf.retrieveNextLine( bf );
+        assertNull( s );
+
+        try {
+            bf.close();
+        }
+        catch( Exception e) {}
+        finally{
+            if( f.exists() ) {
+                f.delete();
+            }
+        }
+    }
 }
