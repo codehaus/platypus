@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -78,6 +78,12 @@ public class FontDirectoryList
 
     }
 
+    /**
+     * Adds directories specified in fontdirs.txt file to the list of directories to register
+     *
+     * @param homeDir the PLATYPUS_HOME directory
+     * @param dirs list of directories containing fonts to register with iText
+     */
     void addDirsInFontDirsTxtFile( final String homeDir, LinkedList<String> dirs )
     {
         String filename = homeDir + "/config/fontdirs.txt";
