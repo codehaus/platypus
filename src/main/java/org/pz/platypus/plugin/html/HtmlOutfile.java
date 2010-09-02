@@ -221,8 +221,8 @@ public class HtmlOutfile
     }
 
     /**
-     * Useful utility method to handle double quotes within
-     * String literals -
+     * Useful when we wish to output a double quoted string
+     * Eases out the all the "escape a double quote" business.
      * @param s
      * @return
      */
@@ -263,6 +263,11 @@ public class HtmlOutfile
         htmlBody.addAttribute("TOPMARGIN", marginTop);
     }
 
+    /**
+     * When we get a command to start off a new font tag,
+     * we need to close the previous font tag, ***if any***.
+     * The inFont variable tells it.  
+     */
     public void handleNewFontFace() {
         startNewFontFace();
         inFont = true;
