@@ -191,23 +191,7 @@ public class HtmlOutfile
      */
     public void emitText( String s )
     {
-        String tabSpace = getCurrentTabbedOutSpaces();
-        if (!tabSpace.isEmpty()) {
-            htmlBody.addElement(tabSpace);
-        }
         htmlBody.addElement(s);
-    }
-
-    /** Am not so sure we need this one - as the pretty print method is already used...
-     *
-     * @return
-     */
-    private String getCurrentTabbedOutSpaces() {
-        String spaces = "";
-        for (int i = 0; i < tab; ++i) {
-            spaces += " "; 
-        }
-        return spaces;
     }
 
     public boolean isOpen()
