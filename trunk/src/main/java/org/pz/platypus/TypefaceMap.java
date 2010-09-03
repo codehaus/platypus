@@ -200,7 +200,7 @@ public class TypefaceMap
 
 
     /**
-     * Return a linked list of font files found in the past list of font directories.
+     * Return a linked list of font files found in the passed-in list of font directories.
      * Font files must use a supported format: .ttf, .otf, .afm, or .ttc
      *
      * @param fontDirs array of directory names that should contain fonts
@@ -222,7 +222,7 @@ public class TypefaceMap
                         fName.toLowerCase().endsWith(".otf") ||
                         fName.toLowerCase().endsWith(".afm") ||
                         fName.toLowerCase().endsWith(".pfm")) {
-                        fontFiles.add( dirName + "/" + fName );
+                            fontFiles.add( dirName + "/" + fName );
                     } // end if filename has correct extension
                 } // end for every file name
             } // end if there are fileNames

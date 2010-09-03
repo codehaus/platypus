@@ -62,7 +62,7 @@ public class PropertyFile
         String line;
 
         BufferedReader inReader = open( filename );
-
+ 
         if ( inReader == null ) {
             if( gdd == null || gdd.getLits() == null ) {
                 // only occurs if Literals file is being set up, so we have to
