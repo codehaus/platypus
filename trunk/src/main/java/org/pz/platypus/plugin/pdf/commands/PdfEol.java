@@ -18,11 +18,11 @@ import com.lowagie.text.*;
  *
  * @author alb
  */
-public class PdfEol implements OutputCommandable
+public class PdfEol implements IOutputCommand
 {
     private String root = "[cr]";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null ) {
             throw new IllegalArgumentException();

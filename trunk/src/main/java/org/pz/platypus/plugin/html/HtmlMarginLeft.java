@@ -10,8 +10,8 @@ package org.pz.platypus.plugin.html;
 import org.pz.platypus.ParamType;
 import org.pz.platypus.Token;
 import org.pz.platypus.utilities.Conversions;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * handles processing of the definition of a user string (macro).
@@ -20,7 +20,7 @@ import org.pz.platypus.interfaces.OutputContextable;
  *
  * @author ask
  */
-public class HtmlMarginLeft implements OutputCommandable
+public class HtmlMarginLeft implements IOutputCommand
 {
     private String root = "[lmargin:";
 
@@ -28,7 +28,7 @@ public class HtmlMarginLeft implements OutputCommandable
 
     private boolean validInCode = false;
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

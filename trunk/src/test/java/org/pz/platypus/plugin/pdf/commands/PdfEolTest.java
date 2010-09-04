@@ -9,7 +9,7 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.junit.*;
 import org.pz.platypus.GDD;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.*;
 import org.pz.platypus.plugin.pdf.commands.PdfEol;
 import org.pz.platypus.test.mocks.*;
@@ -24,7 +24,7 @@ import java.util.logging.Level;
 public class PdfEolTest
 {
     GDD gdd;
-    OutputContextable pdfData;
+    IOutputContext pdfData;
     PdfData pData;
     PdfEol pEol;
     PdfOutfile outfile;

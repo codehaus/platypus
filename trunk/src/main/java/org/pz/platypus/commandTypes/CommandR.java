@@ -8,7 +8,7 @@
 package org.pz.platypus.commandTypes;
 
 import org.pz.platypus.*;
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 import org.pz.platypus.utilities.*;
 
 /**
@@ -88,7 +88,7 @@ public class CommandR extends Command
         ParseContext newContext = new ParseContext( gdd, context.source,
                                                     newInputLine, context.startPoint);
 
-        Commandable com = cTable.getCommand( replacementRoot );
+        ICommand com = cTable.getCommand( replacementRoot );
         if( com == null ) {
             // if the real command cannot be found, an error occurred. So, output the
             // invalid original alias root as text and advance by its length. This means

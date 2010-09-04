@@ -8,8 +8,8 @@
 package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.Footer;
 
@@ -18,11 +18,11 @@ import org.pz.platypus.plugin.pdf.Footer;
  *
  * @author alb
  */
-public class PdfFooterOff implements OutputCommandable
+public class PdfFooterOff implements IOutputCommand
 {
     private String root = "[-footer]";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

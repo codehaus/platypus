@@ -9,19 +9,19 @@ package org.pz.platypus.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * Abstract portion of command that marks the end of cover text for a URL
  *
  * @author alb
  */
-public abstract class UrlWithCoverTextEnd implements OutputCommandable
+public abstract class UrlWithCoverTextEnd implements IOutputCommand
 {
     private final String root = "[-url]";
 
-    public int process(OutputContextable context, Token tok, int tokNum)
+    public int process(IOutputContext context, Token tok, int tokNum)
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -46,7 +46,7 @@ public abstract class UrlWithCoverTextEnd implements OutputCommandable
      * @param tok contains the location data
      * @param context contains the location of the logger and literals file
      */
-    private void showErrorMsg(Token tok, OutputContextable context) {
+    private void showErrorMsg(Token tok, IOutputContext context) {
         GDD gdd = context.getGdd();
         gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                         gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +

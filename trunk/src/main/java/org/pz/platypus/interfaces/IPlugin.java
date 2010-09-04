@@ -15,7 +15,7 @@ import org.pz.platypus.CommandLineArgs;
  *
  * @author alb
  */
-public interface Pluggable
+public interface IPlugin
 {  
     public void process( GDD gdd, final CommandLineArgs clArgs );
 }

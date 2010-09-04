@@ -10,7 +10,7 @@ package org.pz.platypus.plugin.pdf;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.pz.platypus.interfaces.OutputCommandable;
+import org.pz.platypus.interfaces.IOutputCommand;
 import org.pz.platypus.GDD;
 
 public class PdfCommandTableTest
@@ -45,7 +45,7 @@ public class PdfCommandTableTest
     {
         final String newPara= "[]";
         pct.loadCommands();
-        OutputCommandable oc = pct.getCommand( newPara );
+        IOutputCommand oc = pct.getCommand( newPara );
         assertEquals( newPara, oc.getRoot() );
     }
 
@@ -54,7 +54,7 @@ public class PdfCommandTableTest
     {
         final String nec= "[non-existentCommand]";
         pct.loadCommands();
-        OutputCommandable oc = pct.getCommand( nec );
+        IOutputCommand oc = pct.getCommand( nec );
         assertEquals( null, oc );
     }
 
@@ -62,7 +62,7 @@ public class PdfCommandTableTest
     public void getNullCommand()
     {
         pct.loadCommands();
-        OutputCommandable oc = pct.getCommand( null );
+        IOutputCommand oc = pct.getCommand( null );
         assertEquals( null, oc );
     }
 }

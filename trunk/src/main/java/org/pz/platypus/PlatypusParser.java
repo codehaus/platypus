@@ -7,7 +7,7 @@
 
 package org.pz.platypus;
 
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 import org.pz.platypus.parsers.BlockCommentParser;
 import org.pz.platypus.parsers.CommandStartParser;
 import org.pz.platypus.parsers.LineCommentParser;
@@ -362,7 +362,7 @@ public class PlatypusParser
                 //TODO: do something big here
             }
 
-            Commandable command = ctable.getCommand( commandRoot );
+            ICommand command = ctable.getCommand( commandRoot );
             if ( command != null ) {
                 return( command.process( gdd, context, tokens, inCode ) + context.startPoint );
             }

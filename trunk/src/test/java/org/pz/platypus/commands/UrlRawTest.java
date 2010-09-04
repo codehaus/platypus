@@ -10,7 +10,7 @@ package org.pz.platypus.commands;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.common.DocData;
 import org.pz.platypus.*;
 import org.pz.platypus.test.mocks.MockLiterals;
@@ -29,7 +29,7 @@ public class UrlRawTest
     {
         String urlOut = null;
 
-        protected void outputUrl( final OutputContextable context, final String url )
+        protected void outputUrl( final IOutputContext context, final String url )
         {
             urlOut = url;
         }
@@ -64,7 +64,7 @@ public class UrlRawTest
     public void testProcessWithNullArg2()
     {
         class DocummentData extends DocData {};
-        OutputContextable oc = new DocummentData();
+        IOutputContext oc = new DocummentData();
         rawUrl.process( oc, null, 6 );
     }
 
@@ -83,7 +83,7 @@ public class UrlRawTest
                 super( gdd );
             }
         };
-        OutputContextable oc = new DocumentData( gdd );
+        IOutputContext oc = new DocumentData( gdd );
 
         Token tok = new Token( new Source(), TokenType.TEXT, "allo", "allo!", new CommandParameter() );
         rawUrl.process( oc, tok, 6 );
@@ -98,7 +98,7 @@ public class UrlRawTest
         final String testUrl = "http://www.cnn.com";
 
         class DocummentData extends DocData {};
-        OutputContextable oc = new DocummentData();
+        IOutputContext oc = new DocummentData();
         CommandParameter param = new CommandParameter();
         param.setString( testUrl );
         Token tok = new Token( new Source(), TokenType.TEXT, "allo", "allo!", param );

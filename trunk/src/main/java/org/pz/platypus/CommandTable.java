@@ -8,12 +8,11 @@
 package org.pz.platypus;
 
 import org.pz.platypus.commandTypes.*;
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
 
 /**
  * Table of all supported commands in Platypus. It's implemented using a key consisting
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 public class CommandTable
 {
     /** the hashtable into which the commands are loaded */
-    protected HashMap<String, Commandable> commandTable;
+    protected HashMap<String, ICommand> commandTable;
 
     private GDD gdd;
 
@@ -49,7 +48,7 @@ public class CommandTable
         assert( Gdd.getLogger() != null );
 
         gdd = Gdd;
-        commandTable = new HashMap<String, Commandable>( 300 );
+        commandTable = new HashMap<String, ICommand>( 300 );
     }
 
     /**
@@ -183,7 +182,7 @@ public class CommandTable
      * add a Commandable item to the hash table, using its root as the key to the entry
      * @param entry to be added (either a command or a symbol)
      */
-    public void add( Commandable entry )
+    public void add( ICommand entry )
     {
         commandTable.put( entry.getRoot(), entry );
     }
@@ -194,8 +193,8 @@ public class CommandTable
      * @param root command root (portion ending in the first | : or ] character
      * @return the Commandable class found, or null on error
      */
-    public Commandable getCommand( final String root )
+    public ICommand getCommand( final String root )
     {
-        return( (Commandable) commandTable.get( root ));
+        return( (ICommand) commandTable.get( root ));
     }
 }

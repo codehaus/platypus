@@ -10,7 +10,7 @@ package org.pz.platypus.commands;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * Abstract class for handling code listing.
@@ -35,7 +35,7 @@ public abstract class CodeWithOptions
      *
      * @return Returns 0 if we're done, 1 if we keep going.
      */
-    protected int preProcess( final OutputContextable context, final Token tok, final int tokNum )
+    protected int preProcess( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

@@ -10,8 +10,8 @@ package org.pz.platypus.plugin.pdf.commands;
 import org.pz.platypus.*;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.utilities.ClosingBraceBuilder;
-import org.pz.platypus.interfaces.OutputContextable;
-import org.pz.platypus.interfaces.OutputCommandable;
+import org.pz.platypus.interfaces.IOutputContext;
+import org.pz.platypus.interfaces.IOutputCommand;
 
 /**
  * handles processing of the definition of a user string (macro).
@@ -20,7 +20,7 @@ import org.pz.platypus.interfaces.OutputCommandable;
  *
  * @author alb
  */
-public class DefUserString implements OutputCommandable
+public class DefUserString implements IOutputCommand
 {
     private String root = "[def:";
 
@@ -28,7 +28,7 @@ public class DefUserString implements OutputCommandable
 
     private boolean validInCode = false;
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

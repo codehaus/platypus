@@ -8,21 +8,21 @@
 package org.pz.platypus.commands;
 
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * Abstract portion of command that marks the beginning of a plain bullet list (default indent and bullet char)
  *
  * @author alb
  */
-public abstract class BulletListPlainEnd implements OutputCommandable
+public abstract class BulletListPlainEnd implements IOutputCommand
 {
     private final String root = "[-list]";
 
-    protected abstract int endBulletList( final OutputContextable context, Token tok, int tokNum );
+    protected abstract int endBulletList( final IOutputContext context, Token tok, int tokNum );
 
-    public int process( OutputContextable context, Token tok, int tokNum )
+    public int process( IOutputContext context, Token tok, int tokNum )
     {
         if( context == null || tok == null || tokNum < 0 ) {
             throw new IllegalArgumentException();

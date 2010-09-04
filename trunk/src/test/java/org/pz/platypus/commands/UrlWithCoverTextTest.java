@@ -10,7 +10,7 @@ package org.pz.platypus.commands;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.common.DocData;
 import org.pz.platypus.*;
 import org.pz.platypus.test.mocks.MockLiterals;
@@ -30,7 +30,7 @@ public class UrlWithCoverTextTest
         String urlOut = null;
         String textOut = null;
 
-        protected void outputUrl( final OutputContextable context, final String url, final String text )
+        protected void outputUrl( final IOutputContext context, final String url, final String text )
         {
             urlOut = url;
             textOut = text;
@@ -71,7 +71,7 @@ public class UrlWithCoverTextTest
     public void testProcessWithNullArg2()
     {
         class DocummentData extends DocData {};
-        OutputContextable oc = new DocummentData();
+        IOutputContext oc = new DocummentData();
         urlCumText.process( oc, null, 6 );
     }
 
@@ -93,7 +93,7 @@ public class UrlWithCoverTextTest
             }
         };
 
-        OutputContextable oc = new DocumentData( gdd );
+        IOutputContext oc = new DocumentData( gdd );
         String coverTextFromCommand = urlCumText.getCoverText( oc, 0 );
         assertTrue( coverTextFromCommand.isEmpty() );
     }
@@ -116,7 +116,7 @@ public class UrlWithCoverTextTest
             }
         };
 
-        OutputContextable oc = new DocumentData( gdd );
+        IOutputContext oc = new DocumentData( gdd );
         String coverTextFromCommand = urlCumText.getCoverText( oc, 0 );
         assertEquals( "CNN", coverTextFromCommand );
     }
@@ -139,7 +139,7 @@ public class UrlWithCoverTextTest
             }
         };
 
-        OutputContextable oc = new DocumentData( gdd );
+        IOutputContext oc = new DocumentData( gdd );
         urlCumText.process( oc, tl.get( 0 ), 0 );
         assertEquals( "CNN", urlCumText.getTextOut() );
         assertEquals( "www.cnn.com", urlCumText.getUrlOut() );
@@ -164,7 +164,7 @@ public class UrlWithCoverTextTest
             }
         };
 
-        OutputContextable oc = new DocumentData( gdd );
+        IOutputContext oc = new DocumentData( gdd );
         urlCumText.process( oc, tl.get( 0 ), 0 );
         assertEquals( "CNN", urlCumText.getTextOut() );
         assertEquals( "www.cnn.com", urlCumText.getUrlOut() );
@@ -192,7 +192,7 @@ public class UrlWithCoverTextTest
             }
         };
 
-        OutputContextable oc = new DocumentData( gdd );
+        IOutputContext oc = new DocumentData( gdd );
         urlCumText.process( oc, tl.get( 0 ), 0 );
         assertEquals( "Churchill", urlCumText.getTextOut() );
         assertEquals( "www.cnn.com", urlCumText.getUrlOut() );

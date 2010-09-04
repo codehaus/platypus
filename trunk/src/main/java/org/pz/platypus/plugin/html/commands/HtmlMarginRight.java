@@ -9,8 +9,8 @@ package org.pz.platypus.plugin.html.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.pdf.Limits;
 import org.pz.platypus.utilities.Conversions;
@@ -20,11 +20,11 @@ import org.pz.platypus.utilities.Conversions;
  *
  * @author alb
  */
-public class HtmlMarginRight implements OutputCommandable
+public class HtmlMarginRight implements IOutputCommand
 {
     private String root = "[rmargin:";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

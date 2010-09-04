@@ -9,21 +9,21 @@ package org.pz.platypus.commands;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * Abstract portion of bare URL command
  *
  * @author ask
  */
-public abstract class UrlRaw implements OutputCommandable
+public abstract class UrlRaw implements IOutputCommand
 {
     private final String root = "[url:";
 
-    protected abstract void outputUrl( final OutputContextable context, String url );
+    protected abstract void outputUrl( final IOutputContext context, String url );
 
-    public int process( OutputContextable context, Token tok, int tokNum )
+    public int process( IOutputContext context, Token tok, int tokNum )
     {
         if( context == null || tok == null || tok.getParameter() == null ) {
             throw new IllegalArgumentException();
@@ -50,7 +50,7 @@ public abstract class UrlRaw implements OutputCommandable
      * @param tok contains the location data
      * @param context contains the location of the logger and literals file
      */    
-    private void showErrorMsg( OutputContextable context, Token tok ) {
+    private void showErrorMsg( IOutputContext context, Token tok ) {
         GDD gdd = context.getGdd();
         gdd.logWarning( gdd.getLit( "FILE#" ) + ": " + tok.getSource().getFileNumber() + " " +
                         gdd.getLit( "LINE#" ) + ": " + tok.getSource().getLineNumber() + " " +

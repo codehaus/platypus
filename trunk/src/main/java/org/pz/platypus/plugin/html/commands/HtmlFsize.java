@@ -9,8 +9,8 @@ package org.pz.platypus.plugin.html.commands;
 
 import com.lowagie.text.Paragraph;
 import org.pz.platypus.*;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.pdf.commands.PdfLeading;
 
@@ -19,11 +19,11 @@ import org.pz.platypus.plugin.pdf.commands.PdfLeading;
  *
  * @author alb / ask
  */
-public class HtmlFsize implements OutputCommandable
+public class HtmlFsize implements IOutputCommand
 {
     private String root = "[font|size:";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -53,7 +53,7 @@ public class HtmlFsize implements OutputCommandable
      * @param tokNum the number of the font size token
      * @param newFontSize the font size we're moving to.
      */
-    private void updateLeading( final OutputContextable context, final Token tok, final int tokNum,
+    private void updateLeading( final IOutputContext context, final Token tok, final int tokNum,
                                 final float newFontSize )
     {
         CommandParameter newLeading = new CommandParameter();

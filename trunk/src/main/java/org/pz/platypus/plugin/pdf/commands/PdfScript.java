@@ -8,19 +8,19 @@
 package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.Token;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * Handles script (in Groovy) for PDF plugin
  *
  * @author alb
  */
-public class PdfScript implements OutputCommandable
+public class PdfScript implements IOutputCommand
 {
     private String root = "[@:";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();

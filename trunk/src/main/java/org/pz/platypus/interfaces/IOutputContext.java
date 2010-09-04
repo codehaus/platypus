@@ -11,11 +11,12 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 
 /**
- * Interface for Output context info
+ * Interface for Output context info--the class that holds all the output settings for a given plugin.
+ * This is referred to in all commands, and in PDF commands, for example, generally called pdd. 
  *
  * @author alb
  */
-public interface OutputContextable
+public interface IOutputContext
 {
     public GDD getGdd();
 

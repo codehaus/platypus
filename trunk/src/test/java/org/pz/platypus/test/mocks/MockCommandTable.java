@@ -8,9 +8,8 @@
 package org.pz.platypus.test.mocks;
 
 import org.pz.platypus.*;
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 
-import java.util.MissingResourceException;
 import java.util.HashMap;
 
 /**
@@ -22,7 +21,7 @@ public class MockCommandTable extends CommandTable
 {
     public MockCommandTable( GDD gdd )
     {
-        commandTable = new HashMap<String, Commandable>( 300 );
+        commandTable = new HashMap<String, ICommand>( 300 );
     }
     
     /**

@@ -12,7 +12,6 @@ import org.pz.platypus.interfaces.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 /**
  * Test plugin for converting Platypus files to Rich Text Format (rtf).
@@ -26,7 +25,7 @@ import java.util.logging.Logger;
  * @author alb
  * @author ask
  */
-public class Start implements Pluggable
+public class Start implements IPlugin
 {
     private RtfOutfile outfile;
     private RtfData rtd;
@@ -156,7 +155,7 @@ public class Start implements Pluggable
         assert( tok != null );
         assert( outfile != null );
 
-        OutputCommandable command = commandTable.getCommand( tok.getRoot() );
+        IOutputCommand command = commandTable.getCommand( tok.getRoot() );
         if( command == null ) {
             //TODO: error message
             return;

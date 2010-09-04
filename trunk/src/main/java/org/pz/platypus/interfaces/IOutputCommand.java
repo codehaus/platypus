@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -10,9 +10,9 @@ package org.pz.platypus.interfaces;
 import org.pz.platypus.*;
 
 /**
- * Interface for individual commands as used in the output plugin.
+ * Interface for individual commands as used in the output plugins.
  */
-public interface OutputCommandable
+public interface IOutputCommand
 {
     /**
      * get the root of the command. For example, fsize: in [fsize:12pt]
@@ -28,5 +28,5 @@ public interface OutputCommandable
      * @param tokNum the number of the token in the token list
      */
 
-    int process( final OutputContextable context, final Token tok, final int tokNum );
+    int process( final IOutputContext context, final Token tok, final int tokNum );
 }

@@ -10,7 +10,7 @@ package org.pz.platypus.parsers;
 import org.pz.platypus.*;
 import org.pz.platypus.exceptions.InvalidCommandException;
 import org.pz.platypus.exceptions.InvalidCommandParameterException;
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 
 /**
  * Handles parsing of compound commands
@@ -62,7 +62,7 @@ public class CommandFamilyParser
             final String command = extractCommandName( context.chars, ++parsePoint );
 
             // look up the command name in the command table
-            Commandable com = ctable.getCommand( familyRoot + command );
+            ICommand com = ctable.getCommand( familyRoot + command );
             if( com == null ) {
                 invalidCommandError( gdd, context, command );
                 throw new InvalidCommandException( command );

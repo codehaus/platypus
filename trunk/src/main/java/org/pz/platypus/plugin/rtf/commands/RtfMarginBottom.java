@@ -17,11 +17,11 @@ import org.pz.platypus.plugin.rtf.*;
  *
  * @author alb
  */
-public class RtfMarginBottom implements OutputCommandable
+public class RtfMarginBottom implements IOutputCommand
 {
     private String root = "[bmargin:";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
