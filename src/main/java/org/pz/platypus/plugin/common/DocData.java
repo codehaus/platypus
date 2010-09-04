@@ -10,7 +10,7 @@ package org.pz.platypus.plugin.common;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.interfaces.ICommandTable;
 
 /**
@@ -20,7 +20,7 @@ import org.pz.platypus.interfaces.ICommandTable;
  * @author alb
  */
 
-public abstract class DocData implements OutputContextable
+public abstract class DocData implements IOutputContext
 {
     /**
      * Inner class containing the value of the data item, plus

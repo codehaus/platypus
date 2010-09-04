@@ -8,7 +8,7 @@
 package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.commands.UrlWithCoverText;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
 
@@ -19,7 +19,7 @@ import org.pz.platypus.plugin.pdf.PdfOutfile;
  */
 public class PdfUrlWithCoverText extends UrlWithCoverText
 {
-    public void outputUrl( OutputContextable context, final String url, String text )
+    public void outputUrl( IOutputContext context, final String url, String text )
     {
         String coverText = text;
         

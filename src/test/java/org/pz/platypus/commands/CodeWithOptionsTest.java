@@ -10,7 +10,6 @@ package org.pz.platypus.commands;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.pz.platypus.interfaces.OutputContextable;
 import org.pz.platypus.plugin.common.DocData;
 import org.pz.platypus.*;
 import org.pz.platypus.test.mocks.MockLiterals;

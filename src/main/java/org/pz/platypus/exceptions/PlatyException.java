@@ -7,14 +7,14 @@
 
 package org.pz.platypus.exceptions;
 
-import org.pz.platypus.interfaces.Exceptionable;
+import org.pz.platypus.interfaces.IException;
 
 /**
  * Basic template for all Platypus-specific runtime exceptions
  *
  * @author alb
  */
-public class PlatyException extends RuntimeException implements Exceptionable
+public class PlatyException extends RuntimeException implements IException
 {
     /** a string to look up in Literals() that identifies the nature of the exception */
     private String explanation;

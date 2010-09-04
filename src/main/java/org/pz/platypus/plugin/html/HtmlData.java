@@ -7,16 +7,12 @@
 
 package org.pz.platypus.plugin.html;
 
-import org.apache.ecs.html.Body;
 import org.pz.platypus.DefaultValues;
 import org.pz.platypus.GDD;
 import org.pz.platypus.Source;
 import org.pz.platypus.TypefaceMap;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.common.DocData;
-
-import java.util.*;
 
 /**
  * Container class for all the state of the HTML document
@@ -24,7 +20,7 @@ import java.util.*;
  * @author ask
  */
 
-public class HtmlData extends DocData implements OutputContextable
+public class HtmlData extends DocData implements IOutputContext
 {
     HtmlDocContext htmlDocContext = new HtmlDocContext();
     private String fface = "";

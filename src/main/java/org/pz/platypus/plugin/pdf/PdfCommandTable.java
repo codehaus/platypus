@@ -9,7 +9,7 @@ package org.pz.platypus.plugin.pdf;
 
 import org.pz.platypus.GDD;
 import org.pz.platypus.interfaces.ICommandTable;
-import org.pz.platypus.interfaces.OutputCommandable;
+import org.pz.platypus.interfaces.IOutputCommand;
 import org.pz.platypus.plugin.pdf.commands.*;
 
 import java.util.HashMap;
@@ -27,11 +27,11 @@ import java.util.Set;
 public class PdfCommandTable  implements ICommandTable
 {
     /** the hashtable into which the commands are loaded */
-    private HashMap<String, OutputCommandable> commandTable;
+    private HashMap<String, IOutputCommand> commandTable;
 
     public PdfCommandTable()
     {
-        commandTable = new HashMap<String, OutputCommandable>( 300 );
+        commandTable = new HashMap<String, IOutputCommand>( 300 );
     }
 
     /**
@@ -127,7 +127,7 @@ public class PdfCommandTable  implements ICommandTable
      * add a OutputCommandable item to the hash table, using its root as the key to the entry
      * @param entry to be added (either a command or a symbol)
      */
-    public void add( final OutputCommandable entry )
+    public void add( final IOutputCommand entry )
     {
         commandTable.put( entry.getRoot(), entry );
     }
@@ -139,7 +139,7 @@ public class PdfCommandTable  implements ICommandTable
      * @param root command root (portion ending in the first | : or ] character
      * @return the OutputCommandable class found, or null on error
      */
-    public OutputCommandable getCommand( final String root )
+    public IOutputCommand getCommand( final String root )
     {
         return( commandTable.get( root ));
     }

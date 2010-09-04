@@ -20,7 +20,6 @@ import java.util.logging.Level;
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.io.File;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
@@ -80,7 +79,6 @@ public class PdfTypefaceMapTest
 
         File fin = new File( filename );
         try {
-//            fin.createNewFile();
             bw = new BufferedWriter( new FileWriter( filename ));
         }
         catch( Exception e ) {
@@ -188,9 +186,4 @@ public class PdfTypefaceMapTest
         String[] fontNames = tfm.extractFamilyNames( "", null );
         assertEquals( 0, fontNames.length);
     }
-
-
-
-
-
 }

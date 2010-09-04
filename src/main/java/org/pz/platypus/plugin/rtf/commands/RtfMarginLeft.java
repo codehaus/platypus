@@ -11,18 +11,16 @@ import org.pz.platypus.*;
 import org.pz.platypus.interfaces.*;
 import org.pz.platypus.plugin.rtf.*;
 
-import java.io.IOException;
-
 /**
  * Implementation of changing the size of the left margin
  *
  * @author alb
  */
-public class RtfMarginLeft implements OutputCommandable
+public class RtfMarginLeft implements IOutputCommand
 {
     private String root = "[lmargin:";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

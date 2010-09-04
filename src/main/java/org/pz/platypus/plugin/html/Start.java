@@ -10,8 +10,8 @@ package org.pz.platypus.plugin.html;
 import org.pz.platypus.*;
 import org.pz.platypus.exceptions.FileCloseException;
 import org.pz.platypus.exceptions.InvalidConfigFileException;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.Pluggable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IPlugin;
 import org.pz.platypus.plugin.pdf.PdfSymbolsTable;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
  *
  * @author alb/ask
  */
-public class Start implements Pluggable
+public class Start implements IPlugin
 {
     /** contains state data for the pdf file */
     private HtmlData htmlData;
@@ -215,7 +215,7 @@ public class Start implements Pluggable
         assert( commandTable!= null && commandTable.getSize() > 0 );
 
         // lookup the command in the HTML command table
-        OutputCommandable oc = commandTable.getCommand( tok.getRoot() );
+        IOutputCommand oc = commandTable.getCommand( tok.getRoot() );
         if( oc != null ) {
              oc.process( htmlData, tok, tokNum );
         }
@@ -316,7 +316,7 @@ public class Start implements Pluggable
         }
 
         // lookup the command in the HTML command table
-        OutputCommandable oc = commandTable.getCommand( sym );
+        IOutputCommand oc = commandTable.getCommand( sym );
         if( oc != null ) {
              oc.process( htmlData, tok, tokNum );
         }

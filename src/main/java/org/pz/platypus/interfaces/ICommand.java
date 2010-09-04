@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -12,7 +12,7 @@ import org.pz.platypus.*;
 /**
  * Interface for individual commands as stored in the command look-up table.
  */
-public interface Commandable
+public interface ICommand
 {
     /**
      * get the root of the command. For example, fsize: in [fsize:12pt]

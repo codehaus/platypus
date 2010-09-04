@@ -28,14 +28,14 @@ public interface ICommandTable
      *
      *  @param command to be added
      */
-    public void add( OutputCommandable command );
+    public void add( IOutputCommand command );
 
     /** get the processor for a command or symbol
      *
      *  @param root the unique key for identifying/looking up a command
      *  @return the command, or null on error
      */
-    public OutputCommandable getCommand( final String root );
+    public IOutputCommand getCommand( final String root );
 
     /** get size of table
      *

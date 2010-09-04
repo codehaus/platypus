@@ -9,7 +9,7 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.Token;
 import org.pz.platypus.commands.BulletListPlainEnd;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
 
@@ -20,7 +20,7 @@ import org.pz.platypus.plugin.pdf.PdfOutfile;
  */
 public class PdfBulletListPlainEnd extends BulletListPlainEnd
 {
-    protected int endBulletList( final OutputContextable context, Token tok, int tokNum )
+    protected int endBulletList( final IOutputContext context, Token tok, int tokNum )
     {
         PdfData pdd = (PdfData) context;
         PdfOutfile outFile = pdd.getOutfile();

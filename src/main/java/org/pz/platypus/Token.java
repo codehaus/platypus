@@ -7,7 +7,7 @@
 
 package org.pz.platypus;
 
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 
 /**
  * The token that is parsed from input lines and via TokenList is passed to the output plugin.
@@ -111,7 +111,7 @@ public class Token
         String descr = " ";
 
         CommandTable ctable = gdd.getCommandTable();
-        Commandable c = ctable.getCommand( root );
+        ICommand c = ctable.getCommand( root );
         if( c != null ) {
             descr = gdd.getLit( c.getRoot() );
         }

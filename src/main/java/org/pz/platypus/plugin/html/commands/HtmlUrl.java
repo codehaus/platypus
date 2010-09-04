@@ -8,7 +8,7 @@
 package org.pz.platypus.plugin.html.commands;
 
 import org.pz.platypus.commands.UrlRaw;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.html.HtmlData;
 import org.pz.platypus.plugin.html.HtmlOutfile;
 
@@ -20,7 +20,7 @@ import org.pz.platypus.plugin.html.HtmlOutfile;
 public class HtmlUrl extends UrlRaw
 {
     @Override
-    protected void outputUrl(OutputContextable context, String url )
+    protected void outputUrl(IOutputContext context, String url )
     {
         //TODO: Even with that I'm not sure adding http:// is right. Let's discuss. ALB
         HtmlData htmlData = (HtmlData) context;

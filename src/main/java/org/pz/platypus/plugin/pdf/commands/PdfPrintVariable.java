@@ -8,19 +8,19 @@
 package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.*;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 
 /**
  * Outputs the user string or system variable that appears after the root.
  *
  * @author alb
  */
-public class PdfPrintVariable implements OutputCommandable
+public class PdfPrintVariable implements IOutputCommand
 {
     private String root = "[*";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();

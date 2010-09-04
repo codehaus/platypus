@@ -7,7 +7,7 @@
 
 package org.pz.platypus;
 
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 import org.pz.platypus.utilities.ProcessSymbol;
 
 /**
@@ -15,7 +15,7 @@ import org.pz.platypus.utilities.ProcessSymbol;
  *
  * @author alb
  */
-public class Symbol implements Commandable
+public class Symbol implements ICommand
 {
     /** what kind of parameter does this command take, if any? */
     protected ParamType parameterType;

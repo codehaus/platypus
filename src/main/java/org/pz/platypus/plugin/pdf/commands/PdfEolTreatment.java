@@ -11,8 +11,8 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Token;
 import org.pz.platypus.commandTypes.EolTreatment;
 import org.pz.platypus.exceptions.EolTreatmentException;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
 
 /**
@@ -20,7 +20,7 @@ import org.pz.platypus.plugin.pdf.PdfData;
  *
  * @author alb
  */
-public class PdfEolTreatment implements OutputCommandable
+public class PdfEolTreatment implements IOutputCommand
 {
     private String root = "[eol:";
 
@@ -30,7 +30,7 @@ public class PdfEolTreatment implements OutputCommandable
      * @param tok the token carrying the new treatment
      * @param tokNum token number
      */
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null || tok.getParameter().getString() == null ) {
             throw new IllegalArgumentException();

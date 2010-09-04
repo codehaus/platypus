@@ -14,8 +14,8 @@ import org.pz.platypus.GDD;
 import org.pz.platypus.Symbol;
 import org.pz.platypus.Token;
 import org.pz.platypus.commands.BulletListPlainStartWithOptions;
-import org.pz.platypus.interfaces.Commandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.ICommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
 import org.pz.platypus.plugin.pdf.PdfFont;
 import org.pz.platypus.plugin.pdf.PdfOutfile;
@@ -39,7 +39,7 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
      * @param tokNum  number in the token stream
      * @return number of additional tokens consumed
      */
-    protected int startNewList( final OutputContextable context, Token tok, int tokNum )
+    protected int startNewList( final IOutputContext context, Token tok, int tokNum )
     {
         PdfData pdd = (PdfData) context;
         PdfOutfile outFile = pdd.getOutfile();
@@ -94,7 +94,7 @@ public class PdfBulletListPlainStartWithOptions extends BulletListPlainStartWith
         }
 
         String root = "[" + sb.toString() + "]";
-        Commandable value = gdd.getCommandTable().getCommand( root );
+        ICommand value = gdd.getCommandTable().getCommand( root );
         if( ! ( value instanceof Symbol )) {
             errorBulletSymbolNotFound( gdd, tok );
         }

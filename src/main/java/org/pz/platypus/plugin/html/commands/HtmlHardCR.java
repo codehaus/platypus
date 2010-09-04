@@ -9,8 +9,8 @@ package org.pz.platypus.plugin.html.commands;
 
 import org.pz.platypus.Token;
 import org.pz.platypus.TokenList;
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.html.HtmlData;
 
 /**
@@ -21,11 +21,11 @@ import org.pz.platypus.plugin.html.HtmlData;
  *
  * @author ask
  */
-public class HtmlHardCR implements OutputCommandable
+public class HtmlHardCR implements IOutputCommand
 {
     private String root = "[]";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -51,7 +51,7 @@ public class HtmlHardCR implements OutputCommandable
      * @param tokNum present token number
      * @return true if first token as specified above, or false if not.
      */
-    private boolean isFirstTokenInLine( final OutputContextable context,
+    private boolean isFirstTokenInLine( final IOutputContext context,
                                         final Token tok, final int tokNum )
     {
         TokenList tl = context.getGdd().getInputTokens();

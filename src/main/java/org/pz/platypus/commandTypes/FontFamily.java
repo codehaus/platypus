@@ -10,7 +10,7 @@ package org.pz.platypus.commandTypes;
 import org.pz.platypus.*;
 import org.pz.platypus.exceptions.InvalidCommandException;
 import org.pz.platypus.exceptions.InvalidCommandParameterException;
-import org.pz.platypus.interfaces.Commandable;
+import org.pz.platypus.interfaces.ICommand;
 import org.pz.platypus.parsers.CommandFamilyParser;
 
 /**
@@ -18,7 +18,7 @@ import org.pz.platypus.parsers.CommandFamilyParser;
  *
  * @author alb
  */
-public class FontFamily implements Commandable
+public class FontFamily implements ICommand
 {
     private String root = "[font|";
 

@@ -10,7 +10,7 @@ package org.pz.platypus.commands;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.common.DocData;
 import org.pz.platypus.*;
 import org.pz.platypus.test.mocks.MockLiterals;
@@ -53,7 +53,7 @@ public class UrlWithCoverTextEndTest
     public void testProcessWithNullArg2()
     {
         class DocummentData extends DocData {};
-        OutputContextable oc = new DocummentData();
+        IOutputContext oc = new DocummentData();
         urlTextEnd.process( oc, null, 6 );
     }
 
@@ -72,7 +72,7 @@ public class UrlWithCoverTextEndTest
                 super( gdd );
             }
         };
-         OutputContextable oc = new DocumentData( gdd );
+         IOutputContext oc = new DocumentData( gdd );
 
         int i = urlTextEnd.process( oc, new Token( new Source(), TokenType.COMMAND, "[-url]", "[-url]", null ), 6 );
 

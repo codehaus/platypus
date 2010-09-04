@@ -8,7 +8,7 @@
 
 package org.pz.platypus.plugin.html;
 
-import org.pz.platypus.interfaces.OutputCommandable;
+import org.pz.platypus.interfaces.IOutputCommand;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -96,8 +96,8 @@ public class HtmlDocContext {
         return nestedTags;
     }
 
-    public List<OutputCommandable> getNestedTagCmds() {
-        List<OutputCommandable> listOfCmds = new ArrayList<OutputCommandable>();
+    public List<IOutputCommand> getNestedTagCmds() {
+        List<IOutputCommand> listOfCmds = new ArrayList<IOutputCommand>();
         for (String cmdName: nestTagsList) {
             // ??? lookup
         }

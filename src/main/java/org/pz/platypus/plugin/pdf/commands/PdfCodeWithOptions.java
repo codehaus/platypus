@@ -7,8 +7,8 @@
 
 package org.pz.platypus.plugin.pdf.commands;
 
-import org.pz.platypus.interfaces.OutputCommandable;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputCommand;
+import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.*;
 import org.pz.platypus.commands.CodeWithOptions;
 import org.pz.platypus.plugin.pdf.*;
@@ -26,9 +26,9 @@ import com.lowagie.text.Paragraph;
  *
  * @author alb
  */
-public class PdfCodeWithOptions extends CodeWithOptions implements OutputCommandable
+public class PdfCodeWithOptions extends CodeWithOptions implements IOutputCommand
 {
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( super.preProcess( context, tok, tokNum ) == 0 ) {
             return( 0 );

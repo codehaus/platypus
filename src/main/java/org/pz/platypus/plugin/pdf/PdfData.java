@@ -13,7 +13,7 @@ import org.pz.platypus.TypefaceMap;
 import org.pz.platypus.DefaultValues;
 import org.pz.platypus.plugin.common.DocData;
 import org.pz.platypus.plugin.common.Underline;
-import org.pz.platypus.interfaces.OutputContextable;
+import org.pz.platypus.interfaces.IOutputContext;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -24,7 +24,7 @@ import javax.script.ScriptEngineManager;
  * @author alb
  */
 
-public class PdfData extends DocData implements OutputContextable
+public class PdfData extends DocData implements IOutputContext
 {
     private PdfOutfile pdfOutfile;
 

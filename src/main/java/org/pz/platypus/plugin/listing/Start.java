@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * @author alb
  * @author ask
  */
-public class Start implements Pluggable
+public class Start implements IPlugin
 {
     private Logger logger;
     private boolean inCode = false;

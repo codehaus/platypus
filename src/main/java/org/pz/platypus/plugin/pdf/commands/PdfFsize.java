@@ -18,11 +18,11 @@ import com.lowagie.text.Paragraph;
  *
  * @author alb
  */
-public class PdfFsize implements OutputCommandable
+public class PdfFsize implements IOutputCommand
 {
     private String root = "[font|size:";
 
-    public int process( final OutputContextable context, final Token tok, final int tokNum )
+    public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         if( context == null || tok == null ) {
             throw new IllegalArgumentException();
@@ -92,7 +92,7 @@ public class PdfFsize implements OutputCommandable
      * @param tokNum the number of the font size token
      * @param newFontSize the font size we're moving to.
      */
-    private void updateLeading( final OutputContextable context, final Token tok, final int tokNum,
+    private void updateLeading( final IOutputContext context, final Token tok, final int tokNum,
                                 final float newFontSize )
     {
         CommandParameter newLeading = new CommandParameter();
