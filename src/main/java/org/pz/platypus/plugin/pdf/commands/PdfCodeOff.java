@@ -40,7 +40,7 @@ public class PdfCodeOff implements IOutputCommand
         TokenList tokens = pdd.getGdd().getInputTokens();
 
         // must output the paragraph manually for listing, because the [-code] command after a
-        // listing implies an end of a paragraph.
+        // listing implies an end of a paragraph and adds a CR/LF to the listing.
         if( pdd.isInCodeListing() ) {
             pdd.setInCodeListing( false );
             PdfOutfile outfile = pdd.getOutfile();
@@ -68,7 +68,7 @@ public class PdfCodeOff implements IOutputCommand
      * @param tokNum  number of the current token, that is, of [-code]
      * @return true if next token is [cr], else false.
      */
-    private boolean nextTokenIsEol( TokenList tokens, int tokNum )
+    boolean nextTokenIsEol( TokenList tokens, int tokNum )
     {
         int nextTokenNum = tokNum + 1;
 
