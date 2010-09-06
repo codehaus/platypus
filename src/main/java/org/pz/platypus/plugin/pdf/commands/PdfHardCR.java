@@ -47,24 +47,50 @@ public class PdfHardCR implements IOutputCommand
                 return( 0 );
             }
         }
-//        else {
-//            currPar.add( new Chunk( Chunk.NEWLINE ));
-//        }
-//        return( 0 );
-//
-//        PdfData pdf = (PdfData) context;
-//        Paragraph currPar = pdf.getOutfile().getItPara();
-//        if( currPar != null ) {
-            currPar.add( new Chunk( Chunk.NEWLINE ));
-//        }
 
+        currPar.add( new Chunk( Chunk.NEWLINE ));
+        
         // if it's the first token in line, it = a blank line, so an additional
-        // NEWLINE needs to be emitted.
+        // NEWLINE needs to be emitted, unless it's right after an end of listing command,
+        // which has already emitted the extra CR/LF.
 
-        if( isFirstTokenInLine( context, tok, tokNum ) && currPar != null ) {
-            currPar.add( new Chunk( Chunk.NEWLINE ));   
+        if( isFirstTokenInLine( context, tok, tokNum ) &&
+            ! isAfterCodeListing( context, tokNum ) &&
+            currPar != null ) {
+                currPar.add( new Chunk( Chunk.NEWLINE ));
         }
         return 0;
+    }
+
+    /**
+     * Were the previous two tokens [-code][cr]? If so, return true.
+     * @param context context for this token (needed to get the TokenList )
+     * @param tokNum
+     * @return
+     */
+    boolean isAfterCodeListing( final IOutputContext context, final int tokNum )
+    {
+        TokenList tl = context.getGdd().getInputTokens();
+
+        Token prevTok = tl.getPrevToken( tokNum );
+        if( prevTok == null ) {
+            return( false );
+        }
+
+        if( ! prevTok.getRoot().equals( "[cr]" )) {
+            return( false );
+        }
+
+        Token prevTok2 = tl.getPrevToken( tokNum - 1 );
+        if( prevTok2 == null ) {
+            return( false );
+        }
+
+        if( prevTok2.getRoot().equals( "[-code]" )) {
+            return( true );
+        }
+
+        return( false );
     }
 
     /**
@@ -77,7 +103,8 @@ public class PdfHardCR implements IOutputCommand
      * @return true if first token as specified above, or false if not.
      */
     private boolean isFirstTokenInLine( final IOutputContext context,
-                                        final Token tok, final int tokNum )
+                                        final Token tok,
+                                        final int tokNum )
     {
         TokenList tl = context.getGdd().getInputTokens();
 

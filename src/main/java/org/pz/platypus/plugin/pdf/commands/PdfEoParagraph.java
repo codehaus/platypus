@@ -15,7 +15,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Chunk;
 
 /**
- * Blank line (auto-inserted by Platypus) for PDF plugin
+ * End of Paragraph for PDF plugin
  *
  * @author alb
  */
