@@ -38,7 +38,7 @@ public class MockPdfOutfile extends PdfOutfile
     @Override
     public void setItPara( Paragraph par )
     {
-        // the paragraph is already set at startup
+        para = par;
     }
 
     @Override
