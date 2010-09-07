@@ -31,10 +31,12 @@ public class PdfEoParagraph implements IOutputCommand
 
         PdfData pdf = (PdfData) context;
 
-        // if we're in an paragraph with content, then close it and start a new one,
-        // else skip a line.
+        // if we're in an paragraph with content, then close it and start a new one.
+        // If we're not, it's likely because someone has inserted multiple blank lines,
+        // so we just skip a line.
         Paragraph currPar = pdf.getOutfile().getItPara();
-        if( currPar == null || ! currPar.isEmpty() ) {
+//        if( currPar == null || ! currPar.isEmpty() ) {
+         if( currPar == null || currPar.size() > 0 ) {
             pdf.getOutfile().startNewParagraph();
         }
         else {

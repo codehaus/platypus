@@ -40,10 +40,12 @@ public class PdfHardCR implements IOutputCommand
             return( 0 ); //TODO: Error message, though effectively an impossible error.
         }
 
+        // a [] marks the end of a bullet entry. If the entry is a paragraph, (almost always the case)
+        // then add it to the current list and return.
         Paragraph currPar = pdd.getOutfile().getItPara();
         if( outfile.inABulletList() ) {
             if( currPar != null && ! currPar.isEmpty() ) {
-                outfile.addItemToList( currPar );
+                outfile.addParagraphToList( currPar );
                 return( 0 );
             }
         }

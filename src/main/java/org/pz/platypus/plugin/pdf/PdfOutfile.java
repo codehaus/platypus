@@ -242,7 +242,7 @@ public class PdfOutfile
         }
 
         if( inABulletList() ) {
-            addItemToList( para );
+            addParagraphToList( para );
         }
         else {
             doParagraphAlignment( para, pdfData );
@@ -304,7 +304,7 @@ public class PdfOutfile
      *
      * @param para the paragraph to add
      */
-    public void addItemToList( Paragraph para )
+    public void addParagraphToList( Paragraph para )
     {
         if( para == null ) {
             return;  // TODO: should add an error message
@@ -341,9 +341,9 @@ public class PdfOutfile
             return;     // TODO: should add an error message
         }
 
-        // if in a paragraph, add it to the list before closing the list.
+        // if in a paragraph, add the paragraph to the list before closing the list.
         if( iTPara != null ) {
-            addItemToList( iTPara );
+            addParagraphToList( iTPara );
         }
 
         // if this list is part of another list (here called the outer list) add it to that list.
