@@ -8,6 +8,8 @@
 package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.Token;
+import org.pz.platypus.TokenType;
+import org.pz.platypus.Source;
 import org.pz.platypus.commands.BulletListPlainEnd;
 import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
@@ -28,10 +30,36 @@ public class PdfBulletListPlainEnd extends BulletListPlainEnd
         outFile.endPlainBulletList();
 
         // if this is the last command in the line, we don't want the concluding [cr]
-        // to insert a blank into the text. 
+        // to insert a blank into the text. Likewise, if there is a new-paragraph command (so, a [CR])
+        // on the next line, it will appear to add an extra new line because the end of list in iText
+        // adds a CR/LF. So, we handle it hear and decrement for the nonce the # of lines added at paragraph break.
 
         Token nextTok = pdd.getGdd().getInputTokens().getNextToken( tokNum );
-        if( nextTok != null && nextTok.getRoot().equals( "[cr]" )) {
+        if( nextTok == null || nextTok.getType() != TokenType.COMMAND ) {
+            return( 0 );
+        }
+
+        Token nextNextTok = pdd.getGdd().getInputTokens().getNextToken( tokNum+1 );
+        if( nextNextTok == null || nextNextTok.getType() != TokenType.COMMAND ) {
+            return( 1 ); // to skip over the [cr] token found immediately above in nextToken.
+        }
+
+        if( nextTok.getRoot().equals( "[cr]" )) {
+            if( nextNextTok.getRoot().equals( "[CR]" )) {
+                if( pdd.getOutfile().getItPara() == null || pdd.getOutfile().getItPara().isEmpty() ) {
+                   pdd.getOutfile().emitText( "" );
+                }
+                if( pdd.getGdd().getInputTokens().size() > tokNum+2 ) {
+                    float currLinesToSkip = pdd.getParagraphSkip();
+                    int currLinesSourceToSkipLine = pdd.getParagraphSkipLine();
+                    pdd.setParagraphSkip( currLinesToSkip - 1.0f, tok.getSource() );
+                    pdd.getOutfile().startNewParagraph();
+                    Source src = tok.getSource();
+                    src.setLineNumber( currLinesSourceToSkipLine );
+                    pdd.setParagraphSkip( currLinesToSkip, src );
+                    return( 2 ); // skip over the [cr] and the [CR]
+                }
+            }
             return( 1 );
         }
         return( 0 );
