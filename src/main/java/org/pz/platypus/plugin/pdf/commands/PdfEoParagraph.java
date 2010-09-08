@@ -51,3 +51,11 @@ public class PdfEoParagraph implements IOutputCommand
         return( root );
     }
 }
+
+/*** NOTE ***
+ * Due to the way, iText inserts a CR/LF at the end of the outermonst unordered list, the [CR] command is handled
+ * specially by PdfBulletListPlainEnd.java when it occurs immediately after the end of a bullet list. If changes
+ * are made to this class above, consider whether they apply to that code as well.
+ *
+ * For more details, consult PLATYPUS-61.
+ ***********/

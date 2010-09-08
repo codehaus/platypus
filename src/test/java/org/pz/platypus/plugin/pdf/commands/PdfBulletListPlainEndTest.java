@@ -25,13 +25,14 @@ import java.util.logging.Level;
  *
  * @author alb
  */
-public class PdfBulletListPlainStartTest
+public class PdfBulletListPlainEndTest
 {
     private GDD gdd;
     private PdfData pdd;
     private Token tok;
     private CommandParameter parm;
     private PdfBulletListPlainStart bulletList;
+    private PdfBulletListPlainEnd bulletListEnd;
 
     @Before
     public void setUp()
@@ -44,30 +45,32 @@ public class PdfBulletListPlainStartTest
         gdd.getLogger().setLevel( Level.OFF );
         pdd = new PdfData( gdd );
         bulletList = new PdfBulletListPlainStart();
+        bulletListEnd = new PdfBulletListPlainEnd();
         parm = new CommandParameter();
         parm.setAmount( 4f );
         parm.setUnit( UnitType.NONE );
-        tok = new Token( new Source(1,1), TokenType.COMMAND, "[list]", "[list]", parm );
+        tok = new Token( new Source(1,1), TokenType.COMMAND, "[-list]", "[-list]", parm );
     }
 
     @Test
     public void testConstructor()
     {
-        assertEquals( "[list]", bulletList.getRoot() );
+        assertEquals( "[-list]", bulletListEnd.getRoot() );
     }
 
-    @Test (expected = IllegalArgumentException.class )
+    @Test(expected = IllegalArgumentException.class )
     public void invalidTokenParameters()
     {
-        bulletList.process( pdd, null, 3 );
+        pdd.setOutfile( null );
+        bulletListEnd.process( pdd, tok, 3 );
     }
 
-    @Test
-    public void validProcess()
-    {
-        MockPdfOutfile mockOutf = new MockPdfOutfile();
-        pdd.setOutfile( (PdfOutfile) mockOutf  );
-        bulletList.process( pdd, tok, 3 );
-        assertEquals( "\u2022", mockOutf.getContent() );
-    }
+//    @Test
+//    public void validProcess()
+//    {
+//        MockPdfOutfile mockOutf = new MockPdfOutfile();
+//        pdd.setOutfile( (PdfOutfile) mockOutf  );
+//        bulletList.process( pdd, tok, 3 );
+//        assertEquals( "\u2022", mockOutf.getContent() );
+//    }
 }

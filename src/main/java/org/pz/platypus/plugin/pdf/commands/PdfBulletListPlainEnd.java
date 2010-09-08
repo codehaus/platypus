@@ -26,7 +26,11 @@ public class PdfBulletListPlainEnd extends BulletListPlainEnd
     {
         PdfData pdd = (PdfData) context;
         PdfOutfile outFile = pdd.getOutfile();
+        if( outFile == null ) {
+            throw new IllegalArgumentException();
+        }
 
+        // here, we end the list.
         outFile.endPlainBulletList();
 
         // if this is the last command in the line, we don't want the concluding [cr]
@@ -64,5 +68,4 @@ public class PdfBulletListPlainEnd extends BulletListPlainEnd
         }
         return( 0 );
     }
-
 }
