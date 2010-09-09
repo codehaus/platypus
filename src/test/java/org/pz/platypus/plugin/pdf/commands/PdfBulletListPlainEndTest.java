@@ -65,12 +65,104 @@ public class PdfBulletListPlainEndTest
         bulletListEnd.process( pdd, tok, 3 );
     }
 
-//    @Test
-//    public void validProcess()
-//    {
-//        MockPdfOutfile mockOutf = new MockPdfOutfile();
-//        pdd.setOutfile( (PdfOutfile) mockOutf  );
-//        bulletList.process( pdd, tok, 3 );
-//        assertEquals( "\u2022", mockOutf.getContent() );
-//    }
+    @Test(expected = IllegalArgumentException.class )
+    public void invalidNullParameters()
+    {
+        MockPdfOutfile mockOutf = new MockPdfOutfile();
+        PdfOutfile outfile = (PdfOutfile) mockOutf;
+        pdd.setOutfile( outfile  );
+        assertEquals( 0, bulletListEnd.process( pdd, null, 0 ));
+    }
+
+    @Test
+    public void validProcess()
+    {
+        MockPdfOutfile mockOutf = new MockPdfOutfile();
+        PdfOutfile outfile = (PdfOutfile) mockOutf;
+        pdd.setOutfile( outfile  );
+        assertEquals( 0, bulletListEnd.process( pdd, tok, 0 ));
+    }
+
+    @Test
+    public void validProcessWithFollowingTokenIscr()
+    {
+        MockPdfOutfile mockOutf = new MockPdfOutfile();
+        PdfOutfile outfile = (PdfOutfile) mockOutf;
+        pdd.setOutfile( outfile  );
+
+        TokenList tl = new TokenList();
+        tl.add( tok );
+
+        Token tok2 = new Token( new Source(1,1), TokenType.COMMAND, "[cr]", "[cr]", null );
+        tl.add( tok2 );
+
+        gdd.setInputTokens( tl );
+
+        assertEquals( 1, bulletListEnd.process( pdd, tok, 0 ));
+    }
+
+    @Test
+    public void validProcessWithFollowingTokensArecrCR()
+    {
+        MockPdfOutfile mockOutf = new MockPdfOutfile();
+        PdfOutfile outfile = (PdfOutfile) mockOutf;
+        pdd.setOutfile( outfile  );
+
+        TokenList tl = new TokenList();
+        tl.add( tok );
+
+        Token tok2 = new Token( new Source(1,1), TokenType.COMMAND, "[cr]", "[cr]", null );
+        tl.add( tok2 );
+
+        Token tok3 = new Token( new Source(1,1), TokenType.COMMAND, "[CR]", "[CR]", null );
+        tl.add( tok3 );
+
+        gdd.setInputTokens( tl );
+
+        assertEquals( 2, bulletListEnd.process( pdd, tok, 0 ));
+    }
+
+    @Test
+    public void validProcessWithFollowingTokensArecrTEXT()
+    {
+        MockPdfOutfile mockOutf = new MockPdfOutfile();
+        PdfOutfile outfile = (PdfOutfile) mockOutf;
+        pdd.setOutfile( outfile  );
+
+        TokenList tl = new TokenList();
+        tl.add( tok );
+
+        Token tok2 = new Token( new Source(1,1), TokenType.COMMAND, "[cr]", "[cr]", null );
+        tl.add( tok2 );
+
+        Token tok3 = new Token( new Source(1,1), TokenType.TEXT, "hello", "hello", null );
+        tl.add( tok3 );
+
+        gdd.setInputTokens( tl );
+
+        assertEquals( 1, bulletListEnd.process( pdd, tok, 0 ));
+    }
+
+    @Test
+    public void validProcessWithFollowingTokensAreTwoNonCrCommands()
+    {
+        MockPdfOutfile mockOutf = new MockPdfOutfile();
+        PdfOutfile outfile = (PdfOutfile) mockOutf;
+        pdd.setOutfile( outfile  );
+
+        TokenList tl = new TokenList();
+        tl.add( tok );
+
+        parm.setAmount( 12f );
+        parm.setUnit( UnitType.POINT );
+        Token tok2 = new Token( new Source(1,1), TokenType.COMMAND, "[fsize:12pt]", "[fsize:12pt]", parm );
+        tl.add( tok2 );
+
+        Token tok3 = new Token( new Source(1,1), TokenType.COMMAND, "[fsize:12pt]", "[fsize:12pt]", parm );
+        tl.add( tok3 );
+
+        gdd.setInputTokens( tl );
+
+        assertEquals( 0, bulletListEnd.process( pdd, tok, 0 ));
+    }
 }

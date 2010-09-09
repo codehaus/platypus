@@ -8,6 +8,7 @@
 package org.pz.platypus.test.mocks;
 
 import org.pz.platypus.plugin.pdf.PdfOutfile;
+import org.pz.platypus.BulletLists;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Chunk;
 
@@ -24,6 +25,11 @@ public class MockPdfOutfile extends PdfOutfile
     private String content = null;
     private Paragraph para = new Paragraph();
     private int newParagraphCount = 0;
+
+    public MockPdfOutfile()
+    {
+        setBulletLists( new BulletLists() );
+    }
 
     @Override
     public void emitChar( final String s, final String fontName ) {
