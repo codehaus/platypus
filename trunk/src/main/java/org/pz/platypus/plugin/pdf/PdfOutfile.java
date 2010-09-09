@@ -943,6 +943,13 @@ public class PdfOutfile
         return( iTPara );
     }
 
+    // this method is used for testing
+
+    public void setBulletLists( BulletLists newBulletLists )
+    {
+        bulletLists = newBulletLists;
+    }
+
     // this method is only ever used for testing.
     public void setItPara( Paragraph newPara )
     {
