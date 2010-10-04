@@ -41,7 +41,9 @@ public class PropertyFileTest
         for( String filename : testFilenames ) {
             File f = new File ( filename );
             if( f.exists() ) {
-                f.delete();
+                if ( !f.delete() ) {
+                    System.out.println("Failed to delete " + filename );
+                }
             }
         }
      }
@@ -267,8 +269,9 @@ public class PropertyFileTest
             //do nothing.
         }
 
+        BufferedWriter out = null;
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter( inputFilename ));
+            out = new BufferedWriter(new FileWriter( inputFilename ));
             out.write( lineContent );
             out.close();
         }
