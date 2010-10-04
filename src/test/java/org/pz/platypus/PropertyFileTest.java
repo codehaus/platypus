@@ -7,6 +7,7 @@
 
 package org.pz.platypus;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.io.*;
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
 
 /**
  * Tests of PropertyFile.java, which handles reading in property files.
- * Note: these tests create a file and then delete it.
+ * Note: these tests create a file and then delete it (when all tests are complete).
  *
  * @author alb
  */
@@ -23,6 +24,27 @@ public class PropertyFileTest
 {
     private GDD gdd;
     private PropertyFile pf;
+
+    private static String testFilenames[] = {
+            "test-file_OK_to_delete0",
+            "test-file_OK_to_delete1",
+            "test-file_OK_to_delete2",
+            "test-file_OK_to_delete3",
+            "test-file_OK_to_delete4",
+            "test-file_OK_to_delete5"
+        };
+
+
+    @AfterClass
+    public static void oneTimeTearDown() {
+        // one-time cleanup code: Get rid of temporary files created here.
+        for( String filename : testFilenames ) {
+            File f = new File ( filename );
+            if( f.exists() ) {
+                f.delete();
+            }
+        }
+     }
 
     @Test
     public void testConstructor()
@@ -89,7 +111,7 @@ public class PropertyFileTest
     {
         pf = new PropertyFile();
 
-        String inputFilename = "test-file_OK_to_delete";
+        String inputFilename = testFilenames[0];
 
         File f = new File ( inputFilename );
         try {
@@ -117,7 +139,7 @@ public class PropertyFileTest
     {
         pf = new PropertyFile();
 
-        String inputFilename = "test-file_OK_to_delete1";
+        String inputFilename = testFilenames[1];
 
         File f = new File ( inputFilename );
         try {
@@ -131,7 +153,7 @@ public class PropertyFileTest
 
         String s = pf.retrieveNextLine( bf );
         assertNull( s );
-               
+
         try {
             bf.close();
         }
@@ -148,7 +170,7 @@ public class PropertyFileTest
     {
         pf = new PropertyFile();
 
-        String inputFilename = "test-file_OK_to_delete2";
+        String inputFilename = testFilenames[2];
         String lineContent = "a=b";
 
         File f = new File ( inputFilename );
@@ -190,7 +212,7 @@ public class PropertyFileTest
     {
         pf = new PropertyFile();
 
-        String inputFilename = "test-file_OK_to_delete3";
+        String inputFilename = testFilenames[3];
         String lineContent = "a=b";
 
         File f = new File ( inputFilename );
@@ -232,7 +254,7 @@ public class PropertyFileTest
     @Test
     public void validLoadofTwoLines()
     {
-        String inputFilename = "test-file_OK_to_delete4";
+        String inputFilename = testFilenames[4];
         String lineContent = "a=b\nc=d\n";
 
         pf = new PropertyFile( inputFilename, gdd );
@@ -256,9 +278,5 @@ public class PropertyFileTest
 
         assertEquals( Status.OK, pf.load() );
         assertEquals( 2, pf.getSize() );
-
-        if( f.exists() ) {
-            f.delete();
-        }
     }
 }
