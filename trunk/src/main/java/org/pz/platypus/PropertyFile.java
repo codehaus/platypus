@@ -57,12 +57,12 @@ public class PropertyFile
      *
      * @return Status.OK, if all went well; else Status.IO_ERR
      */
-    public int load()           
+    public int load()
     {
         String line;
 
         BufferedReader inReader = open( filename );
- 
+
         if ( inReader == null ) {
             if( gdd == null || gdd.getLits() == null ) {
                 // only occurs if Literals file is being set up, so we have to
@@ -82,6 +82,14 @@ public class PropertyFile
         if( gdd != null && gdd.getLogger() != null ) {
             gdd.log( "Property file loaded with " + contents.size() + " entries: " + filename );
         }
+
+        try {
+            inReader.close();
+        }
+        catch( IOException ioe ){
+            gdd.logFine( "Error closing: " + filename + " Ignored." );
+        }
+        
         return( Status.OK );
     }
 
@@ -145,7 +153,7 @@ public class PropertyFile
 
         key = line.substring( 0, equalsSign );
         value = line.substring( equalsSign + 1, line.length() );
-        contents.put( key, value );        
+        contents.put( key, value );
     }
 
     /**
@@ -205,7 +213,7 @@ public class PropertyFile
         if( contents == null ) {
             return( -1 );
         }
-        
+
         return( contents.size() );
     }
 

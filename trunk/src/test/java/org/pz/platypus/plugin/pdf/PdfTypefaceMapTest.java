@@ -8,6 +8,8 @@
 package org.pz.platypus.plugin.pdf;
 
 import static org.junit.Assert.*;
+
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.pz.platypus.GDD;
@@ -31,6 +33,7 @@ import java.io.FileWriter;
 public class PdfTypefaceMapTest
 {
     private GDD gdd;
+    private String filename = "test-file_OK_to_delete";
     TypefaceMap tfm;
 
     @Before
@@ -44,6 +47,18 @@ public class PdfTypefaceMapTest
 
         tfm = new TypefaceMap( gdd );
     }
+
+    @AfterClass
+    public static void oneTimeTearDown() {
+        // one-time cleanup code: Get rid of temporary files created here.
+        File f = new File ( "test-file_OK_to_delete" );
+        if( f.exists() ) {
+            if ( !f.delete() ) {
+                System.out.println("Failed to delete: " + "test-file_OK_to_delete" );
+            }
+        }
+    }
+
 
     @Test
     public void testConstructor()
@@ -73,7 +88,6 @@ public class PdfTypefaceMapTest
     @Test
     public void testLoadValidOneLineFile() throws InvalidConfigFileException
     {
-        String filename = "test-file_OK_to_delete";
         BufferedWriter bw;
         HashMap<String, LinkedList<String>> hmap = tfm.getMap();
 
@@ -95,10 +109,12 @@ public class PdfTypefaceMapTest
             bw.flush();
             tfm.loadFromFile( filename );
             hmap = tfm.getMap();
+            bw.close();
         }
         catch( Exception e) {}
         finally{
             if( fin.exists() ) {
+
                 fin.delete();
             }
         }
@@ -109,7 +125,6 @@ public class PdfTypefaceMapTest
     @Test
     public void testLoadCommentLine()
     {
-        String filename = "test-file_OK_to_delete";
         BufferedWriter bw;
         HashMap<String, LinkedList<String>> hmap = tfm.getMap();
 
@@ -131,6 +146,7 @@ public class PdfTypefaceMapTest
             bw.flush();
             tfm.loadFromFile( filename );
             hmap = tfm.getMap();
+            bw.close();
         }
         catch( Exception e) {}
         finally{
@@ -146,7 +162,6 @@ public class PdfTypefaceMapTest
     @Test
     public void testLoadLineWithNoEqualsSign()
     {
-        String filename = "test-file_OK_to_delete";
         BufferedWriter bw;
         HashMap<String, LinkedList<String>> hmap = tfm.getMap();
 
@@ -168,6 +183,7 @@ public class PdfTypefaceMapTest
             bw.flush();
             tfm.loadFromFile( filename );
             hmap = tfm.getMap();
+            bw.close();
         }
         catch( Exception e) {}
         finally{
