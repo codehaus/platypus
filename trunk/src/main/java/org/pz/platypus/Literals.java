@@ -25,14 +25,14 @@ public class Literals extends PropertyFile
      */
     public Literals()
     {
-        super();    
+        super();
     }
-    
+
     /**
      * Open a resource bundle with the name: resourceName.properties
      * In the event the resource bundle cannot be found, the program
      * shuts down. Clearly, this is a fatal error.
-     * 
+     *
      * @throws MissingResourceException if resource is not found.
      * @param resourceName  name of the resource bundle
      */
@@ -41,7 +41,7 @@ public class Literals extends PropertyFile
         super();
         String homeDir = new PlatypusHomeDirectory( this.getClass() ).get();
         if( homeDir == null ) {
-            System.err.println( "PLATYPUS_HOME is not defined in your environment." +
+            System.err.println( "PLATYPUS_HOME is not defined in your environment." + " " +
                                 "See Documentation to fix. Exiting..." );
             throw new MissingResourceException( null, null, null );
         }

@@ -7,10 +7,7 @@
 
 package org.pz.platypus.utilities;
 
-import org.pz.platypus.Platypus;
-import java.net.URL;
 import java.io.File;
-import java.util.MissingResourceException;
 
 /**
  * Gets the home directory for Platypus as set in the user environment.
@@ -21,13 +18,10 @@ public class PlatypusHomeDirectory
 {
     private String homeDirectory;
 
-    public PlatypusHomeDirectory()
-    {
-        this( null );
-    }
     /**
      * Creates a string of the home directory from the user environment and
-     * makes sure it ends with a file separator.
+     * makes sure it ends with a file separator. In the event, the home directory
+     * is not specified, PlatypusHomeDirectory.get() returns null.
      *
      * @param gddClass used in the commented-out code
      */
@@ -59,9 +53,6 @@ public class PlatypusHomeDirectory
                 homeDirectory += separator;
             }
         }
-        else {
-            throw new MissingResourceException( null, null, null );
-        } 
     }
 
     /**
@@ -84,6 +75,7 @@ public class PlatypusHomeDirectory
 
     /**
      * return the home directory name with a file separator at end
+     * 
      * @return  the directory name
      */
     public String get()
