@@ -10,9 +10,9 @@
 
      Note: this contains no tests or reports.
 
-     2009-06-09	alb	incomplete, but a start.
-     2009-06-23	alb	complete, works correctly.
-     2009-10-01	alb	added ..\ to all files to reflect new project organization;
+    2009-06-09	alb	incomplete, but a start.
+    2009-06-23	alb	complete, works correctly.
+    2009-10-01	alb	added ..\ to all files to reflect new project organization;
 					added licenses to jar
 	2009-12-06	alb	added cli.jar to manifest file for ASK's Apache Commons CLI addition
 	2010-01-09	alb	cleaned up so that build can be run from \src\build without modification
@@ -22,11 +22,12 @@
 				alb	migrated unit test runs to this build file
 	2010-03-06	alb	added platypus.home file as an attempt to solve CI's inability to set environment variables
 	2010-03-xx	ask	added HTML plugin commands.
-	2010-04-09   	alb  removed dependency on PDF plugin from HTML plugin. Changed
+	2010-04-09  alb  removed dependency on PDF plugin from HTML plugin. Changed
 	                     the way that main-jar inlcudes packages in the plugin directory
-	2010-04-11  	alb  added build-only target (does not run tests) entitled 'build'. To run: ant build
-	2010-04-23   	alb  updated iText from v. 2.1.3 to 2.1.7
-	2010-09-01    alb  updated Platypus version to 0.2.5; removed compiling and JAR construction for RTF plugin.
+	2010-04-11  alb  added build-only target (does not run tests) entitled 'build'. To run: ant build
+	2010-04-23  alb  updated iText from v. 2.1.3 to 2.1.7
+	2010-09-01  alb  updated Platypus version to 0.2.5; removed compiling and JAR construction for RTF plugin.
+	2010-10-24  alb  begin working on continuous delivery model for this file. Added Javadoc creation (as part of 'delivery' task. 
 -->
 
 <project name="platypus-build" default="all" basedir=".">
@@ -56,11 +57,13 @@
 	
 	<!-- test directories and resources -->
 	<property name="test.report.dir"		location="${top.dir}\test-reports"/>
+	<property name="javadoc.dir"			location="${top.dir}\reports\javadoc"/>
 
 	<!-- miscellaneous properties -->
 	<property name="version"				value="0.2.5" />
 	<property name="message" 				value="Build Platypus for Test and Release" />
 	<property name="build-message"			value="Build Platypus, Do not run tests" />
+	<property name="delivery-msg"           value="Build, run all tests, all reports, pagkage for deploy, all platforms" />
 
     <path id="project.classpath">
         <pathelement location="${classes.dir}"/>
@@ -68,6 +71,14 @@
             <include name="*.jar"/>
         </fileset>
     </path>
+
+<target name="delivery" 
+		depends="all,
+				 javadoc,
+				 zip-javadoc"
+		description="Run all targets in continuous-delivery cycle">
+	<echo> ${delivery-msg} </echo>		
+</target>
 
 <target name="all"
         depends="compile-prep,
@@ -316,7 +327,7 @@
 </target>
 
  
-<target name="zip-all">
+<target name="zip-all" description="Zip up the package deliverable (binaries, fonts, and docs)">
     <delete file="${jar.dir}\platypus.home" />
     <zip destfile="${build.dir}\platypus-${version}.zip"
          basedir="${jar.dir}" >
@@ -360,6 +371,44 @@
 		</fileset>
 		<report todir="${test.report.dir}\html" />
 	</junitreport>
+</target>
+
+<target name="javadoc" description="Generate Javadoc">
+	<delete dir="${javadoc.dir}" />
+	<mkdir  dir="${javadoc.dir}" />
+    <javadoc
+		sourcepath="${src.dir}"
+        destdir="${javadoc.dir}"
+        failonerror="false"
+        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;"        
+        excludepackagenames="com.lowagie.text.*,org.apache.commons.cli*"
+        author="true"
+        version="true"
+        private="true"
+        use="true"
+        doctitle="Platypus Code"
+        windowtitle="Platypus Code">
+        <doctitle><![CDATA[<h1>Platypus Code</h1>]]></doctitle>
+        <bottom><![CDATA[<i>Copyright &#169; 2008-10 Pacific Data Works LLC</i>]]> </bottom>
+    </javadoc>
+</target>
+
+<target name="zip-javadoc" description="Create .zip of javadoc files" depends="javadoc" >
+    <zip destfile="${javadoc.dir}/javadoc-${version}.zip"
+         basedir="${javadoc.dir}" >
+    </zip>
+</target>
+
+<target name="zip-javadoc-with-src" description="Create .zip of source and javadoc for posting" depends="zip-javadoc">
+	<!-- zip the source -->
+	<zip destfile="${javadoc.dir}/source-${version}.zip"
+		 basedir="${src.dir}" >
+	</zip>
+	<!-- make a zip file containing the zipped javadoc and the zipped source -->
+	<zip destfile="${javadoc.dir}\${version}-src.zip"
+		 basedir="${javadoc.dir}"
+		 includes="**/*.zip" >
+	</zip> 	
 </target>
 </project>
  
