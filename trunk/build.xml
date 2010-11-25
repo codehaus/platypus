@@ -28,6 +28,7 @@
 	2010-10-24  alb begin working on continuous delivery model for this file. Added Javadoc creation (as part of 'delivery' task).
 	2010-11-09  alb began setting up assembly of User Guide as part of build. Automates previously manual task. See setup-docs step.
 					changed version number back to v. 0.2.4, for bug-fix release.
+    2010-11-23  alb completed changes to dynamic construction of user guide.
 -->
 
 <project name="platypus-build" default="all" basedir=".">
@@ -289,43 +290,20 @@
     </copy>
 </target>
 
-<!--
-<target  name="setup-docs" description="set up misc docs in root of JAR">
-    <copy todir="${jar.dir}" >
-        <fileset dir="${docs.dir}" />
-    </copy>
+<target  name="setup-docs" description="Assemble User Guide in root of JAR and add batch file to run Platypus">
+    <copy file="${tools.dir}\pdfconcat\pdfConcat.jar" todir="." />
+
+	<java jar="pdfConcat.jar"
+		  failonerror="true"
+		  fork="true">
+		<arg line="${docs.dir}\UserGuide-${version}-core.pdf ${docs.dir}\chars.pdf ${docs.dir}\licenses.pdf ${jar.dir}\UserGuide-${version}.pdf" />
+	</java>
+
     <copy  todir="${jar.dir}" >
         <fileset dir="${misc.dir}" >
             <include name="*.bat" />
-			<include name="*.pdf" />
         </fileset>
-    </copy>
-</target>
-
-
-<target  name="setup-docs" description="Assemble User Guide in root of JAR">
-	<java classname="Main" 
-		  failonerror="true"
-		  fork="true"
-		  dir="${tools.dir}\pdfConcat\">
-		<arg line="${docs.dir}\UserGuide-${version}-core.pdf ${docs.dir}\chars.pdf ${jar.dir}\docs\UserGuide-${version}.pdf" />
-		<classpath>
-			<pathelement location="${vendor.libs}\iText-2.1.7.jar" />
-		</classpath>
-	</java>	
-</target>
--->
-<target  name="setup-docs" description="Assemble User Guide in root of JAR">
-	<java jar="${tools.dir}\pdfConcat\pdfConcat.jar"
-		  classpath="${vendor.libs}\iText-2.1.7.jar"
-		  failonerror="true"
-		  fork="true"
-		  dir="${tools.dir}\pdfconcat\">
-		<arg line="${docs.dir}\UserGuide-${version}-core.pdf ${docs.dir}\chars.pdf ${jar.dir}\docs\UserGuide-${version}.pdf" />
-		<classpath>
-			<pathelement location="${vendor.libs}\iText-2.1.7.jar" />
-		</classpath>
-	</java>	
+    </copy>	
 </target>
 
 <target  name="setup-fonts" description="package free fonts">
