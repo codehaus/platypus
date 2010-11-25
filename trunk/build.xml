@@ -4,11 +4,9 @@
 
 	Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
 	Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
-	This is the full Platypus build file, that creates all the 
+	This is the full Platypus build file, that creates all the
 		the plugins and bundles them will all necessary files.
 	Requires directories set up as they are in the downloadable source.
-
-     Note: this contains no tests or reports.
 
     2009-06-09	alb	incomplete, but a start.
     2009-06-23	alb	complete, works correctly.
@@ -16,51 +14,54 @@
 					added licenses to jar
 	2009-12-06	alb	added cli.jar to manifest file for ASK's Apache Commons CLI addition
 	2010-01-09	alb	cleaned up so that build can be run from \src\build without modification
-	2010-01-11	alb	modified so that it's the topmost file in the source directory. 
-					 This facilitates its use by various CI servers. 
+	2010-01-11	alb	modified so that it's the topmost file in the source directory.
+					    This facilitates its use by various CI servers.
 	2010-03-05	alb	added RTF plugin processing
 				alb	migrated unit test runs to this build file
 	2010-03-06	alb	added platypus.home file as an attempt to solve CI's inability to set environment variables
 	2010-03-xx	ask	added HTML plugin commands.
-	2010-04-09  alb  removed dependency on PDF plugin from HTML plugin. Changed
+	2010-04-09  alb removed dependency on PDF plugin from HTML plugin. Changed
 	                     the way that main-jar inlcudes packages in the plugin directory
-	2010-04-11  alb  added build-only target (does not run tests) entitled 'build'. To run: ant build
-	2010-04-23  alb  updated iText from v. 2.1.3 to 2.1.7
-	2010-09-01  alb  updated Platypus version to 0.2.5; removed compiling and JAR construction for RTF plugin.
-	2010-10-24  alb  begin working on continuous delivery model for this file. Added Javadoc creation (as part of 'delivery' task. 
+	2010-04-11  alb added build-only target (does not run tests) entitled 'build'. To run: ant build
+	2010-04-23  alb updated iText from v. 2.1.3 to 2.1.7
+	2010-09-01  alb updated Platypus version to 0.2.5; removed compiling and JAR construction for RTF plugin from 'all'.
+	2010-10-24  alb begin working on continuous delivery model for this file. Added Javadoc creation (as part of 'delivery' task).
+	2010-11-09  alb began setting up assembly of User Guide as part of build. Automates previously manual task. See setup-docs step.
+					changed version number back to v. 0.2.4, for bug-fix release.
 -->
 
 <project name="platypus-build" default="all" basedir=".">
 
 	<property name="top.dir"				location="." />
-	
+
     <!-- input directories and files -->
 	<property name="src.dir" 				location="${top.dir}\src\main\java"/>
     <property name="src.html.plugin.dir"    location="\${src.dir}\org\pz\platypus\plugin\html"/>
     <property name="src.listing.plugin.dir" location="\${src.dir}\org\pz\platypus\plugin\listing"/>
     <property name="src.pdf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\pdf"/>
     <property name="src.rtf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\rtf"/>
-	<property name="src.test.dir"   		location="\${top.dir}\src\test\java" />	
+	<property name="src.test.dir"   		location="\${top.dir}\src\test\java" />
 	<!--<property name="config.dir"				location="${top.dir}\src\main\resources\" /> -->
 	<property name="config.dir"				location="${top.dir}\config\" />
     <property name="docs.dir"       		location="${top.dir}\docs\" />
     <property name="fonts.dir"      		location="${top.dir}\fonts\" />
-	<property name="licenses.dir"			location="${top.dir}\licenses\" />	
+	<property name="licenses.dir"			location="${top.dir}\licenses\" />
 	<property name="misc.dir"				location="${top.dir}\misc\" />
+	<property name="tools.dir"				location="${top.dir}\tools\" />
 	<property name="vendor.libs"    		location="${top.dir}\lib\" />
-	
+
 	<!-- ouput directories and files -->
-	<property name="build.dir" 				location="${top.dir}\target\" /> 
-	<property name="classes.dir" 			location="\${build.dir}\classes\" />	
+	<property name="build.dir" 				location="${top.dir}\target\" />
+	<property name="classes.dir" 			location="\${build.dir}\classes\" />
 	<property name="jar.dir"				location="\${build.dir}\jar"/>
     <property name="vendor.lib.dir" 		location="\${build.dir}\jar\lib" />
-	
+
 	<!-- test directories and resources -->
 	<property name="test.report.dir"		location="${top.dir}\test-reports"/>
 	<property name="javadoc.dir"			location="${top.dir}\reports\javadoc"/>
 
 	<!-- miscellaneous properties -->
-	<property name="version"				value="0.2.5" />
+	<property name="version"				value="0.2.4" />
 	<property name="message" 				value="Build Platypus for Test and Release" />
 	<property name="build-message"			value="Build Platypus, Do not run tests" />
 	<property name="delivery-msg"           value="Build, run all tests, all reports, pagkage for deploy, all platforms" />
@@ -72,12 +73,13 @@
         </fileset>
     </path>
 
-<target name="delivery" 
+<target name="delivery"
 		depends="all,
 				 javadoc,
-				 zip-javadoc"
+				 zip-javadoc,
+				 zip-javadoc-with-src"
 		description="Run all targets in continuous-delivery cycle">
-	<echo> ${delivery-msg} </echo>		
+	<echo> ${delivery-msg} </echo>
 </target>
 
 <target name="all"
@@ -98,12 +100,12 @@
                  setup-fonts,
 				 unit-test,
                  zip-all"
-        description="Run all major targets">
+        description="build and test">
 	<echo> ${message} </echo>
 </target>
 
 <target name="build"
-		depends ="compile-prep,
+		depends="compile-prep,
                  compile,
                  compile-listing-plugin,
                  compile-pdf-plugin,
@@ -132,7 +134,7 @@
 
  <target name="compile-prep" description="Clean compilation output directory" >
 	<mkdir dir="${classes.dir}"/>
-    <delete dir="${classes.dir}\org" />	
+    <delete dir="${classes.dir}\org" />
 </target>
 
 <target name="compile-listing-plugin" depends="compile" description="Compile listing plug-in with Java 6">
@@ -178,9 +180,9 @@
 	<jar destfile="${jar.dir}\platypus.jar">
 		<fileset dir="${build.dir}\classes\">
 			<exclude name="**\plugin\html\**" />
-			<exclude name="**\plugin\listing\**" />	
+			<exclude name="**\plugin\listing\**" />
 			<exclude name="**\plugin\pdf\**" />
-			<exclude name="**\plugin\rtf\**" />	
+			<exclude name="**\plugin\rtf\**" />
 		</fileset>
 		<manifest>
 			<attribute name="Implementation-Title" value="Platypus Page Layout And Typesetting System" />
@@ -287,6 +289,7 @@
     </copy>
 </target>
 
+<!--
 <target  name="setup-docs" description="set up misc docs in root of JAR">
     <copy todir="${jar.dir}" >
         <fileset dir="${docs.dir}" />
@@ -297,6 +300,32 @@
 			<include name="*.pdf" />
         </fileset>
     </copy>
+</target>
+
+
+<target  name="setup-docs" description="Assemble User Guide in root of JAR">
+	<java classname="Main" 
+		  failonerror="true"
+		  fork="true"
+		  dir="${tools.dir}\pdfConcat\">
+		<arg line="${docs.dir}\UserGuide-${version}-core.pdf ${docs.dir}\chars.pdf ${jar.dir}\docs\UserGuide-${version}.pdf" />
+		<classpath>
+			<pathelement location="${vendor.libs}\iText-2.1.7.jar" />
+		</classpath>
+	</java>	
+</target>
+-->
+<target  name="setup-docs" description="Assemble User Guide in root of JAR">
+	<java jar="${tools.dir}\pdfConcat\pdfConcat.jar"
+		  classpath="${vendor.libs}\iText-2.1.7.jar"
+		  failonerror="true"
+		  fork="true"
+		  dir="${tools.dir}\pdfconcat\">
+		<arg line="${docs.dir}\UserGuide-${version}-core.pdf ${docs.dir}\chars.pdf ${jar.dir}\docs\UserGuide-${version}.pdf" />
+		<classpath>
+			<pathelement location="${vendor.libs}\iText-2.1.7.jar" />
+		</classpath>
+	</java>	
 </target>
 
 <target  name="setup-fonts" description="package free fonts">
@@ -326,7 +355,7 @@
     </copy>
 </target>
 
- 
+
 <target name="zip-all" description="Zip up the package deliverable (binaries, fonts, and docs)">
     <delete file="${jar.dir}\platypus.home" />
     <zip destfile="${build.dir}\platypus-${version}.zip"
@@ -334,8 +363,8 @@
     </zip>
 </target>
 
-<!-- ========================================== 
-			  unit testing targets  
+<!-- ==========================================
+			  unit testing targets
      ========================================== -->
 
 <target name="compile-unit-tests" depends= "compile-prep, compile, compile-listing-plugin, compile-pdf-plugin, compile-rtf-plugin" description="Compile unit tests">
@@ -364,7 +393,7 @@
 			</fileset>
 		</batchtest>
 	</junit>
-	
+
 	<junitreport todir="${test.report.dir}">
 		<fileset dir="${test.report.dir}">
 			<include name="TEST-*.xml" />
@@ -373,6 +402,10 @@
 	</junitreport>
 </target>
 
+<!-- ==========================================
+			          Javadoc
+     ========================================== -->
+	 
 <target name="javadoc" description="Generate Javadoc">
 	<delete dir="${javadoc.dir}" />
 	<mkdir  dir="${javadoc.dir}" />
@@ -380,7 +413,7 @@
 		sourcepath="${src.dir}"
         destdir="${javadoc.dir}"
         failonerror="false"
-        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;"        
+        classpath="${vendor.lib.dir}\itext-2.1.7.jar;${vendor.lib.dir}\commons-cli-1.2.jar;${vendor.lib.dir}\ecs-1.4.2.jar;"
         excludepackagenames="com.lowagie.text.*,org.apache.commons.cli*"
         author="true"
         version="true"
@@ -408,7 +441,6 @@
 	<zip destfile="${javadoc.dir}\${version}-src.zip"
 		 basedir="${javadoc.dir}"
 		 includes="**/*.zip" >
-	</zip> 	
+	</zip>
 </target>
 </project>
- 
