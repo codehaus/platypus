@@ -14,7 +14,7 @@ import org.pz.platypus.commands.UrlWithCoverTextEnd;
  *
  * @author alb
  */
-public class PdfUrlWithCoverTextEnd extends UrlWithCoverTextEnd 
+public class PdfUrlWithCoverTextEnd extends UrlWithCoverTextEnd
 {
 
 }
