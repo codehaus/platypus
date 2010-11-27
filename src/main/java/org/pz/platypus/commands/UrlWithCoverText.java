@@ -98,7 +98,8 @@ public abstract class UrlWithCoverText implements IOutputCommand
 
             // if it's the [-url] (end of cover text) command, we're done.
             if( tok.getType() == TokenType.COMMAND &&
-//                tok.getRoot().equals( new PdfUrlWithCoverTextEnd().getRoot() )) {  //This generates a NoClassDefFoundError
+//                The next line generates a NoClassDefFoundError. See PLATYPUS-66 in JIRA    
+//                tok.getRoot().equals( new PdfUrlWithCoverTextEnd().getRoot() )) {
                    tok.getRoot().equals( "[-url]")) {
                     break;
             }
