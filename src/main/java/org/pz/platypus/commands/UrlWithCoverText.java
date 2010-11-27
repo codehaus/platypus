@@ -93,12 +93,13 @@ public abstract class UrlWithCoverText implements IOutputCommand
                 String macroKey = tok.getParameter().getString();
                 String macroText = gdd.getUserStrings().getString( macroKey );
                 coverText.append( macroText );
-                continue;  
+                continue;
             }
 
             // if it's the [-url] (end of cover text) command, we're done.
             if( tok.getType() == TokenType.COMMAND &&
-                tok.getRoot().equals( new PdfUrlWithCoverTextEnd().getRoot() )) {
+//                tok.getRoot().equals( new PdfUrlWithCoverTextEnd().getRoot() )) {  //This generates a NoClassDefFoundError
+                   tok.getRoot().equals( "[-url]")) {
                     break;
             }
 
