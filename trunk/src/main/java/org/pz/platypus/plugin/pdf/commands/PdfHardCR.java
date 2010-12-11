@@ -9,6 +9,7 @@ package org.pz.platypus.plugin.pdf.commands;
 
 import org.pz.platypus.Token;
 import org.pz.platypus.TokenList;
+import org.pz.platypus.TokenType;
 import org.pz.platypus.interfaces.IOutputCommand;
 import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
@@ -51,7 +52,7 @@ public class PdfHardCR implements IOutputCommand
         }
 
         currPar.add( new Chunk( Chunk.NEWLINE ));
-        
+
         // if it's the first token in line, it = a blank line, so an additional
         // NEWLINE needs to be emitted, unless it's right after an end of listing command,
         // which has already emitted the extra CR/LF.
@@ -88,7 +89,7 @@ public class PdfHardCR implements IOutputCommand
             return( false );
         }
 
-        if( prevTok2.getRoot().equals( "[-code]" )) {
+        if(( prevTok2.getType() == TokenType.COMMAND ) && prevTok2.getRoot().equals( "[-code]" )) {
             return( true );
         }
 
