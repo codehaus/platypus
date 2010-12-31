@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.  
+ *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -92,7 +92,7 @@ public class TextTransforms
     /**
      * Truncates count number of bytes from the back (right end) of a string
      * @param text the string to truncate
-     * @param count how much to truncate
+     * @param count how many bytes to truncate
      * @return the truncated string or, in the case of error, the original string.
      */
     public static String truncate( String text, final int count )

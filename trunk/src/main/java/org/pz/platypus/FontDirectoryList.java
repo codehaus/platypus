@@ -7,6 +7,8 @@
 
 package org.pz.platypus;
 
+import org.pz.platypus.utilities.TextTransforms;
+
 import java.io.BufferedReader;
 import java.util.*;
 import java.io.File;
@@ -75,7 +77,6 @@ public class FontDirectoryList
         if( homeDir != null ) {
             addDirsInFontDirsTxtFile( homeDir, dirs );
         }
-
     }
 
     /**
@@ -96,9 +97,9 @@ public class FontDirectoryList
 
         String line;
         while(( line = propFile.retrieveNextLine( inReader )) != null  ) {
-            addFontDir( dirs, line );    
+            addFontDir( dirs, line );
         }
-                
+
     }
 
     /**
@@ -108,15 +109,22 @@ public class FontDirectoryList
      * @param dirList list of directories to which the new directory is added
      * @param dirName new directory to add. If an error occurs, no directory is added.
      */
-    private void addFontDir( LinkedList<String> dirList, final String dirName )
+    public void addFontDir( LinkedList<String> dirList, final String dirName )
     {
         if( dirList == null || dirName == null ) {
             return;
         }
 
+        String nameToAdd;
         File dir = new File( dirName );
         if( dir.isDirectory() ) {
-            dirList.add( dirName );
+            if( dirName.endsWith( "/" ) || dirName.endsWith( "\\" )) {
+                nameToAdd = TextTransforms.truncate( dirName, 1 );
+            }
+            else {
+                nameToAdd = dirName;
+            }
+            dirList.add( nameToAdd );
         }
     }
 
