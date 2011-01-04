@@ -42,6 +42,8 @@
     <property name="src.pdf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\pdf"/>
     <property name="src.rtf.plugin.dir"     location="\${src.dir}\org\pz\platypus\plugin\rtf"/>
 	<property name="src.test.dir"   		location="\${top.dir}\src\test\java" />
+	<property name="src.test.groovy.dir"	location="\${top.dir}\src\test\groovy" />
+
 	<!--<property name="config.dir"				location="${top.dir}\src\main\resources\" /> -->
 	<property name="config.dir"				location="${top.dir}\config\" />
     <property name="docs.dir"       		location="${top.dir}\docs\" />
@@ -62,7 +64,7 @@
 	<property name="javadoc.dir"			location="${top.dir}\reports\javadoc"/>
 
 	<!-- miscellaneous properties -->
-	<property name="version"				value="0.2.4" />
+	<property name="version"				value="0.2.5" />
 	<property name="message" 				value="Build Platypus for Test and Release" />
 	<property name="build-message"			value="Build Platypus, Do not run tests" />
 	<property name="delivery-msg"           value="Build, run all tests, all reports, pagkage for deploy, all platforms" />
@@ -73,6 +75,23 @@
             <include name="*.jar"/>
         </fileset>
     </path>
+
+	<path id="groovy.class.path">
+      <fileset dir="${tools.dir}\groovy">
+         <include name="groovy-all*.jar"/>
+      </fileset>
+   </path>
+<!--
+	<taskdef name="groovy"
+         classname="org.codehaus.groovy.ant.Groovy"
+         classpathref="D:\Dev\platypus\platypus\tools\groovy\groovy-all-1.6.3.jar">
+    </taskdef>
+-->
+
+	<taskdef name="groovy"
+		classname="org.codehaus.groovy.ant.Groovy"
+		classpathref="groovy.class.path" >
+	</taskdef>
 
 <target name="delivery"
 		depends="all,
@@ -299,11 +318,13 @@
 		<arg line="${docs.dir}\UserGuide-${version}-core.pdf ${docs.dir}\chars.pdf ${docs.dir}\licenses.pdf ${jar.dir}\UserGuide-${version}.pdf" />
 	</java>
 
+	<delete file=".\pdfConcat.jar" />
+
     <copy  todir="${jar.dir}" >
         <fileset dir="${misc.dir}" >
             <include name="*.bat" />
         </fileset>
-    </copy>	
+    </copy>
 </target>
 
 <target  name="setup-fonts" description="package free fonts">
@@ -342,9 +363,12 @@
 </target>
 
 <!-- ==========================================
-			  unit testing targets
+		 unit & acceptance testing targets
      ========================================== -->
-
+<target name="acceptance-tests" >
+	<groovy src="${src.test.groovy.dir}\functionaltests\cliTest.groovy">
+	</groovy>
+</target>
 <target name="compile-unit-tests" depends= "compile-prep, compile, compile-listing-plugin, compile-pdf-plugin, compile-rtf-plugin" description="Compile unit tests">
 	<javac srcdir="${src.test.dir}"
 		   destdir="${classes.dir}"
@@ -383,7 +407,7 @@
 <!-- ==========================================
 			          Javadoc
      ========================================== -->
-	 
+
 <target name="javadoc" description="Generate Javadoc">
 	<delete dir="${javadoc.dir}" />
 	<mkdir  dir="${javadoc.dir}" />
