@@ -1,11 +1,11 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-08 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2011 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
-package org.pz.platypus.plugin.pdf;
+package org.pz.platypus;
 
 /**
  * Color, as specified by three integers, 0-255, that correspond to RGB
@@ -35,28 +35,38 @@ public class RgbColor
         B = b;
     }
 
-    public int getR() {
+    public int getR()
+    {
         return R;
     }
 
-    public void setR( final int r ) {
-        R = r;
+    public void setR( final int r )
+    {
+        if( r >=0 && r <= 255 ) {
+            R = r;
+        }
     }
 
-    public int getG() {
+    public int getG()
+    {
         return G;
     }
 
-    public void setG( final int g ) {
-        G = g;
+    public void setG( final int g )
+    {
+        if( g >=0 && g <= 255 ) {
+            G = g;
+        }
     }
 
     public int getB() {
         return B;
     }
 
-    public void setB( final int b ) {
-        B = b;
+    public void setB( final int b )
+    {
+        if( b >=0 && b <= 255 ) {
+            B = b;
+        }
     }
-
 }

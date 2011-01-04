@@ -49,9 +49,13 @@ public class PdfFontTest
     {
         assertEquals( DefaultValues.FONT_TYPEFACE, font.getFace() );
         assertEquals( DefaultValues.FONT_SIZE, font.getSize(), 0.01f );
+        assertEquals( 0, font.getColor().getR() );
+        assertEquals( 0, font.getColor().getG() );
+        assertEquals( 0, font.getColor().getB() );
+
     }
 
-// Commented out because of migration to PdfFontFactory.java. Eventually move to tests for that class.    
+// Commented out because of migration to PdfFontFactory.java. Eventually move to tests for that class.
 //    @Test
 //    public void isNotBase14FontName()
 //    {

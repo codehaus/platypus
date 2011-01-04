@@ -9,6 +9,7 @@ package org.pz.platypus.plugin.pdf;
 
 import com.lowagie.text.Font;
 import org.pz.platypus.GDD;
+import org.pz.platypus.RgbColor;
 import org.pz.platypus.Source;
 import org.pz.platypus.DefaultValues;
 
@@ -29,7 +30,7 @@ public class PdfFont implements Cloneable
     private float size = 0f;
 
     /** color of font */
-//    private RgbColor color;
+    private RgbColor color;
 
     /** is font bold? */
     private boolean bold;
@@ -67,6 +68,7 @@ public class PdfFont implements Cloneable
         gdd = pdd.getGdd();
         pdfData = pdd;
         typeface = fontName;
+        color = existingFont.getColor();
         size = existingFont.getSize();
         bold = existingFont.getBold();
         italics = existingFont.getItalics();
@@ -82,7 +84,7 @@ public class PdfFont implements Cloneable
     public void setToDefault()
     {
         typeface  = DefaultValues.FONT_TYPEFACE;
-//        color     = new RgbColor();
+        color     = new RgbColor();
         size      = DefaultValues.FONT_SIZE;
         bold      = DefaultValues.FONT_BOLD;
         italics   = DefaultValues.FONT_ITALIC;
@@ -111,6 +113,11 @@ public class PdfFont implements Cloneable
     public boolean getBold()
     {
         return( bold );
+    }
+
+    public RgbColor getColor()
+    {
+        return( color );
     }
 
     public boolean getItalics()
@@ -154,8 +161,8 @@ public class PdfFont implements Cloneable
         if( bold != onOff ) {
             bold = onOff;
             source = newSource;
-//        iTfont = createFont( this );
-        iTfont = fontFactory.createItextFont( this );
+
+            iTfont = fontFactory.createItextFont( this );
         }
     }
 
