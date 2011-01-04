@@ -67,6 +67,7 @@ public class PdfCommandTable  implements ICommandTable
         add( new PdfEol() );
         add( new PdfEolTreatment() );
         add( new PdfEoParagraph() );
+        add( new PdfFcolor() );
         add( new PdfFface() );
         add( new PdfFirstLineIndent() );
         add( new PdfFooterOn() );

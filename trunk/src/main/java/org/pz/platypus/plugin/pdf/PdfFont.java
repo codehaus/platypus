@@ -166,6 +166,15 @@ public class PdfFont implements Cloneable
         }
     }
 
+    public void setColor( final RgbColor newColor, final Source newSource )
+    {
+        if( ! newColor.equals( color )) {
+            color = newColor;
+            source = new Source();
+            iTfont = fontFactory.createItextFont( this );
+        }
+    }
+
     /**
      * set italics on/off and re-create the iText font to record the change.
      *
