@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2011 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -14,6 +14,7 @@ import com.lowagie.text.pdf.BaseFont;
 import org.pz.platypus.GDD;
 import org.pz.platypus.TypefaceMap;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
@@ -45,28 +46,29 @@ public class PdfFontFactory
         PdfFont pf = f;
 
         int style = 0;
- //       Color col  = new Color( color.getR(), color.getG(), color.getB() );
+
         Font font = null;
 
         if( pf == null ) {
             pf = new PdfFont( pdfData );
         }
 
+        Color col  = new Color( pf.getColor().getR(), pf.getColor().getG(), pf.getColor().getB() );
         String iTextFontName = createItextFontName( pf );
 
         if( ! isBase14Font( pf.getFace() )) {
             style = computeItextStyle( pf );
-            font = getIdentityHFont( iTextFontName, pf.getSize(), style );
+            font = getIdentityHFont( iTextFontName, pf.getSize(), style, col );
         }
 
         if( font == null ) {   //TODO: identify when this would be the case.
-            font = getCp1252Font( iTextFontName, pf.getSize(), style );
+            font = getCp1252Font( iTextFontName, pf.getSize(), style, col );
         }
 
         if( font == null || font.getBaseFont() == null ) { //TODO: Make error msg use literals
             gdd.logWarning( "iText could not find font for: " + iTextFontName + ". Using Times-Roman" );
             font = FontFactory.getFont( BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.EMBEDDED,
-                   pf.getSize(), style );
+                   pf.getSize(), style, col );
         }
 
 // #if debug
@@ -75,7 +77,7 @@ public class PdfFontFactory
 
         return( font );
     }
-    
+
     /**
      * iText font style captures bold, italic, strikethru, underline. Since we handle
      * strikethrough and underline ourselves, we use it to communicate italic and bold
@@ -290,20 +292,21 @@ public class PdfFontFactory
             return( true );
         }
     }
-    
+
     /**
      * Gets the font with CP1252 (aka WINANSI) encoding
      * @param fontName name of font to get
      * @param size  size in points
      * @param style bold, italic, etc.
+     * @param color font color (RGB 0-255)
      * @return the font, or null if an error occurred.
      */
-    Font getCp1252Font( final String fontName, float size, int style )
+    Font getCp1252Font( final String fontName, float size, int style, Color color )
     {
         Font font;
         try {
 
-            font = FontFactory.getFont( fontName, BaseFont.CP1252, BaseFont.EMBEDDED, size, style );
+            font = FontFactory.getFont( fontName, BaseFont.CP1252, BaseFont.EMBEDDED, size, style, color );
         }
         catch( Exception ex ) {
             font = null;
@@ -311,28 +314,29 @@ public class PdfFontFactory
 
         return( font );
     }
-    
+
     /**
      * Opens a font using the IDENTITY-H encoding.
      *
      * @param fontName  the name assigned to the font in the font list
      * @param size the size in points
      * @param style bold, italic, etc.
+     * @param color font color (RGB 0-255)
      * @return the Font if opened; null if the file could not be opened or an error occurred.
      */
-    Font getIdentityHFont( final String fontName, float size, int style )
+    Font getIdentityHFont( final String fontName, float size, int style, Color color )
     {
         Font font;
         try {
-            font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style );
+            font = FontFactory.getFont( fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, size, style, color );
         }
         catch( Exception ex ) {
             font = null;
         }
 
         return( font );
-    }    
-    
+    }
+
     /**
      * Determines whehter the current font is one of the Base14 Acrobat fonts, built into
      * every PDF reader. These fonts require special hanldling, and so this routine helps
