@@ -8,11 +8,11 @@
 package org.pz.platypus;
 
 /**
- * Color, as specified by three integers, 0-255, that correspond to RGB
+ * Derived from Color; specifies color via three integers, 0-255, that correspond to RGB
  *
  * @author alb
  */
-public class RgbColor
+public class RgbColor extends Color
 {
     private int R;
     private int G;
@@ -33,6 +33,11 @@ public class RgbColor
         R = r;
         G = g;
         B = b;
+    }
+
+    public int[] parse()  //TODO: fill in. Extract from PdfFcolor.java
+    {
+        return( null );
     }
 
     public int getR()
