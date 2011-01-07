@@ -19,7 +19,7 @@ import org.pz.platypus.test.mocks.MockLiterals;
 import java.util.logging.Level;
 
 /**
- * Test processing of changing paragraph indent from the right side.
+ * Test processing of changing paragraph alignment.
  *
  * @author alb
  */
@@ -48,6 +48,7 @@ public class PdfAlignmentTest
         align = new PdfAlignment();
         assertEquals( "[align:", align.getRoot() );
     }
+
     @Test
     public void testValidCenterAlignment()
     {
