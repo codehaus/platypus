@@ -55,12 +55,15 @@ public class PdfFcolor implements IOutputCommand
 
         pdf.getFont().setColor( newColor, tok.getSource() );
 
-        return 0;
+        return( 0 );
     }
 
     /**
      * parse the color spec, which should be in the form 999,999,999
      *
+     * @param colorSpec the color as specified in the command
+     * @param tok the token for the command, used in error messages only
+     * @param gdd the global document data container, used because it contains the logger.
      * @return an int array with 3 values for R, G, B. On error, an int array containing no values.
      */
     int[] parseColorSpec( final String colorSpec, final Token tok, GDD gdd )
@@ -120,29 +123,6 @@ public class PdfFcolor implements IOutputCommand
                         gdd.getLit( "LINE" ) + t.getSource().getLineNumber() + " " +
                         msg + " " +
                         gdd.getLit( "IGNORED" ));
-    }
-    /**
-     * Updates the leading by running the command PdfLeading with the new value
-     * @param context context of current token, needed by PdfLeading
-     * @param tok the current token for font size, from which to extract data for the leading command
-     * @param tokNum the number of the font size token
-     * @param newFontSize the font size we're moving to.
-     */
-    private void updateLeading( final IOutputContext context, final Token tok, final int tokNum,
-                                final float newFontSize )
-    {
-        CommandParameter newLeading = new CommandParameter();
-        newLeading.setAmount( newFontSize * DefaultValues.LEADING_TO_FONT_SIZE_RATIO );
-        newLeading.setUnit( UnitType.POINT );
-
-        Token newLeadingToken = new Token(
-                tok.getSource(),
-                TokenType.COMMAND,
-                "[leading:",
-                "[leading:",
-                newLeading );
-
-        new PdfLeading().process( context, newLeadingToken, tokNum  );
     }
 
     public String getRoot()
