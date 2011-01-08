@@ -18,7 +18,6 @@ import org.pz.platypus.test.mocks.MockLiterals;
 import java.util.logging.Level;
 
 import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.Font;
 
 /**
  * Test of PdfFont objects, which wrap the iText font object
