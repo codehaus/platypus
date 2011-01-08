@@ -7,11 +7,11 @@
 
 package org.pz.platypus.plugin.pdf.commands;
 
-import com.lowagie.text.Paragraph;
 import org.pz.platypus.*;
 import org.pz.platypus.interfaces.IOutputCommand;
 import org.pz.platypus.interfaces.IOutputContext;
 import org.pz.platypus.plugin.pdf.PdfData;
+import org.pz.platypus.utilities.TextTransforms;
 
 import java.util.Scanner;
 
@@ -60,15 +60,40 @@ public class PdfFcolor implements IOutputCommand
 
     /**
      * parse the color spec, which should be in the form 999,999,999
+     *
+     * @return an int array with 3 values for R, G, B. On error, an int array containing no values.
      */
     int[] parseColorSpec( final String colorSpec, final Token tok, GDD gdd )
     {
         assert( colorSpec != null );
 
-        Scanner scan = new Scanner( colorSpec ).useDelimiter( "," );
-        int r = scan.nextInt();
-        int g = scan.nextInt();
-        int b = scan.nextInt();
+        int r = -1;
+        int g = -1;
+        int b = -1;
+
+        String rgbColor = colorSpec;
+
+        // if it's a macro, then look it up. Colors are in the user-editable strings.
+        if( colorSpec.startsWith( "$" )) {
+            String macro = TextTransforms.lop( colorSpec, 1 );
+            rgbColor = gdd.getUserStrings().getString( macro );
+        }
+
+        if( rgbColor == null ) {
+            errMsg( "ERROR.UNDEFINED_COLOR", tok, gdd );
+            return( new int[0] );
+        }
+
+        Scanner scan = new Scanner( rgbColor ).useDelimiter( "," );
+        if( scan.hasNext() ) {
+            r = scan.nextInt();
+            if( scan.hasNext() ) {
+                g = scan.nextInt();
+                if( scan.hasNext() ) {
+                    b = scan.nextInt();
+                }
+            }
+        }
 
         if(( r < 0 || r > 255 ) || ( g < 0 || g > 255 ) || ( b < 0 || b > 255 )) {
             errMsg( "ERROR.INVALID_COLOR", tok, gdd );
@@ -118,20 +143,6 @@ public class PdfFcolor implements IOutputCommand
                 newLeading );
 
         new PdfLeading().process( context, newLeadingToken, tokNum  );
-    }
-
-    /**
-     * Sees if any text has been written to the current paragraph.
-     *
-     * @param iTPara the current paragraph
-     * @return true if no text has been written, false otherwise.
-     */
-    boolean inEmptyParagraph( final Paragraph iTPara )
-    {
-        if( iTPara == null || iTPara.size() == 0 ) {
-            return( true );
-        }
-        return( false );
     }
 
     public String getRoot()

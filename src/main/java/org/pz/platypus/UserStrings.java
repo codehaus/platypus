@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-09 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2011 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -17,14 +17,14 @@ import java.util.TreeMap;
  * System strings have the format of starting with: $ followed by an alphanumeric and
  * then alphanumerics or the _ character
  * They are defined with [def:$macro{meaning}]. They are printed by the command operator *,
- * as in: [*$macro]
+ * as in: [*$macro]. To fetch a string without printing it use [$macro]
  *
  * @author alb (Andrew Binstock)
  */
 public class UserStrings
 {
     @SuppressWarnings("unchecked")  // don't issue spurious unchecked warnings on tree accesses
-                                    // works only with Java 5 compiler and later releases
+                  // works only with Java 5 compiler and later releases
     private final TreeMap userStrings;
 
     public UserStrings()
@@ -45,7 +45,7 @@ public class UserStrings
         }
 
         if( key.length() < 2 ) {
-            return( Status.INVALID_PARAM );    
+            return( Status.INVALID_PARAM );
         }
 
 //        if ( ! ( key.startsWith( "$" ) && Character.isLetterOrDigit( key.codePointAt( 1 ) ))) {
@@ -66,7 +66,6 @@ public class UserStrings
 
         return( Status.OK );
     }
-
 
     /**
      * Returns a string containing all the keys and values formatted
