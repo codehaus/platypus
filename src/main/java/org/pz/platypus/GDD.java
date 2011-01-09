@@ -1,7 +1,7 @@
 /***
  *  Platypus: Page Layout and Typesetting Software (free at platypus.pz.org)
  *
- *  Platypus is (c) Copyright 2006-10 Pacific Data Works LLC. All Rights Reserved.
+ *  Platypus is (c) Copyright 2011 Pacific Data Works LLC. All Rights Reserved.
  *  Licensed under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html)
  */
 
@@ -17,11 +17,11 @@ import java.util.logging.*;
 
 /**
  * Global document data. Is a singleton, although not created as such due to testing repercussions.
- * 
+ *
  * @author alb
  * @author atul
  */
-public class GDD 
+public class GDD
 {
     private boolean         clVerbose = false;      // command line -verbose switch
     private boolean         clVVerbose = false;     // command line -vverbose switch
@@ -43,7 +43,7 @@ public class GDD
     private SystemStrings   sysStrings;
     private Map<String,String> userEnv;
     private UserStrings     userStrings;
-    
+
     public GDD()
     {
         sysStrings = new SystemStrings();
@@ -75,6 +75,32 @@ public class GDD
         sysStrings = new SystemStrings();
         userEnv = System.getenv();
         userStrings = new UserStrings();
+        loadRgbColorsIntoUserStrings( userStrings );
+    }
+
+    /**
+     * Loads the 16 HTML standard colors as RGB values into the user strings map
+     * @param userMacros the KV table containing user-defined macros
+     */
+    public void loadRgbColorsIntoUserStrings( final UserStrings userMacros )
+    {
+        userMacros.add( "AQUA",    "0,255,255" );     // x00FFFF
+        userMacros.add( "BLACK",   "0,0,0" );         // x000000
+        userMacros.add( "BLUE",    "0,0,255" );       // x0000FF
+        userMacros.add( "FUSCHIA", "255,0,255" );    // xFF00FF
+        userMacros.add( "GRAY",    "128,128,128" );  // x808080
+        userMacros.add( "GREY",    "128,128,128" );  // x808080 --- same as GRAY
+        userMacros.add( "GREEN",   "0,128,0" );      // x008000
+        userMacros.add( "LIME",    "0,255,0" );      // x00FF00
+        userMacros.add( "MAROON",  "128,0,0" );      // x800000
+        userMacros.add( "NAVY",    "0,0,128" );      // x000080
+        userMacros.add( "OLIVE",   "128,128,0" );    // x808000
+        userMacros.add( "PURPLE",  "128,0,128" );    // x800080
+        userMacros.add( "RED",     "255,0,0" );      // xFF0000
+        userMacros.add( "SILVER",  "192,192,192" ); // xC0C0C0
+        userMacros.add( "TEAL",    "0,128,128" );    // x008080
+        userMacros.add( "WHITE",   "255,255,255" ); // xFFFFFF
+        userMacros.add( "YELLOW",  "255,255,0" );   // xFFFF00
     }
 
     /**
@@ -95,11 +121,11 @@ public class GDD
     /**
      * set up the logger we'll use and give it our own formatting.
      * This logger writes to the console only.
-     * 
+     *
      * @param loggerName name for the logger
      */
     public void setupLogger( final  String loggerName )
-    {        
+    {
         logger = Logger.getLogger( loggerName == null ? "org.pz.platypus.Platypus" : loggerName );
 
         ConsoleHandler consh = new ConsoleHandler();
@@ -200,7 +226,7 @@ public class GDD
     {
         inCode = trueOrFalse;
     }
-    
+
     public FileList getInputFileList()
     {
         return( inputFileList );
@@ -240,8 +266,8 @@ public class GDD
     {
         lits = newLits;
     }
-    
-    public Logger getLogger() 
+
+    public Logger getLogger()
     {
         return logger;
     }
@@ -275,12 +301,12 @@ public class GDD
     {
         return(  symbolsListFilename );
     }
-    
+
     public SystemStrings getSysStrings()
     {
         return sysStrings;
     }
-    
+
     public UserStrings getUserStrings()
     {
         return userStrings;
@@ -295,8 +321,8 @@ public class GDD
     {
         this.clVerbose = clVerbose;
         this.logger.setLevel( Level.FINE );
-    } 
-    
+    }
+
     public boolean isClVVerbose()
     {
         return clVVerbose;
@@ -318,5 +344,5 @@ public class GDD
     public Map<String, String> getUserEnv() {
         return userEnv;
     }
-   
+
 }
