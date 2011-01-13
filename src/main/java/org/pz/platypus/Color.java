@@ -18,4 +18,67 @@ import org.pz.platypus.interfaces.IColor;
 abstract class Color implements IColor
 {
 
+    // for RGB colors
+    int R;   // red,   0-255
+    int G;   // green, 0-255
+    int B;   // blue,  0-255
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) {
+            return( true );
+        }
+
+        if (o == null || getClass() != o.getClass() ) {
+            return( false );
+        }
+
+        Color color = (Color) o;
+
+        if (B != color.B) return( false );
+        if (G != color.G) return( false );
+        if (R != color.R) return( false );
+
+        return( true );
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = R;
+        result = 31 * result + G;
+        result = 31 * result + B;
+        return( result );
+    }
+
+    public int getR()
+    {
+        return( R );
+    }
+
+    public void setR(int r)
+    {
+        R = r ;
+    }
+
+    public int getG()
+    {
+        return( G );
+    }
+
+    public void setG(int g)
+    {
+        G = g;
+    }
+
+    public int getB()
+    {
+        return( B );
+    }
+
+    public void setB(int b)
+    {
+        B = b;
+    }
 }
