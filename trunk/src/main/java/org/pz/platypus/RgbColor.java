@@ -14,10 +14,6 @@ package org.pz.platypus;
  */
 public class RgbColor extends Color
 {
-    private int R;
-    private int G;
-    private int B;
-
     /**
      * Default color is black: ( 0, 0, 0 )
      */
@@ -33,6 +29,11 @@ public class RgbColor extends Color
         R = r;
         G = g;
         B = b;
+    }
+
+    public RgbColor( final String colorMacro )
+    {
+        //TODO: allow a macro to specify the color.
     }
 
     public int[] parse()  //TODO: fill in. Extract from PdfFcolor.java
