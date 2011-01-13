@@ -84,9 +84,9 @@ public class GDD
      */
     public void loadRgbColorsIntoUserStrings( final UserStrings userMacros )
     {
-        userMacros.add( "AQUA",    "0,255,255" );     // x00FFFF
-        userMacros.add( "BLACK",   "0,0,0" );         // x000000
-        userMacros.add( "BLUE",    "0,0,255" );       // x0000FF
+        userMacros.add( "AQUA",    "0,255,255" );    // x00FFFF
+        userMacros.add( "BLACK",   "0,0,0" );        // x000000
+        userMacros.add( "BLUE",    "0,0,255" );      // x0000FF
         userMacros.add( "FUSCHIA", "255,0,255" );    // xFF00FF
         userMacros.add( "GRAY",    "128,128,128" );  // x808080
         userMacros.add( "GREY",    "128,128,128" );  // x808080 --- same as GRAY
@@ -97,10 +97,10 @@ public class GDD
         userMacros.add( "OLIVE",   "128,128,0" );    // x808000
         userMacros.add( "PURPLE",  "128,0,128" );    // x800080
         userMacros.add( "RED",     "255,0,0" );      // xFF0000
-        userMacros.add( "SILVER",  "192,192,192" ); // xC0C0C0
+        userMacros.add( "SILVER",  "192,192,192" );  // xC0C0C0
         userMacros.add( "TEAL",    "0,128,128" );    // x008080
-        userMacros.add( "WHITE",   "255,255,255" ); // xFFFFFF
-        userMacros.add( "YELLOW",  "255,255,0" );   // xFFFF00
+        userMacros.add( "WHITE",   "255,255,255" );  // xFFFFFF
+        userMacros.add( "YELLOW",  "255,255,0" );    // xFFFF00
     }
 
     /**
@@ -341,7 +341,8 @@ public class GDD
         this.logger.setLevel( Level.FINEST );
     }
 
-    public Map<String, String> getUserEnv() {
+    public Map<String, String> getUserEnv()
+    {
         return userEnv;
     }
 
