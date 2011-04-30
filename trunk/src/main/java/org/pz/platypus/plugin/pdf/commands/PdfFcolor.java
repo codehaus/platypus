@@ -20,16 +20,16 @@ import java.util.Scanner;
  *
  * @author alb
  */
-public class PdfFcolor implements IOutputCommand
+public class PdfFcolor extends CommandExecutor implements IOutputCommand
 {
-    private String root = "[fcolor:";
+    public PdfFcolor() { root = "[fcolor:"; };
 
     public int process( final IOutputContext context, final Token tok, final int tokNum )
     {
         GDD gdd;
         RgbColor newColor;
 
-        /** the way the new color is specified in the original command. Should be 999,999,999. */
+        /** the way the color is specified in the original command. Should be 999,999,999. */
         String newColorSpec;
 
         if( context == null || tok == null ) {
@@ -106,27 +106,27 @@ public class PdfFcolor implements IOutputCommand
         int[] colors = { r, g, b };
         return( colors );
     }
-
-    /**
-     * Prints an error message via the GDD error logging facility.
-     * @param msg string of the message
-     * @param t   token where the error occurred
-     * @param gdd contains the logger
-     */
-    private void errMsg( final String msg, final Token t, final GDD gdd )
-    {
-        assert( msg != null );
-        assert( t != null );
-        assert( gdd != null );
-
-        gdd.logWarning( gdd.getLit( "FILE" ) + t.getSource().getFileNumber() + " " +
-                        gdd.getLit( "LINE" ) + t.getSource().getLineNumber() + " " +
-                        msg + " " +
-                        gdd.getLit( "IGNORED" ));
-    }
-
-    public String getRoot()
-    {
-        return( root );
-    }
+//
+//    /**
+//     * Prints an error message via the GDD error logging facility.
+//     * @param msg string of the message
+//     * @param t   token where the error occurred
+//     * @param gdd contains the logger
+//     */
+//    private void errMsg( final String msg, final Token t, final GDD gdd )
+//    {
+//        assert( msg != null );
+//        assert( t != null );
+//        assert( gdd != null );
+//
+//        gdd.logWarning( gdd.getLit( "FILE" ) + t.getSource().getFileNumber() + " " +
+//                        gdd.getLit( "LINE" ) + t.getSource().getLineNumber() + " " +
+//                        msg + " " +
+//                        gdd.getLit( "IGNORED" ));
+//    }
+//
+//    public String getRoot()
+//    {
+//        return( root );
+//    }
 }

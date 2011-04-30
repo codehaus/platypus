@@ -36,15 +36,16 @@ public class PdfCodeOn implements IOutputCommand
 
         // save the current format
         PdfSaveFormat.save( pdd );
-        
+
         // now switch to code format
         PdfFont currFont = (PdfFont) pdd.getFont().clone();
-        currFont.setFace( "Bitstream Vera Sans Mono", tok.getSource() );
+//        currFont.setFace( "Bitstream Vera Sans Mono", tok.getSource() );
+        currFont.setFace( "DejaVu Sans Mono", tok.getSource() );
         currFont.setSize( currFont.getSize() * 0.85f, tok.getSource() );
         currFont.setBold( false, tok.getSource() );
         currFont.setItalics( false, tok.getSource() );
         pdd.setFont( currFont );
-        
+
         pdd.setStrikethru( false, tok.getSource() );
         setUnderlineToFalse( pdd, tok );
         setEolTreatmentToHard( pdd, tok );
