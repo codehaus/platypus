@@ -24,7 +24,7 @@ import java.util.TreeMap;
 public class UserStrings
 {
     @SuppressWarnings("unchecked")  // don't issue spurious unchecked warnings on tree accesses
-                  // works only with Java 5 compiler and later releases
+                                    // works only with Java 5 compiler and later releases
     private final TreeMap userStrings;
 
     public UserStrings()

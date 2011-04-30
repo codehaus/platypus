@@ -11,7 +11,7 @@ import org.pz.platypus.interfaces.ICommand;
 import org.pz.platypus.utilities.ErrorMsg;
 
 /**
- * The basic abstract class for all commands
+ * The basic abstract class for all input commands
  *
  * @author alb
  */
